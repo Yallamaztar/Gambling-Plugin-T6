@@ -4,10 +4,9 @@ from typing import Dict, Optional
 class Bank:
     def __init__(self, filepath: Optional[str] = None) -> None:
         if filepath is None:
-            here = os.path.dirname(os.path.abspath(__file__))
-            project_root = os.path.dirname(here)
-            filepath = os.path.join(project_root, "bank_db.json")
-        self.filepath = filepath
+            core = os.path.dirname(os.path.abspath(__file__))
+            root = os.path.dirname(core)
+            self.filepath = os.path.join(root, "bank_db.json")
         self.bank = self.load_bank()
 
     def load_bank(self) -> Dict:
