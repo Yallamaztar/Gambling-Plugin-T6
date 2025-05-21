@@ -17,7 +17,7 @@ class Register:
         def balance(player: str) -> Tuple[str, int]: 
             return player, f"your balance is ^1${self.bank.get_balance(player)}"
 
-        def gamble(player: str, amount: str) -> Tuple[str, bool] | Tuple[str, str]: 
+        def gamble(player: str, amount: str) -> Tuple[str, str]: 
             try: 
                 bet = int(amount)
                 current = self.bank.get_balance(player)

@@ -21,7 +21,7 @@ class GamblingPlugin:
         self.server   = self.iw4m.Server(self.iw4m)
         self.commands = self.iw4m.Commands(self.iw4m)
 
-    def is_valid_audit_log(self, audit_log: Dict[str, Any]):
+    def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
         origin, log_time = audit_log['origin'], audit_log['time']
         return (origin, log_time) not in self.last_seen and origin != 'TonyBot'
 
