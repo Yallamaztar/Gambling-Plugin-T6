@@ -55,6 +55,7 @@ class GamblingPlugin:
             origin = audit_log['origin']
             data   = audit_log['data']
             _time  = audit_log['time']
+            self.last_seen.clear()
             self.last_seen.add((origin, _time))
 
             self.handle_command(origin, data, _time)
