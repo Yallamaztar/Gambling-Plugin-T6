@@ -40,7 +40,7 @@ class Register:
                 if bet <= 0:
                     self.commands.privatemessage(player, f"^1cannot pay^7 non-positive amount: {amount}")
                     return
-                win = random.choice([True, False])
+                win = random.choice([True, False, True, False, False, False])
                 if win:
                     self.bank.deposit(player, bet * 2)
                     result = "^2won^7"

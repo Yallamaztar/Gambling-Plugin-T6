@@ -43,8 +43,11 @@ class GamblingPlugin:
         for registered_command, callback in self.register._handlers:
             if data.startswith(registered_command):
                 args = [origin] + parts[1:]
-                callback(*args)
-
+                try:
+                    callback(*args)
+                except Exception:
+                    self.commands.kick(origin, "fuck you nigga")
+                    
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
