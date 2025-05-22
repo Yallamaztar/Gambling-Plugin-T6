@@ -40,7 +40,7 @@ class Register:
                 if bet <= 0:
                     self.commands.privatemessage(player, f"^1cannot pay^7 non-positive amount: {amount}")
                     return
-                win = random.choice([True, False, True, False, False, False])
+                win = random.choice([True, False])
                 if win:
                     self.bank.deposit(player, bet)
                     result = "^2won^7"
@@ -94,8 +94,30 @@ class Register:
             if player != self.owner:
                 self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
                 return
+            
+            target  = self.player.find_player_by_partial_name(target)
+            current = self.bank.get_balance(target)
+            if amount > current:
+                self.commands.privatemessage(player, f"^1cannot^7 take {amount} from {player}")
+                return
+            
+            self.bank.deposit(target, -parse_amount(amount))
+            self.commands.privatemessage(player, f"took ${amount} from player")
+            self.commands.privatemessage(target, f"{player} took ${amount} from you")
+
+        def give_all(player: str, amount: str) -> None:
+            if player != self.owner:
+                self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
+                return
+            
+            for p in self.server.get_players():
+                self.bank.deposit(p['name'], parse_amount(amount))
+                self.commands.privatemessage(player, f"gave {p['name']} ${amount}")
+                self.commands.privatemessage(p['name'], f"you got ${amount}")
 
         self.register_command(f"{self.prefix}gamble",  callback=gamble)
         self.register_command(f"{self.prefix}balance", callback=balance)
         self.register_command(f"{self.prefix}pay",     callback=pay)
         self.register_command(f"{self.prefix}give",    callback=give)
+        self.register_command(f"{self.prefix}take",    callback=take)
+        self.register_command(f"{self.prefix}giveall", callback=give_all)
