@@ -5,6 +5,8 @@ from core.registry import Register
 from core.utils import banner
 
 from typing import Dict, Any
+from threading import Thread
+
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -43,11 +45,16 @@ class GamblingPlugin:
         for registered_command, callback in self.register._handlers:
             if data.startswith(registered_command):
                 args = [origin] + parts[1:]
-                try:
-                    callback(*args)
-                except Exception:
-                    self.commands.kick(origin, "fuck you nigga")
-                    
+
+                def run_callback():
+                    try:
+                        callback(*args)
+                    except Exception:
+                        if origin != self.owner:
+                            self.commands.kick(origin, "fuck you nigga")
+
+                Thread(target=run_callback).start()
+
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
@@ -58,6 +65,7 @@ class GamblingPlugin:
             origin = audit_log['origin']
             data   = audit_log['data']
             _time  = audit_log['time']
+            
             self.last_seen.clear()
             self.last_seen.add((origin, _time))
 
