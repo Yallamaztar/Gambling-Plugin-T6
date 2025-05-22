@@ -42,7 +42,7 @@ class Register:
                     return
                 win = random.choice([True, False, True, False, False, False])
                 if win:
-                    self.bank.deposit(player, bet * 2)
+                    self.bank.deposit(player, bet)
                     result = "^2won^7"
                 else:
                     self.bank.deposit(player, -bet)
