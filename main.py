@@ -61,16 +61,16 @@ class GamblingPlugin:
             if not self.is_valid_audit_log(audit_log):
                 time.sleep(.1)
                 continue
-
-            origin = audit_log['origin']
-            data   = audit_log['data']
-            _time  = audit_log['time']
             
             self.last_seen.clear()
-            self.last_seen.add((origin, _time))
+            self.last_seen.add((audit_log['origin'], audit_log['time']))
 
-            self.handle_command(origin, data, _time)
+            self.handle_command(
+                audit_log['origin'], audit_log['data'], audit_log['time']
+            )
+            
             time.sleep(.1)
 
 if __name__ == '__main__':
     GamblingPlugin().run()
+    
