@@ -2,7 +2,7 @@ import os, time
 from iw4m import IW4MWrapper
 from core.db import Bank
 from core.registry import Register
-from core.utils import printdebug, printinfo, printerror, banner
+from core.utils import banner
 
 from typing import Dict, Any
 
@@ -19,9 +19,16 @@ class GamblingPlugin:
         )
 
         self.server   = self.iw4m.Server(self.iw4m)
+        self.player   = self.iw4m.Player(self.iw4m)
         self.commands = self.iw4m.Commands(self.iw4m)
-        self.register = Register(self.bank, self.commands)
-        
+
+        self.register = Register(self.owner,
+            bank     = self.bank,
+            server   = self.server,
+            commands = self.commands,
+            player   = self.player
+        )
+
         print(banner())
 
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
@@ -32,38 +39,13 @@ class GamblingPlugin:
         parts = data.strip().split()
         if not parts:
             return
-        
-        command = parts[0]
-        printdebug(f"Received command: {data} from {origin} - {time}")
-        
-        if command == "!give": 
-            if origin == self.owner:
-                try:
-                    target, amount = parts[1], int(amount)
-                    self.bank.deposit(target, int(amount))
-                    self.commands.privatemessage(target, f"you have been ^2paid^7: ${amount}")
-                    self.commands.privatemessage(origin, f"^2successfully^7 paid {target} ${amount}")
-                    printinfo(f"{origin} gave ${amount} to {target}")
-                except Exception:
-                    printerror(f"Failed !give command | Most likely player not found")    
-            else:
-                self.commands.privatemessage(origin, "you dont have ^1perms^7 for this")
-                printdebug(f"{origin} tried to use !give without permission")
-        
+
         for registered_command, callback in self.register._handlers:
             if data.startswith(registered_command):
-                try:
-                    args = [origin] + parts[1:]
-                    response = callback(*args)
-                    if response:
-                        player, message = response
-                        self.commands.privatemessage(player, message)
-                        printdebug(f"Executed {registered_command} for {origin}")
-                except Exception:
-                    printerror(f"Command error ({registered_command})")
+                args = [origin] + parts[1:]
+                callback(*args)
 
     def run(self) -> None:
-        printinfo("GamblingPlugin is now running.")
         while True:
             audit_log = self.server.get_recent_audit_log()
             if not self.is_valid_audit_log(audit_log):
