@@ -31,7 +31,6 @@ class Register:
         else:
             return int(amount)
 
-
     def impl_commands(self) -> None:
         def balance(player: str, target: Optional[str] = None) -> None:
             if target == None:
@@ -43,13 +42,14 @@ class Register:
 
         def gamble(player: str, amount: str) -> None:
             try:
-                if amount == "all":
+                if amount == "all":    
                     bet = self.bank.get_balance(player)
                     if bet == 0: 
                         self.commands.say(f"^7@{player} is ^1^Fgay n poor")
                         return
+                    
                 else:
-                    bet = self.self.parse_amount(amount)
+                    bet = self.parse_amount(amount)
                     current = self.bank.get_balance(player)
 
                     if current < bet:

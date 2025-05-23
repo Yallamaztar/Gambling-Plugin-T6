@@ -4,7 +4,9 @@ from typing import Dict, Any
 from threading import Thread
 import os, time
 
+from core.manager import GamblingManager
 from core.registry import Register
+
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -26,6 +28,9 @@ class GamblingPlugin:
             commands = self.commands,
             player   = self.player
         )
+
+        GamblingManager(self.server, self.commands)
+
         print(f"""
 \x1b[38;2;0;140;255m .88888.                      dP       dP oo
 \x1b[38;2;0;130;255md8'   `88                     88       88
