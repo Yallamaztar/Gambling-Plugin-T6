@@ -29,7 +29,8 @@ class GamblingManager:
         while True:
             top_players = self.bank.get_top_balances()
             self.commands.say("^7Top 5 ^5Richest^7 Players:")
+            time.sleep(1)
             for i, player in enumerate(top_players):
-                print(f"^7#{i} {player['name']} - ^5{player['balance']}")
-
+                self.commands.say(f"^7#{i} {player['name']} - ^5{player['balance']}")
+                
             time.sleep(600)
