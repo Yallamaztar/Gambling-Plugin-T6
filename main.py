@@ -7,7 +7,6 @@ import os, time
 from core.manager import GamblingManager
 from core.registry import Register
 
-
 class GamblingPlugin:
     def __init__(self) -> None:
         self.owner     = '[ACOG]budiwrld'
@@ -31,7 +30,8 @@ class GamblingPlugin:
 
         GamblingManager(self.server, self.commands)
 
-        print(f"""
+        # lil ascii art neva hurt nobody
+        print(f""" 
 \x1b[38;2;0;140;255m .88888.                      dP       dP oo
 \x1b[38;2;0;130;255md8'   `88                     88       88
 \x1b[38;2;0;120;255m88        .d8888b. 88d8b.d8b. 88d888b. 88 dP 88d888b. .d8888b.

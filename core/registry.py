@@ -117,15 +117,19 @@ class Register:
                 self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
                 return
             
-            amount = self.parse_amount(amount)
+            target = self.player.find_player_by_partial_name(target)
 
-            target  = self.player.find_player_by_partial_name(target)
-            current = self.bank.get_balance(target)
-            if amount > current:
-                self.commands.privatemessage(player, f"^1cannot^7 take {amount} from {target}")
-                return
+            if amount == "all":
+                amount = self.bank.get_balance(target)
+            else:
+                amount = self.parse_amount(amount)
+                current = self.bank.get_balance(target)
+
+                if amount > current:
+                    self.commands.privatemessage(player, f"^1cannot^7 take {amount} from {target}")
+                    return
             
-            self.bank.deposit(target, -amount) # why dont work??? :c
+            self.bank.deposit(target, -amount)
             self.commands.privatemessage(player, f"took ${amount} from player")
             self.commands.privatemessage(target, f"{player} took ${amount} from you")
 
@@ -138,10 +142,27 @@ class Register:
                 self.bank.deposit(p['name'], self.parse_amount(amount))
                 self.commands.privatemessage(player, f"gave {p['name']} ${amount}")
                 self.commands.privatemessage(p['name'], f"you got ${amount}")
-         
+
+        def take_all(player: str):
+            if player != self.owner:
+                self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
+                return
+            
+            players = self.server.get_players()
+            self.commands.say(f"^7Taking {len(players)} players moneys")
+
+            for p in players:
+                current = self.bank.get_balance(p['name'])
+                if current == 0:
+                    return
+                
+                self.bank.deposit(p['name'], -current)
+                self.commands.privatemessage(player, f"Took {len(players)} players money")
+
         self.register_command(f"{self.prefix}gamble",  callback=gamble)
         self.register_command(f"{self.prefix}balance", callback=balance)
         self.register_command(f"{self.prefix}pay",     callback=pay)
         self.register_command(f"{self.prefix}give",    callback=give)
         self.register_command(f"{self.prefix}take",    callback=take)
         self.register_command(f"{self.prefix}giveall", callback=give_all)
+        self.register_command(f"{self.prefix}takeall", callback=take_all)
