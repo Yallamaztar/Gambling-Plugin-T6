@@ -17,7 +17,6 @@ class Bank:
             return {}
 
     def save_bank(self) -> None:
-        os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
         with open(self.filepath, 'w') as bank_file:
             json.dump(self.bank, bank_file, indent=2)
 

@@ -1,13 +1,13 @@
 from typing import List, Tuple, Optional, Callable
-from core.db import Bank
-from core.utils import parse_amount
 from iw4m import IW4MWrapper
 import random
 
+from core.db import Bank
+
 class Register:
-    def __init__(self, owner: str, *, bank: Bank, server: IW4MWrapper.Server, player: IW4MWrapper.Player, commands: IW4MWrapper.Commands, prefix: Optional[str] = "!") -> None:
+    def __init__(self, owner: str, *, server: IW4MWrapper.Server, player: IW4MWrapper.Player, commands: IW4MWrapper.Commands, prefix: Optional[str] = "!") -> None:
         self.owner    = owner
-        self.bank     = bank
+        self.bank     = Bank()
         self.server   = server
         self.player   = player
         self.commands = commands
@@ -18,6 +18,19 @@ class Register:
 
     def register_command(self, command: str, *, callback: Callable) -> None:
         self._handlers.append((command, callback))
+
+    def parse_amount(self, amount: str) -> int:
+        if amount[-1].lower() == 'k':
+            return int(float(amount[:-1]) * 1000)
+        elif amount[-1].lower() == 'm':
+                return int(float(amount[:-1]) * 1000000)
+        elif amount[-1].lower() == 'b':
+            return int(float(amount[:-1]) * 1000000000)
+        elif amount[-1].lower() == 't':
+            return int(float(amount[:-1]) * 1000000000000)
+        else:
+            return int(amount)
+
 
     def impl_commands(self) -> None:
         def balance(player: str, target: Optional[str] = None) -> None:
@@ -30,16 +43,23 @@ class Register:
 
         def gamble(player: str, amount: str) -> None:
             try:
-                bet = parse_amount(amount)
-                current = self.bank.get_balance(player)
+                if amount == "all":
+                    bet = self.bank.get_balance(player)
+                    if bet == 0: 
+                        self.commands.say(f"^7@{player} is ^1^Fgay n poor")
+                        return
+                else:
+                    bet = self.self.parse_amount(amount)
+                    current = self.bank.get_balance(player)
 
-                if current < bet:
-                    self.commands.privatemessage(player, f"^1cannot^7 bet ${bet}, you ^3only^7 have ^1${current}")
-                    return
+                    if current < bet:
+                        self.commands.privatemessage(player, f"^1cannot^7 bet ${bet}, you ^3only^7 have ^1${current}")
+                        return
                 
-                if bet <= 0:
-                    self.commands.privatemessage(player, f"^1cannot pay^7 non-positive amount: {amount}")
-                    return
+                    if bet <= 0:
+                        self.commands.privatemessage(player, f"^1cannot pay^7 non-positive amount: {amount}")
+                        return
+                
                 win = random.choice([True, False])
                 if win:
                     self.bank.deposit(player, bet)
@@ -54,10 +74,10 @@ class Register:
 
             except ValueError:
                 self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
-
+            
         def pay(player: str, target: str, amount: str) -> None:
             try:
-                amount = parse_amount(amount)
+                amount = self.parse_amount(amount)
                 if amount <= 0:
                     self.commands.privatemessage(player, f"^1cannot pay^7 non-positive amount: {amount}")
                     return
@@ -68,6 +88,8 @@ class Register:
                     return
                 
                 self.bank.deposit(player, -amount)
+
+                target = self.player.find_player_by_partial_name(target)
                 self.bank.deposit(target, amount)
 
                 player_new_balance = self.bank.get_balance(player)
@@ -78,7 +100,7 @@ class Register:
 
             except ValueError:
                 self.commands.privatemessage(player, f"^1{amount}^7 is ^1not^7 a valid number")
-
+         
         def give(player: str, target: str, amount: str) -> None:
             if player != self.owner:
                 self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
@@ -86,22 +108,24 @@ class Register:
 
             target = self.player.find_player_by_partial_name(target)
 
-            self.bank.deposit(target, parse_amount(amount))
+            self.bank.deposit(target, self.parse_amount(amount))
             self.commands.privatemessage(player, f"gave {target} ${amount}")
             self.commands.privatemessage(target, f"you got ${amount}")
-
+        
         def take(player: str, target: str, amount: str) -> None:
             if player != self.owner:
                 self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
                 return
             
+            amount = self.parse_amount(amount)
+
             target  = self.player.find_player_by_partial_name(target)
             current = self.bank.get_balance(target)
             if amount > current:
-                self.commands.privatemessage(player, f"^1cannot^7 take {amount} from {player}")
+                self.commands.privatemessage(player, f"^1cannot^7 take {amount} from {target}")
                 return
             
-            self.bank.deposit(target, -parse_amount(amount))
+            self.bank.deposit(target, -amount) # why dont work??? :c
             self.commands.privatemessage(player, f"took ${amount} from player")
             self.commands.privatemessage(target, f"{player} took ${amount} from you")
 
@@ -111,10 +135,10 @@ class Register:
                 return
             
             for p in self.server.get_players():
-                self.bank.deposit(p['name'], parse_amount(amount))
+                self.bank.deposit(p['name'], self.parse_amount(amount))
                 self.commands.privatemessage(player, f"gave {p['name']} ${amount}")
                 self.commands.privatemessage(p['name'], f"you got ${amount}")
-
+         
         self.register_command(f"{self.prefix}gamble",  callback=gamble)
         self.register_command(f"{self.prefix}balance", callback=balance)
         self.register_command(f"{self.prefix}pay",     callback=pay)

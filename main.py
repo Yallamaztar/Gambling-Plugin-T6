@@ -1,18 +1,15 @@
-import os, time
+from colorama import just_fix_windows_console
 from iw4m import IW4MWrapper
-from core.db import Bank
-from core.registry import Register
-from core.utils import banner
-
 from typing import Dict, Any
 from threading import Thread
+import os, time
 
+from core.registry import Register
 
 class GamblingPlugin:
     def __init__(self) -> None:
         self.owner     = '[ACOG]budiwrld'
         self.last_seen = set()
-        self.bank      = Bank()
 
         self.iw4m = IW4MWrapper(
             base_url  = os.environ['IW4M_URL'],
@@ -25,13 +22,22 @@ class GamblingPlugin:
         self.commands = self.iw4m.Commands(self.iw4m)
 
         self.register = Register(self.owner,
-            bank     = self.bank,
             server   = self.server,
             commands = self.commands,
             player   = self.player
         )
-
-        print(banner())
+        print(f"""
+\x1b[38;2;0;140;255m .88888.                      dP       dP oo
+\x1b[38;2;0;130;255md8'   `88                     88       88
+\x1b[38;2;0;120;255m88        .d8888b. 88d8b.d8b. 88d888b. 88 dP 88d888b. .d8888b.
+\x1b[38;2;0;110;255m88   YP88 88'  `88 88'`88'`88 88'  `88 88 88 88'  `88 88'  `88
+\x1b[38;2;0;100;255mY8.   .88 88.  .88 88  88  88 88.  .88 88 88 88    88 88.  .88
+\x1b[38;2;0;90;255m `88888'  `88888P8 dP  dP  dP 88Y8888' dP dP dP    dP `8888P88
+\x1b[38;2;0;80;255mooooooooooooooooooooooooooooooooooooooooooooooooooooooo~~~~.88~
+\x1b[38;2;0;70;255m                                                       d8888P\x1b[0m
+ ──────────────────────────────────────────────────────────
+    """
+        )
 
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
         origin, log_time = audit_log['origin'], audit_log['time']
@@ -72,5 +78,5 @@ class GamblingPlugin:
             time.sleep(.1)
 
 if __name__ == '__main__':
+    just_fix_windows_console()
     GamblingPlugin().run()
-    
