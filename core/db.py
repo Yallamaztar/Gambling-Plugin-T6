@@ -28,6 +28,6 @@ class Bank:
         self.bank[player] = self.get_balance(player) + amount
         self.save_bank()
 
-    def get_top_balances(self, count: int = 5) -> List[Dict[str, int]]:
+    def get_top_balances(self, count: Optional[int] = 5) -> List[Dict[str, int]]:
         top_players = sorted(self.load_bank().items(), key=lambda item: item[1], reverse=True)
         return [{"name": player, "balance": balance} for player, balance in top_players[:count]]

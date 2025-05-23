@@ -62,7 +62,7 @@ class GamblingPlugin:
                         callback(*args)
                     except Exception:
                         if origin != self.owner:
-                            self.commands.kick(origin, "fuck you nigga")
+                            self.commands.kick(origin, "fuck you")
 
                 Thread(target=run_callback).start()
 
