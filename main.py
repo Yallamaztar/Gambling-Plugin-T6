@@ -1,6 +1,6 @@
 from colorama import just_fix_windows_console
 from iw4m import IW4MWrapper
-from typing import Dict, Any
+from typing import Dict, Set, Any
 from threading import Thread
 import os, time
 
@@ -10,7 +10,7 @@ from core.registry import Register
 class GamblingPlugin:
     def __init__(self) -> None:
         self.owner     = '[ACOG]budiwrld'
-        self.last_seen = set()
+        self.last_seen: Set[str, str] = set()
 
         self.iw4m = IW4MWrapper(
             base_url  = os.environ['IW4M_URL'],

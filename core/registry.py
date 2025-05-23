@@ -143,7 +143,7 @@ class Register:
                 self.commands.privatemessage(player, f"gave {p['name']} ${amount}")
                 self.commands.privatemessage(p['name'], f"you got ${amount}")
 
-        def take_all(player: str):
+        def take_all(player: str) -> None:
             if player != self.owner:
                 self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
                 return
@@ -159,6 +159,14 @@ class Register:
                 self.bank.deposit(p['name'], -current)
                 self.commands.privatemessage(player, f"Took {len(players)} players money")
 
+        def reset_bank(player) -> None:
+            if player != self.owner:
+                self.commands.privatemessage(player, "you dont have ^1perms^7 for this")
+                return
+            
+            self.bank.reset()
+            self.commands.say("^7Bank has been ^1reset")
+
         self.register_command(f"{self.prefix}gamble",  callback=gamble)
         self.register_command(f"{self.prefix}balance", callback=balance)
         self.register_command(f"{self.prefix}pay",     callback=pay)
@@ -166,3 +174,4 @@ class Register:
         self.register_command(f"{self.prefix}take",    callback=take)
         self.register_command(f"{self.prefix}giveall", callback=give_all)
         self.register_command(f"{self.prefix}takeall", callback=take_all)
+        self.register_command(f"{self.prefix}reset",   callback=reset_bank)
