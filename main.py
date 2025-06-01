@@ -29,9 +29,9 @@ class GamblingPlugin:
         )
 
         GamblingManager(self.server, self.commands)
-
+        print(self.server.logged_in_as())
         # lil ascii art neva hurt nobody
-        print(f""" 
+        print(f"""
 \x1b[38;2;0;140;255m .88888.                      dP       dP oo
 \x1b[38;2;0;130;255md8'   `88                     88       88
 \x1b[38;2;0;120;255m88        .d8888b. 88d8b.d8b. 88d888b. 88 dP 88d888b. .d8888b.
@@ -46,40 +46,44 @@ class GamblingPlugin:
 
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
         origin, log_time = audit_log['origin'], audit_log['time']
-        return (origin, log_time) not in self.last_seen and origin != 'TonyBot'
+        return (origin, log_time) not in self.last_seen and origin != "TonyBot"
 
     def handle_command(self, origin: str, data: str, time: str) -> None:
         parts = data.strip().split()
         if not parts:
             return
 
-        for registered_command, callback in self.register._handlers:
-            if data.startswith(registered_command):
+        for registered_command, alias, callback in self.register._handlers:
+            if data.startswith(registered_command) or data.startswith(alias):
                 args = [origin] + parts[1:]
 
                 def run_callback():
                     try:
                         callback(*args)
                     except Exception:
-                        if origin != self.owner:
-                            self.commands.kick(origin, "fuck you")
+                        pass
 
                 Thread(target=run_callback).start()
 
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
+
+            if audit_log is None:
+                time.sleep(.1)
+                continue
+
             if not self.is_valid_audit_log(audit_log):
                 time.sleep(.1)
                 continue
-            
+
             self.last_seen.clear()
             self.last_seen.add((audit_log['origin'], audit_log['time']))
 
             self.handle_command(
                 audit_log['origin'], audit_log['data'], audit_log['time']
             )
-            
+
             time.sleep(.1)
 
 if __name__ == '__main__':

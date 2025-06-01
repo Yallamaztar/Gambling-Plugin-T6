@@ -13,7 +13,7 @@ class Bank:
         try:
             with open(self.filepath, 'r') as bank_file:
                 return json.load(bank_file)
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, FileNotFoundError):
             return {}
 
     def save_bank(self) -> None:
@@ -33,5 +33,5 @@ class Bank:
         self.save_bank()
 
     def get_top_balances(self, count: Optional[int] = 5) -> List[Dict[str, int]]:
-        top_players = sorted(self.load_bank().items(), key=lambda item: item[1], reverse=True)
+        top_players = sorted(self.bank.items(), key=lambda item: item[1], reverse=True)
         return [{"name": player, "balance": balance} for player, balance in top_players[:count]]

@@ -9,27 +9,29 @@ class GamblingManager:
         self.bank     = Bank()
         self.server   = server
         self.commands = commands
-        
-        Thread(target=self.passive_income, daemon=True).start()
+
+        # Thread(target=self.passive_income, daemon=True).start()
         Thread(target=self.broadcast_richest_players, daemon=True).start()
-    
+
     def passive_income(self, amount: int = 1000000) -> None:
         while True:
-            time.sleep(300)
+            time.sleep(30)
+            print("passive incum")
             players = self.server.get_players()
             if len(players) == 0: time.sleep(10); continue
-            
+
             for player in players:
                 self.bank.deposit(player['name'], amount)
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
 
     def broadcast_richest_players(self) -> None:
         while True:
-            time.sleep(600)
+            time.sleep(550)
+            print("broadcastin")
             top_players = self.bank.get_top_balances()
             self.commands.say("^7Top 5 ^5Richest^7 Players:")
-            
+
             time.sleep(.5)
             for i, player in enumerate(top_players):
-                self.commands.say(f"^7#{i} {player['name']} - ^5{player['balance']}")
+                self.commands.say(f"^7#{i + 1} {player['name']} - ^5{player['balance']}")
                 time.sleep(.2)
