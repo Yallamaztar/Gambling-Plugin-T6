@@ -182,3 +182,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 *.json
+*.json
