@@ -10,7 +10,7 @@ class GamblingManager:
         self.server   = server
         self.commands = commands
 
-        # Thread(target=self.passive_income, daemon=True).start()
+        # Thread(target=self.passive_income, daemon=True).start() # Doesnt work for now, cant write to json file cause of some buffer / thread issue gg 
         Thread(target=self.broadcast_richest_players, daemon=True).start()
 
     def passive_income(self, amount: int = 1000000) -> None:
