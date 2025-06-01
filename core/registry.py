@@ -7,13 +7,14 @@ from core.db import Bank
 class Register:
     def __init__(self, owner: str, *, server: IW4MWrapper.Server, player: IW4MWrapper.Player, commands: IW4MWrapper.Commands, prefix: Optional[str] = "!") -> None:
         self.owner    = owner
-        self.bank     = Bank()
         self.server   = server
         self.player   = player
         self.commands = commands
         self.prefix   = prefix
 
+        self.bank = Bank()
         self._handlers: List[Tuple[str, Callable]] = []
+
         self.impl_commands()
 
     def register_command(self, command: str, *, alias: str, callback: Callable) -> None:

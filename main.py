@@ -8,8 +8,8 @@ from core.manager import GamblingManager
 from core.registry import Register
 
 class GamblingPlugin:
-    def __init__(self) -> None:
-        self.owner     = '[ACOG]budiwrld'
+    def __init__(self, owner: str = '[ACOG]budiwrld') -> None:
+        self.owner = owner
         self.last_seen: Set[str, str] = set()
 
         self.iw4m = IW4MWrapper(
@@ -29,7 +29,6 @@ class GamblingPlugin:
         )
 
         GamblingManager(self.server, self.commands)
-        print(self.server.logged_in_as())
         # lil ascii art neva hurt nobody
         print(f"""
 \x1b[38;2;0;140;255m .88888.                      dP       dP oo
@@ -46,9 +45,9 @@ class GamblingPlugin:
 
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
         origin, log_time = audit_log['origin'], audit_log['time']
-        return (origin, log_time) not in self.last_seen and origin != "TonyBot"
-
-    def handle_command(self, origin: str, data: str, time: str) -> None:
+        return (origin, log_time) not in self.last_seen and origin != self.server.logged_in_as()
+    
+    def handle_command(self, origin: str, data: str) -> None:
         parts = data.strip().split()
         if not parts:
             return
@@ -79,10 +78,7 @@ class GamblingPlugin:
 
             self.last_seen.clear()
             self.last_seen.add((audit_log['origin'], audit_log['time']))
-
-            self.handle_command(
-                audit_log['origin'], audit_log['data'], audit_log['time']
-            )
+            self.handle_command(audit_log['origin'], audit_log['data'])
 
             time.sleep(.1)
 
