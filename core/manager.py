@@ -7,7 +7,6 @@ from core.database.bank import BankManager
 class GamblingManager:
     def __init__(self, server: IW4MWrapper.Server, commands: IW4MWrapper.Commands) -> None:
         self.bank     = BankManager()
-        self.lock     = self.bank.lock
         self.server   = server
         self.commands = commands
 
