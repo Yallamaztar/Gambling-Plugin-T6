@@ -1,4 +1,4 @@
-from typing import Set, Tuple
+from typing import Dict, Any, Set, Tuple
 from threading import Thread
 import time
 
@@ -6,8 +6,6 @@ from core.database.owners import OwnerManager
 from core.manager import GamblingManager
 from core.registry import Register
 from core.wrapper import Wrapper
-from core.utils import is_valid_audit_log
-
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -27,6 +25,10 @@ class GamblingPlugin:
         GamblingManager(self.server, self.commands)
         self.run()
     
+    def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
+        origin, data, log_time = audit_log['origin'], audit_log['data'], audit_log['time']
+        return (origin, data, log_time) not in self.last_seen and origin != self.server.logged_in_as()
+
     def handle_command(self, origin: str, data: str) -> None:
         parts = data.strip().split()
         if not parts:
@@ -40,7 +42,7 @@ class GamblingPlugin:
                     try:
                         callback(*args)
                     except Exception:
-                        pass
+                        Wrapper().commands.kick(origin, "fuck you")
 
                 Thread(target=run_callback).start()
                 break
@@ -53,7 +55,7 @@ class GamblingPlugin:
                 time.sleep(.1)
                 continue
 
-            if not is_valid_audit_log(audit_log):
+            if not self.is_valid_audit_log(audit_log):
                 time.sleep(.1)
                 continue
 

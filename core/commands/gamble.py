@@ -16,7 +16,7 @@ class GambleCommand:
             
             result = self.update_balance(player, bet)
             self.commands.privatemessage(player, f"you {result} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.say(f"{split_clan_tag(player)} {result} ${bet}")
+            self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
 
         except ValueError:
             return self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")

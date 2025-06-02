@@ -1,5 +1,5 @@
 import re, random
-from typing import Dict, Any, Optional
+from typing import Optional
 
 def safe_int(value: str, default: Optional[int] = 0) -> int:
     try:
@@ -21,7 +21,3 @@ def split_clan_tag(name: str) -> str:
     if match:
         return f"^{random.randint(0, 9)}{match.group(1)}^7{match.group(2)}"
     return name.strip()
-
-def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
-    origin, data, log_time = audit_log['origin'], audit_log['data'], audit_log['time']
-    return (origin, data, log_time) not in self.last_seen and origin != self.server.logged_in_as()

@@ -2,6 +2,8 @@ from typing import Dict, List, Optional
 from threading import RLock
 import json, os
 
+from core.utils import safe_int
+
 class BankManager:
     def __init__(self):
         database  = os.path.dirname(os.path.abspath(__file__))
@@ -30,7 +32,7 @@ class BankManager:
     
     def deposit(self, player: str, amount: int) -> None:
         with self.lock:
-            self.bank[player] = self.balance(player) + amount
+            self.bank[player] = safe_int(self.balance(player)) + safe_int(amount)
             self.save()
 
     def reset(self) -> None:
