@@ -16,11 +16,7 @@ class GamblingPlugin:
         self.player = wrapper.player
         self.commands = wrapper.commands
 
-        self.register = Register(OwnerManager().load(),
-            server   = self.server,
-            commands = self.commands,
-            player   = self.player
-        )
+        self.register = Register()
 
         GamblingManager(self.server, self.commands)
         self.run()

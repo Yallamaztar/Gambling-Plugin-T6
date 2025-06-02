@@ -12,13 +12,8 @@ from core.commands.take import take, take_all
 from core.commands.usage import usage
 
 class Register:
-    def __init__(self, owners: List[str], *, server: IW4MWrapper.Server, player: IW4MWrapper.Player, commands: IW4MWrapper.Commands, prefix: Optional[str] = "!") -> None:
-        self.owners   = owners
-        self.server   = server
-        self.player   = player
-        self.commands = commands
-        self.prefix   = prefix
-
+    def __init__(self, prefix: Optional[str] = "!") -> None:
+        self.prefix = prefix
         self._handlers: List[Tuple[str, Callable]] = []
         self.impl_commands()
 
