@@ -9,7 +9,7 @@ class ResetCommand:
     @owners_only()
     def reset(self, player : str) -> None:
         BankManager().reset()
-        Wrapper().commands.say(player, "^7Bank has been ^1reset")
+        Wrapper().commands.say("^7Bank has been ^1reset")
 
 def reset(player: str) -> None:
     run_command_threaded(ResetCommand, player)

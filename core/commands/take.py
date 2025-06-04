@@ -14,7 +14,7 @@ class TakeCommand:
 
     @owners_only()
     def take(self, player: str, target: str, amount: str) -> None:
-        target = self.player.find_player_by_partial_name()
+        target = self.player.find_player_by_partial_name(target)
         amount = self.validate(player, target, amount)
 
         self.bank.deposit(target, -amount)
@@ -48,7 +48,7 @@ class TakeAllCommand:
             bal = self.bank.balance(p['name'])
             if bal == 0: return
             self.bank.deposit(p['name'], -parse_amount(amount))
-        
+            
         self.commands.privatemessage(player, f"Took {len(self.server.get_players())} players money")
 
 def take(player: str, target: str, amount: str) -> None:
