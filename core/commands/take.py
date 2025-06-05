@@ -11,7 +11,8 @@ class TakeCommand:
         self.bank = BankManager()
 
         self.take(player, target, amount)
-
+        return
+    
     @owners_only()
     def take(self, player: str, target: str, amount: str) -> None:
         target = self.player.find_player_by_partial_name(target)
@@ -41,6 +42,7 @@ class TakeAllCommand:
         self.bank = BankManager()
 
         self.take_all(player, amount)
+        return
     
     @owners_only()
     def take_all(self, player: str, amount: str) -> None:

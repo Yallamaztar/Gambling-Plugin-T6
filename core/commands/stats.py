@@ -16,5 +16,7 @@ class StatsCommand:
             self.commands.say(f"^7#{i + 1} {player['name']} - ^5{player['balance']}")
             time.sleep(.2)
 
+        return
+
 def stats(player: str) -> None:
     run_command_threaded(StatsCommand, player)

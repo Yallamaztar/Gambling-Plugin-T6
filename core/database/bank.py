@@ -32,7 +32,7 @@ class BankManager:
     
     def deposit(self, player: str, amount: int) -> None:
         with self.lock:
-            self.bank[player] = safe_int(self.balance(player)) + safe_int(amount)
+            self.bank[player] = self.balance(player) + safe_int(amount)
             self.save()
 
     def reset(self) -> None:

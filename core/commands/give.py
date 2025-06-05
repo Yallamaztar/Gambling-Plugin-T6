@@ -10,7 +10,8 @@ class GiveCommand:
         self.bank = BankManager()
 
         self.give(player, target, amount)
-        
+        return
+    
     @owners_only()
     def give(self, player: str, target: str, amount: str) -> None:
         target = self.player.find_player_by_partial_name(target)

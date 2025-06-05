@@ -8,7 +8,7 @@ class PayCommand:
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
-
+    
         try:
             payment = self.validate(player, target, amount)
             if payment == None:
@@ -25,9 +25,10 @@ class PayCommand:
 
             self.commands.privatemessage(player, f"you have paid ^2${payment}^7 to {target} | Your new balance: ^5${self.bank.balance(player)}")
             self.commands.privatemessage(target, f"{player} paid you ^2${amount}^7 | Your new balance: ^5${self.bank.balance(target)}")
-            
+            return
+        
         except ValueError:
-            self.commands.privatemessage(player, f"^1{amount}^7 is ^1not^7 a valid number")
+            return self.commands.privatemessage(player, f"^1{amount}^7 is ^1not^7 a valid number")
 
     def validate(self, player: str, target: str, amount: str) -> int | None:
         if player == target:

@@ -13,6 +13,7 @@ class UsageCommand:
         Wrapper().commands.privatemessage(player, "^7!richest - ^2See the top 5 richest players")
         time.sleep(.5)
         Wrapper().commands.privatemessage(player, "^7Use ^3k^7, ^3m^7, or ^3b^7 (e.g., 5k, 2m) for amounts")
-
+        return
+    
 def usage(player: str) -> None:
     run_command_threaded(UsageCommand, player)

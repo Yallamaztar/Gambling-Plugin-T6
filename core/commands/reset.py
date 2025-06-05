@@ -5,6 +5,7 @@ from core.wrapper import Wrapper
 class ResetCommand:
     def __init__(self, player: str) -> None:
         self.reset(player)
+        return
 
     @owners_only()
     def reset(self, player : str) -> None:
