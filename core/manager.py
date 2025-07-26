@@ -1,4 +1,4 @@
-from threading import Thread
+from concurrent.futures import ThreadPoolExecutor
 from iw4m import IW4MWrapper
 import time
 
@@ -10,9 +10,11 @@ class GamblingManager:
         self.server   = server
         self.commands = commands
 
-        Thread(target=self.passive_income, daemon=True).start()
-        Thread(target=self.broadcast_richest_players, daemon=True).start()
-        Thread(target=self.broadcast_hint, daemon=True).start()
+        self.executor = ThreadPoolExecutor(max_workers=3)
+
+        self.executor.submit(self.passive_income)
+        self.executor.submit(self.broadcast_richest_players)
+        self.executor.submit(self.broadcast_hint)
 
     def passive_income(self, amount: int = 10000000) -> None:
         while True:
@@ -23,7 +25,7 @@ class GamblingManager:
                 self.bank.deposit(player['name'], amount)
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
             
-            time.sleep(1100)
+            time.sleep(400)
 
     def broadcast_richest_players(self) -> None:
         while True:

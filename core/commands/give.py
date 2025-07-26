@@ -15,7 +15,7 @@ class GiveCommand:
     @owners_only()
     def give(self, player: str, target: str, amount: str) -> None:
         target = self.player.find_player_by_partial_name(target)
-        self.bank.deposit(target, parse_amount(amount))
+        self.bank.deposit(target, parse_amount(amount)) 
         self.commands.privatemessage(player, f"Gave {target} ${amount}")
         self.commands.privatemessage(target, f"You've gotten ^2${amount} ^7from {player}")
 
@@ -27,6 +27,7 @@ class GiveAllCommand:
         self.bank = BankManager()
 
         self.give_all(player, amount)
+        return
 
     @owners_only()
     def give_all(self, player: str, amount: str) -> None:
@@ -34,6 +35,8 @@ class GiveAllCommand:
             self.bank.deposit(p['name'], parse_amount(amount))
             self.commands.privatemessage(player, f"Gave {p['name']} ${amount}")
             self.commands.privatemessage(p['name'], f"You've gotten ^2${amount} ^7from {player}")
+        
+        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players {amount}")
 
 def give(player: str, target: str, amount: str) -> None:
     run_command_threaded(GiveCommand, player, target, amount)
