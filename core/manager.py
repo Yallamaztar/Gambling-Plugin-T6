@@ -16,7 +16,7 @@ class GamblingManager:
         self.executor.submit(self.broadcast_richest_players)
         self.executor.submit(self.broadcast_hint)
 
-    def passive_income(self, amount: int = 10000000) -> None:
+    def passive_income(self, amount: int = 100000) -> None:
         while True:
             players = self.server.get_players()
             if len(players) == 0: time.sleep(10); continue
@@ -25,7 +25,7 @@ class GamblingManager:
                 self.bank.deposit(player['name'], amount)
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
             
-            time.sleep(400)
+            time.sleep(24000)
 
     def broadcast_richest_players(self) -> None:
         while True:
