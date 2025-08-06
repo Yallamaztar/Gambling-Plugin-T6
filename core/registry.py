@@ -10,6 +10,7 @@ from core.commands.stats import stats
 from core.commands.take import take, take_all
 from core.commands.usage import usage
 from core.commands.claim import daily, weekly, monthly
+from core.commands.shop import shop 
 
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
@@ -32,6 +33,9 @@ class Register:
         self.register_command(f"{self.prefix}daily",   alias=f"{self.prefix}day",  callback=daily)
         self.register_command(f"{self.prefix}weekly",  alias=f"{self.prefix}wkly", callback=weekly)
         self.register_command(f"{self.prefix}monthly", alias=f"{self.prefix}mnth", callback=monthly)
+        
+        # Shop command
+        self.register_command(f"{self.prefix}shop", alias=f"{self.prefix}shp", callback=shop)
 
         # Admin commands
         self.register_command(f"{self.prefix}give",        alias=f"{self.prefix}gi",  callback=give)
