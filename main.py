@@ -6,6 +6,7 @@ import time
 from core.manager import GamblingManager
 from core.registry import Register
 from core.wrapper import Wrapper
+from core.events import EventManager
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -20,7 +21,10 @@ class GamblingPlugin:
         self.executor = ThreadPoolExecutor(max_workers=15)
 
         GamblingManager(self.server, self.commands)
+        
         print("Plugin running")
+        
+        self.executor.submit(EventManager)
         self.run()
         
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
