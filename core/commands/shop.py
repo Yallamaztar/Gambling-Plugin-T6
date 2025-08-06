@@ -24,7 +24,7 @@ class ShopCommand:
             else:
                 self.bank.deposit(player, -10_000_000_000)
                 self.commands.setlevel(player, "trusted")
-                self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Trusted")
+                self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Gambler")
 
         elif item.lower() == "senioradmin":
             balance = self.bank.balance(player)
