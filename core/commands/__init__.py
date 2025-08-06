@@ -12,29 +12,30 @@ def rate_limit(*, hours: int = None, minutes: int = None) -> Callable:
         raise ValueError("missing hours or minutes")
     
     rate_limit_time: int = (hours or 0) * 3600 + (minutes or 0) * 60
-    threads: Dict[str, Lock] = {}
-    last_call: Dict[str, float] = {}
+    threads: Dict[tuple, Lock] = {}
+    last_call: Dict[tuple, float] = {}
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(self, player, *args, **kwargs) -> Any:
+        def wrapper(player: str, *args, **kwargs) -> Any:
             if player in OwnerManager().load():
-                return
-            
-            now = time.monotonic()
-            
-            if player not in threads:
-                threads[player] = Lock()
-                last_call[player] = 0.0
+                return func(player, *args, **kwargs)
 
-            with threads[player]:
-                if now - last_call[player] < rate_limit_time:
-                    remaining = int(rate_limit_time) - int((now - last_call[player]))
-                    Wrapper().commands.privatemessage(self, f"You must wait {format_time(remaining)}s before using this again")
+            now = now = time.time()
+            key = (func.__name__, player)
+
+            if key not in threads:
+                threads[key] = Lock()
+                last_call[key] = 0.0
+
+            with threads[key]:
+                if now - last_call[key] < rate_limit_time:
+                    remaining = int(rate_limit_time - (now - last_call[key]))
+                    Wrapper().commands.privatemessage(player, f"^7You must wait ^3{format_time(remaining)} ^7before using this again")
                     return
-                
-                last_call[player] = now
-            return func(self, player, *args, **kwargs)
+                last_call[key] = now
+
+            return func(player, *args, **kwargs)
         return wrapper
     return decorator
 

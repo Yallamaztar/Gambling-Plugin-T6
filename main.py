@@ -40,7 +40,7 @@ class GamblingPlugin:
                     try:
                         callback(*args)
                     except Exception:
-                        Wrapper().commands.kick(origin, "fuck you")
+                        self.commands.privatemessage(origin, "Do ^1!usage ^7to see ^3help ^7page")
 
                 self.executor.submit(run_callback)
                 break

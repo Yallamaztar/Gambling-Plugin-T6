@@ -6,21 +6,21 @@ class DailyClaimCommand:
     def __init__(self, player: str) -> None:
         amount = 1000000
         BankManager().deposit(player, amount)
-        Wrapper().commands.say(player, f"Successfully claimed {amount}")
+        Wrapper().commands.say(f"^2Successfully ^7claimed ^5${amount}")
         return
 
 class WeeklyClaimCommand:
     def __init__(self, player: str) -> None:
         amount = 15000000
         BankManager().deposit(player, amount)
-        Wrapper().commands.say(player, f"Successfully claimed {amount}")
+        Wrapper().commands.say(f"^2Successfully ^7claimed ^5${amount}")
         return
 
 class MonthlyClaimCommand:
     def __init__(self, player: str) -> None:
         amount = 100000000
         BankManager().deposit(player, amount)
-        Wrapper().commands.say(player, f"Successfully claimed {amount}")
+        Wrapper().commands.say(f"^2Successfully ^7claimed ^5${amount}")
         return
 
 @rate_limit(hours=24)
