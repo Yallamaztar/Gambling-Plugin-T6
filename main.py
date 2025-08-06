@@ -3,7 +3,6 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import deque
 import time
 
-from core.database.owners import OwnerManager
 from core.manager import GamblingManager
 from core.registry import Register
 from core.wrapper import Wrapper
@@ -61,7 +60,6 @@ class GamblingPlugin:
             self.last_seen.clear()
             self.last_seen.append((audit_log['origin'], audit_log['data'], audit_log['time']))
             self.handle_command(audit_log['origin'], audit_log['data'])
-            print(f"Running Gamble For Player {audit_log['origin']}")
 
             time.sleep(.01)
 

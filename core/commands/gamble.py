@@ -1,7 +1,7 @@
 from core.database.bank import BankManager
 from core.utils import parse_amount, split_clan_tag, safe_int
 from core.wrapper import Wrapper
-from core.commands import run_command_threaded
+from core.commands import run_command_threaded, rate_limit
 import random
 
 class GambleCommand:
@@ -53,6 +53,6 @@ class GambleCommand:
             result = "^1lost^7"
 
         return result
-    
+
 def gamble(player: str, amount: str) -> None:
     run_command_threaded(GambleCommand, player, amount)

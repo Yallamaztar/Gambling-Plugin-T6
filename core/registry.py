@@ -1,7 +1,6 @@
 from typing import List, Tuple, Optional, Callable
-from iw4m import IW4MWrapper
 
-from core.database.bank import BankManager
+from core.commands.owner import add_owner, remove_owner
 from core.commands.balance import balance
 from core.commands.gamble import gamble
 from core.commands.give import give, give_all
@@ -10,6 +9,7 @@ from core.commands.reset import reset
 from core.commands.stats import stats
 from core.commands.take import take, take_all
 from core.commands.usage import usage
+from core.commands.claim import daily, weekly, monthly
 
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
@@ -21,13 +21,24 @@ class Register:
         self._handlers.append((command, alias, callback))
 
     def impl_commands(self) -> None:
+        # Client commands
         self.register_command(f"{self.prefix}usage",   alias=f"{self.prefix}u",    callback=usage)
         self.register_command(f"{self.prefix}gamble",  alias=f"{self.prefix}g",    callback=gamble)
         self.register_command(f"{self.prefix}balance", alias=f"{self.prefix}bal",  callback=balance)
         self.register_command(f"{self.prefix}pay",     alias=f"{self.prefix}p",    callback=pay)
-        self.register_command(f"{self.prefix}give",    alias=f"{self.prefix}g",    callback=give)
         self.register_command(f"{self.prefix}richest", alias=f"{self.prefix}rich", callback=stats)
-        self.register_command(f"{self.prefix}take",    alias=f"{self.prefix}t",    callback=take)
-        self.register_command(f"{self.prefix}giveall", alias=f"{self.prefix}ga",   callback=give_all)
-        self.register_command(f"{self.prefix}takeall", alias=f"{self.prefix}ta",   callback=take_all)
-        self.register_command(f"{self.prefix}reset",   alias=f"{self.prefix}res",  callback=reset)
+
+        # Claimable commands
+        self.register_command(f"{self.prefix}daily",   alias=f"{self.prefix}day",  callback=daily)
+        self.register_command(f"{self.prefix}weekly",  alias=f"{self.prefix}wkly", callback=weekly)
+        self.register_command(f"{self.prefix}monthly", alias=f"{self.prefix}mnth", callback=monthly)
+
+        # Admin commands
+        self.register_command(f"{self.prefix}give",        alias=f"{self.prefix}gi",  callback=give)
+        self.register_command(f"{self.prefix}giveall",     alias=f"{self.prefix}ga",  callback=give_all)
+        self.register_command(f"{self.prefix}take",        alias=f"{self.prefix}t",   callback=take)
+        self.register_command(f"{self.prefix}takeall",     alias=f"{self.prefix}ta",  callback=take_all)
+        self.register_command(f"{self.prefix}reset",       alias=f"{self.prefix}res", callback=reset)
+        self.register_command(f"{self.prefix}addowner",    alias=f"{self.prefix}add", callback=add_owner)
+        self.register_command(f"{self.prefix}removeowner", alias=f"{self.prefix}rmv", callback=remove_owner)
+        

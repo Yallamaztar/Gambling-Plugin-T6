@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional
-from functools import lru_cache
 from threading import RLock
+from functools import lru_cache
 import json, os
 
 from core.utils import safe_int
@@ -27,7 +27,7 @@ class BankManager:
             with open(self.bank_db, 'w') as f:
                 json.dump(self.bank, f, indent=2)
 
-    @lru_cache(maxsize=40)
+    @lru_cache(maxsize=50)
     def balance(self, player: str) -> int:
         with self.lock:
             return self.bank.get(player, 0)
