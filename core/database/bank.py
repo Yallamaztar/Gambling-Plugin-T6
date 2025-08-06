@@ -43,7 +43,7 @@ class BankManager:
             self.bank.clear()
             self.save()
 
-    def top_balances(self, count: Optional[int] = 5) -> List[Dict[str, int]]:
+    def top_balances(self, count: Optional[int] = 5) -> List[Dict[str, str | int]]:
         with self.lock:
             return [
                 {'name': player, 'balance': balance} 
