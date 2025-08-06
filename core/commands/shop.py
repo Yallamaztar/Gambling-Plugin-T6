@@ -11,19 +11,9 @@ class ShopCommand:
 
         if item is None or item == "":
             self.commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
-            self.commands.privatemessage(player, "!say Access - $300mil")
-            self.commands.privatemessage(player, "Trusted Role - $1bil")
-            self.commands.privatemessage(player, "SeniorAdmin Role - $100q")
-
-        elif item.lower() == "say":
-            balance = self.bank.balance(player)
-
-            if balance < 250_000_000:
-                self.commands.privatemessage(player, "You cant ^1afford ^7this")
-                return
-            else:
-                self.bank.deposit(player, -300_000_000)
-                # give player access to !s
+            self.commands.privatemessage(player, "^^5Gambler ^7Role - $10bil")
+            self.commands.privatemessage(player, "^8SeniorAdmin ^7Role - $100z")
+            self.commands.privatemessage(player, "")
         
         elif item.lower() == "trusted":
             balance = self.bank.balance(player)
@@ -32,7 +22,7 @@ class ShopCommand:
                 self.commands.privatemessage(player, "You cant ^1afford ^7this")
                 return
             else:
-                self.bank.deposit(player, -1_000_000_000)
+                self.bank.deposit(player, -10_000_000_000)
                 self.commands.setlevel(player, "trusted")
                 self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Trusted")
 
@@ -43,7 +33,7 @@ class ShopCommand:
                 self.commands.privatemessage(player, "You cant ^1afford ^7this")
                 return
             else:
-                self.bank.deposit(player, -100_000_000_000_000_000)
+                self.bank.deposit(player, -100_000_000_000_000_000_000)
                 self.commands.setlevel(player, "senioradmin")
                 self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2SeniorAdmin")
 
