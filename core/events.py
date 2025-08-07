@@ -11,7 +11,6 @@ class EventManager:
         self.commands = Wrapper().commands
 
         self.events()
-        print("Running CLient")
         self.client.run()
 
     def events(self) -> None:
@@ -22,5 +21,6 @@ class EventManager:
 
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str) -> None:
+            print("Killed: " + player)
             self.bank.deposit(attacker, 5000)
             self.commands.privatemessage(attacker, f"Kill reward: ^2$5000")
