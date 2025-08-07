@@ -9,9 +9,9 @@ class EventManager:
         self.client = GSCClient()
         self.bank = BankManager()
         self.commands = Wrapper().commands
-        self.kill_streaks: Dict[str, int] = {}
 
         self.events()
+        print("Running CLient")
         self.client.run()
 
     def events(self) -> None:
@@ -22,21 +22,5 @@ class EventManager:
 
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str) -> None:
-            if player == attacker:
-                penalty = 10000
-                self.bank.deposit(player, -penalty)
-                self.commands.privatemessage(player, f"^1Suicide penalty^7: -${penalty}")
-                return
-
-            self.kill_streaks[player] = 0
-            self.kill_streaks[attacker] = self.kill_streaks.get(attacker, 0) + 1
-            streak = self.kill_streaks[attacker]
-            
-            reward = 5000
-            if streak >= 5:
-                streak_bonus = reward * (streak // 5)
-                reward += streak_bonus
-                self.commands.say(f"^7{attacker} is on a ^2{streak} ^7killstreak! (^2+${streak_bonus}^7)")
-
-            self.bank.deposit(attacker, reward)
-            self.commands.privatemessage(attacker, f"Kill reward: ^2+${reward}")
+            self.bank.deposit(attacker, 5000)
+            self.commands.privatemessage(attacker, f"Kill reward: ^2$5000")
