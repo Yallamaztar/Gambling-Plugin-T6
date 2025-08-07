@@ -17,7 +17,8 @@ class Register:
         self.prefix = prefix
         self._handlers: List[Tuple[str, Callable]] = []
         self.impl_commands()
-
+        return
+    
     def register_command(self, command: str, *, alias: str, callback: Callable) -> None:
         self._handlers.append((command, alias, callback))
 
@@ -46,3 +47,4 @@ class Register:
         self.register_command(f"{self.prefix}addowner",    alias=f"{self.prefix}add", callback=add_owner)
         self.register_command(f"{self.prefix}removeowner", alias=f"{self.prefix}rmv", callback=remove_owner)
         
+        return

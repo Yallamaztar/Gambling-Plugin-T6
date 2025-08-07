@@ -27,15 +27,15 @@ class BankManager:
             with open(self.bank_db, 'w') as f:
                 json.dump(self.bank, f, indent=2)
 
-    @lru_cache(maxsize=50)
+    @lru_cache(maxsize=150)
     def balance(self, player: str) -> int:
         with self.lock:
-            return self.bank.get(player, 0)
+            return self.balance(player)
     
     def deposit(self, player: str, amount: int) -> None:
         with self.lock:
             self.balance.cache_clear()
-            self.bank[player] = self.balance(player) + safe_int(amount)
+            self.bank[player] = self.bank.get(player, 0) + safe_int(amount)
             self.save()
 
     def reset(self) -> None:

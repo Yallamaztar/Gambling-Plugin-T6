@@ -18,7 +18,7 @@ class GamblingPlugin:
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor(max_workers=40)
+        self.executor = ThreadPoolExecutor(max_workers=50)
 
         GamblingManager(self.server, self.commands)
         

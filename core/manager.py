@@ -15,7 +15,8 @@ class GamblingManager:
         self.executor.submit(self.passive_income)
         self.executor.submit(self.broadcast_richest_players)
         self.executor.submit(self.broadcast_hint)
-
+        return
+    
     def passive_income(self, amount: int = 100000) -> None:
         while True:
             players = self.server.get_players()

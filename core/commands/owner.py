@@ -7,7 +7,8 @@ class OwnerAddCommand:
         self.player = Wrapper().player
         self.manager = OwnerManager()
         self.add(player, target)
-
+        return
+    
     @owners_only()
     def add(self, player: str, target: str) -> None:
         self.manager.add(self.player.find_player_by_partial_name(target))
@@ -17,6 +18,7 @@ class OwnerRemoveCommand:
         self.player = Wrapper().player
         self.manager = OwnerManager()
         self.remove(player, target)
+        return
 
     @owners_only()
     def remove(self, player: str, target: str) -> None:
