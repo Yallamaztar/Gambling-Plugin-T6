@@ -36,6 +36,8 @@ class ShopCommand:
                 self.bank.deposit(player, -100_000_000_000_000_000_000)
                 self.commands.setlevel(player, "senioradmin")
                 self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2SeniorAdmin")
+        
+        return
 
 def shop(player: str, item: Optional[str] = None) -> None:
     run_command_threaded(ShopCommand, player, item)
