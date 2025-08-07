@@ -26,5 +26,3 @@ class EventManager:
             self.bank.deposit(attacker, 5000)
             self.commands.privatemessage(attacker, f"Kill reward: ^2$5000")
             return
-
-        return

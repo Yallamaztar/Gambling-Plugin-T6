@@ -9,13 +9,13 @@ class OwnerManager:
 
     def load(self) -> List[str]:
         try:
-            with open(self.owners_db, 'r') as f:
+            with open(self.owners_db, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
     def save(self, owners: List[str]) -> None:
-        with open(self.owners_db, 'w') as f:
+        with open(self.owners_db, 'w', encoding='utf-8' ) as f:
             json.dump(owners, f, indent=2)
 
     def add(self, owners: Union[List[str], str]) -> None:

@@ -17,20 +17,20 @@ class BankManager:
     def load(self) -> Dict[str, int]:
         with self.lock:
             try:
-                with open(self.bank_db, 'r') as f:
+                with open(self.bank_db, 'r', encoding='utf-8') as f:
                     return json.load(f)
             except (json.JSONDecodeError, FileNotFoundError):
                 return {}
             
     def save(self) -> None:
         with self.lock:
-            with open(self.bank_db, 'w') as f:
+            with open(self.bank_db, 'w', encoding='utf-8') as f:
                 json.dump(self.bank, f, indent=2)
 
     @lru_cache(maxsize=150)
     def balance(self, player: str) -> int:
         with self.lock:
-            return self.balance(player)
+            return self.bank.get(player, 0)
     
     def deposit(self, player: str, amount: int) -> None:
         with self.lock:

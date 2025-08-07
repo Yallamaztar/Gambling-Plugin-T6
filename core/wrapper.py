@@ -1,5 +1,5 @@
-from iw4m import IW4MWrapper
 import os
+from iw4m import IW4MWrapper
 
 class Wrapper:
     def __init__(self) -> None:

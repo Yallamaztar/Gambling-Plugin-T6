@@ -48,7 +48,7 @@ class GamblingPlugin:
 
                 self.executor.submit(run_callback)
                 break
-            
+                      
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
