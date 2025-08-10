@@ -9,7 +9,7 @@ from core.commands.reset import reset
 from core.commands.stats import stats
 from core.commands.take import take, take_all
 from core.commands.usage import usage
-from core.commands.claim import daily, weekly, monthly
+from core.commands.claim import hourly, daily, weekly, monthly
 from core.commands.shop import shop 
 
 class Register:
@@ -17,7 +17,6 @@ class Register:
         self.prefix = prefix
         self._handlers: List[Tuple[str, Callable]] = []
         self.impl_commands()
-        return
     
     def register_command(self, command: str, *, alias: str, callback: Callable) -> None:
         self._handlers.append((command, alias, callback))
@@ -31,6 +30,7 @@ class Register:
         self.register_command(f"{self.prefix}richest", alias=f"{self.prefix}rich", callback=stats)
 
         # Claimable commands
+        self.register_command(f"{self.prefix}hourly",  alias=f"{self.prefix}hrl",  callback=hourly)
         self.register_command(f"{self.prefix}daily",   alias=f"{self.prefix}day",  callback=daily)
         self.register_command(f"{self.prefix}weekly",  alias=f"{self.prefix}wkly", callback=weekly)
         self.register_command(f"{self.prefix}monthly", alias=f"{self.prefix}mnth", callback=monthly)
@@ -46,5 +46,3 @@ class Register:
         self.register_command(f"{self.prefix}reset",       alias=f"{self.prefix}res", callback=reset)
         self.register_command(f"{self.prefix}addowner",    alias=f"{self.prefix}add", callback=add_owner)
         self.register_command(f"{self.prefix}removeowner", alias=f"{self.prefix}rmv", callback=remove_owner)
-        
-        return

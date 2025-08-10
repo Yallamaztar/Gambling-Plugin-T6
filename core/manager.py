@@ -13,7 +13,7 @@ class GamblingManager:
         self.executor = ThreadPoolExecutor(max_workers=3)
 
         self.executor.submit(self.passive_income)
-        self.executor.submit(self.broadcast_richest_players)
+        # self.executor.submit(self.broadcast_richest_players) # shows old richest stats
         self.executor.submit(self.broadcast_hint)
         return
     

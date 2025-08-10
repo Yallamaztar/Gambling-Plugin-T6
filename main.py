@@ -24,7 +24,7 @@ class GamblingPlugin:
         
         print("Plugin running")
         
-        self.executor.submit(EventManager)
+        # self.executor.submit(EventManager) # broken
         self.run()
         
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
