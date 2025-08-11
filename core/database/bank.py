@@ -3,13 +3,24 @@ from threading import RLock
 import json, os
 
 class BankManager:
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(BankManager, cls).__new__(cls)
+        return cls._instance
+    
     def __init__(self):
+        if hasattr(self, 'initialized'):
+            return
+            
         database  = os.path.dirname(os.path.abspath(__file__))
         self.bank_db = os.path.join(database, "data", "bank.json")
         os.makedirs(os.path.dirname(self.bank_db), exist_ok=True)
         
         self.lock = RLock()
         self.bank = self.load()
+        self.initialized = True
 
     def load(self) -> Dict[str, int]:
         with self.lock:
