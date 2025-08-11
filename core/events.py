@@ -29,4 +29,4 @@ class EventManager:
         def on_killed(player: str, attacker: str, reason: str) -> None:
             print(f"[EventManager]: {player} killed by {attacker} - {reason}")
             self.bank.deposit(attacker, 400)
-            self.commands.privatemessage(attacker, f"Kill Bonus: ^5$4000")
+            self.commands.privatemessage(attacker, "Kill Bonus: ^5$400")

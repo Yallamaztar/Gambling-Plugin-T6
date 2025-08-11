@@ -24,10 +24,10 @@ class GamblingManager:
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
             
             print(f"[GamblingManager]: Ran `passive_income` for {len(players)} players")
-            time.sleep(24000)
+            time.sleep(2000)
 
     def broadcast_hint(self) -> None:
         while True:
-            time.sleep(225)
+            time.sleep(450)
             self.commands.say("^7Need help? Type ^3!usage ^7or ^3!u ^7to see all gambling options")
             print(f"[GamblingManager]: Ran `broadcast_hint`")
