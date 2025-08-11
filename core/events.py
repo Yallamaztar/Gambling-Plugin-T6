@@ -18,15 +18,15 @@ class EventManager:
         print("[EventManager]: Running")
 
     def register_events(self) -> None:
-        @self.client.on("player_connected")
+        @self.client.on("player_spawned")
         def on_connected(player: str) -> None:
             print(f"[EventManager]: {player} connected")
-            self.bank.deposit(player, 200)
-            self.commands.privatemessage(player, "Round Bonus: ^5$200")
+            self.bank.deposit(player, 1000)
+            self.commands.privatemessage(player, "Spawn Bonus: ^5$1000")
         
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str) -> None:
             print(f"[EventManager]: {player} killed by {attacker} - {reason}")
-            self.bank.deposit(attacker, 400)
-            self.commands.privatemessage(attacker, "Kill Bonus: ^5$400")
+            self.bank.deposit(attacker, 10000)
+            self.commands.privatemessage(attacker, "Kill Bonus: ^5$10,000")
             

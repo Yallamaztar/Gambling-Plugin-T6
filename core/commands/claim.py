@@ -18,19 +18,19 @@ class ClaimCommand:
 
 class HourlyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:
-        super().__init__(player, 5_000)
+        super().__init__(player, 100_000)
 
 class DailyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:
-        super().__init__(player, 50_000)
+        super().__init__(player, 1_500_000)
 
 class WeeklyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:
-        super().__init__(player, 450_000)
+        super().__init__(player, 12_500_000)
 
 class MonthlyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:
-        super().__init__(player, 4_000_000)
+        super().__init__(player, 100_000_000)
 
 
 @rate_limit(hours=1)
