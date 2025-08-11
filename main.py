@@ -7,24 +7,27 @@ from core.manager import GamblingManager
 from core.registry import Register
 from core.wrapper import Wrapper
 from core.events import EventManager
+from core.database.bank import BankManager
 
 class GamblingPlugin:
     def __init__(self) -> None:
         self.last_seen = deque(maxlen=50)
-
+        
         wrapper = Wrapper()
         self.server = wrapper.server
         self.player = wrapper.player
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor(max_workers=50)
+        self.executor = ThreadPoolExecutor(max_workers=30)
 
-        GamblingManager(self.server, self.commands)
-        
+        bank = BankManager()
+        bank.reset()
+
+        GamblingManager(bank, self.server, self.commands)
+        EventManager(bank, self.commands)
+
         print("Plugin running")
-        
-        # self.executor.submit(EventManager) # broken
         self.run()
         
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:

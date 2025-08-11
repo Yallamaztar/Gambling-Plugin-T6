@@ -35,12 +35,13 @@ class BankManager:
     def deposit(self, player: str, amount: int) -> None:
         with self.lock:
             self.balance.cache_clear()
-            self.bank[player] = self.bank.get(player, 0) + safe_int(amount)
+            self.bank[player] = self.bank.get(player, 0) + amount
             self.save()
 
     def reset(self) -> None:
         with self.lock:
             self.bank.clear()
+            self.balance.cache_clear()
             self.save()
 
     def top_balances(self, count: Optional[int] = 5) -> List[Dict[str, str | int]]:

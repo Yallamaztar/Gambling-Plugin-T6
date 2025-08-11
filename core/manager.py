@@ -5,17 +5,14 @@ import time
 from core.database.bank import BankManager
 
 class GamblingManager:
-    def __init__(self, server: IW4MWrapper.Server, commands: IW4MWrapper.Commands) -> None:
-        self.bank     = BankManager()
+    def __init__(self, bank: BankManager, server: IW4MWrapper.Server, commands: IW4MWrapper.Commands) -> None:
+        self.bank     = bank
         self.server   = server
         self.commands = commands
 
-        self.executor = ThreadPoolExecutor(max_workers=3)
-
+        self.executor = ThreadPoolExecutor(max_workers=2)
         self.executor.submit(self.passive_income)
-        # self.executor.submit(self.broadcast_richest_players) # shows old richest stats
         self.executor.submit(self.broadcast_hint)
-        return
     
     def passive_income(self, amount: int = 100000) -> None:
         while True:
@@ -26,20 +23,11 @@ class GamblingManager:
                 self.bank.deposit(player['name'], amount)
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
             
+            print(f"[GamblingManager]: Ran `passive_income` for {len(players)} players")
             time.sleep(24000)
-
-    def broadcast_richest_players(self) -> None:
-        while True:
-            time.sleep(500)
-            top_players = self.bank.top_balances()
-            self.commands.say("^7Top 5 ^5Richest^7 Players:")
-
-            time.sleep(.5)
-            for i, player in enumerate(top_players):
-                self.commands.say(f"^7#{i + 1} {player['name']} - ^5{player['balance']}")
-                time.sleep(.2)
 
     def broadcast_hint(self) -> None:
         while True:
             time.sleep(225)
             self.commands.say("^7Need help? Type ^3!usage ^7or ^3!u ^7to see all gambling options")
+            print(f"[GamblingManager]: Ran `broadcast_hint`")

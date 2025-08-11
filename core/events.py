@@ -1,25 +1,32 @@
+from concurrent.futures import ThreadPoolExecutor
 from gsc_events import GSCClient
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
-from typing import Dict, Any
-import random
+from iw4m import IW4MWrapper
 
 class EventManager:
-    def __init__(self) -> None:
+    def __init__(self, bank: BankManager, commands: IW4MWrapper.Commands) -> None:
         self.client = GSCClient()
-        self.bank = BankManager()
-        self.commands = Wrapper().commands
+        self.client.delete_event_logs()
+
+        self.bank = bank
+        self.commands = commands
+
+        executor = ThreadPoolExecutor(max_workers=10)
 
         self.events()
-        self.client.run()
+        executor.submit(self.client.run)
+        print("[EventManager]: Running")
 
     def events(self) -> None:
         @self.client.on("player_connected")
         def on_connected(player: str) -> None:
-            self.bank.deposit(player, 1000)
-            self.commands.privatemessage(player, "You received a ^2$1000^7 connection bonus!")
+            print(f"[EventManager]: {player} connected")
+            self.bank.deposit(player, 200)
+            self.commands.privatemessage(player, "Round Bonus: ^5$200")
         
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str) -> None:
-            self.bank.deposit(attacker, 5000)
-            self.commands.privatemessage(attacker, f"Kill reward: ^2$5000")
+            print(f"[EventManager]: {player} killed by {attacker} - {reason}")
+            self.bank.deposit(attacker, 400)
+            self.commands.privatemessage(attacker, f"Kill Bonus: ^5$4000")
