@@ -24,7 +24,7 @@ class GamblingManager:
                 self.commands.privatemessage(player['name'], f"You ^2received^7 ${amount}")
             
             print(f"[GamblingManager]: Ran `passive_income` for {len(players)} players")
-            time.sleep(2000)
+            time.sleep(900)
 
     def broadcast_hint(self) -> None:
         while True:
