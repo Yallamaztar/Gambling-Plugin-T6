@@ -1,7 +1,7 @@
 import re, random
-from typing import Optional
+from typing import Union, Optional
 
-def safe_int(value: str, default: Optional[int] = 0) -> int:
+def safe_int(value: Union[str, int], default: int = 0) -> int:
     try:
         return int(value)
     except (ValueError, TypeError):

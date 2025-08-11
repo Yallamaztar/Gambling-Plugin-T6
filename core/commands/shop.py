@@ -1,48 +1,67 @@
 from core.database.bank import BankManager
+from core.database.owners import OwnerManager
 from core.wrapper import Wrapper
-from core.commands import run_command_threaded
-
+from core.commands import run_command_threaded, rate_limit
 from typing import Optional
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None) -> None:
-        self.commands = Wrapper().commands
-        self.bank = BankManager()
+        commands = Wrapper().commands
+        owner    = OwnerManager()
+        bank     = BankManager()
 
         if item is None or item == "":
-            self.commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
-            self.commands.privatemessage(player, "^^5Gambler ^7Role - $10bil")
-            self.commands.privatemessage(player, "^8SeniorAdmin ^7Role - $100z")
-            self.commands.privatemessage(player, "More Stuff Coming In Future!")
+            commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
+            commands.privatemessage(player, "^7[1] ^5Gambler ^7Role     - $500b")
+            commands.privatemessage(player, "^7[2] ^5SeniorAdmin ^7Role - $100z")
+            commands.privatemessage(player, "^7[3] ^5Gamlbing ^7Admin   - $400z")
+            commands.privatemessage(player, "^7-- More Stuff Coming Soon --")
+
+        elif item.lower() == "gambler" or item == "1":
+            price = 500_000_000_000 # 500 billion
+            balance = bank.balance(player)
+            
+            if balance == 0:
+                commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+
+            if balance < price: 
+                commands.privatemessage(player, "You cant ^1afford ^7this"); return
+            
+            bank.deposit(player, -price)
+            commands.setlevel(player, "trusted")
+            commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Gambler")
         
-        elif item.lower() == "trusted":
-            price = int(500_000_000)
-            balance = self.bank.balance(player)
+        elif item.lower() == "senioradmin" or item == "2":
+            price = 100_000_000_000_000_000_000 # 100 zillion or wtv
+            balance = bank.balance(player)
+            
+            if balance == 0:
+                commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+
+            if balance < price:
+                commands.privatemessage(player, "You cant ^1afford ^7this"); return
+            
+            bank.deposit(player, -price)
+            commands.setlevel(player, "senioradmin")
+            commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2SeniorAdmin")
+        
+        elif item.lower() == "admin" or item == "2":
+            price = 400_000_000_000_000_000_000
+            balance = bank.balance(player)
+
+            if balance == 0:
+                commands.say(f"^7@{player} is ^1^Fgay n poor"); return
             
             if balance < price: 
-                self.commands.privatemessage(player, "You cant ^1afford ^7this")
-                return
+                commands.privatemessage(player, "You cant ^1afford ^7this"); return
             
-            else:
-                self.bank.deposit(player, -price)
-                self.commands.setlevel(player, "trusted")
-                self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Gambler")
+            bank.deposit(player, -price)
+            owner.add(player)
+            commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2Gambling Admin")
 
-        elif item.lower() == "senioradmin":
-            price = int(100_000_000_000_000_000) # 100 zillion or wtv
-            balance = self.bank.balance(player)
-            
-            if balance < price:
-                self.commands.privatemessage(player, "You cant ^1afford ^7this")
-                return
-            
-            else:
-                self.bank.deposit(player, -price)
-                self.commands.setlevel(player, "senioradmin")
-                self.commands.privatemessage(player, "Congratulations! You have been ^3promoted ^7to ^2SeniorAdmin")
-        
-        return
+        else: 
+            commands.privatemessage(player, "Invalid item selected"); return
 
-
+@rate_limit(seconds=5)
 def shop(player: str, item: Optional[str] = None) -> None:
     run_command_threaded(ShopCommand, player, item)

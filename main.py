@@ -36,11 +36,12 @@ class GamblingPlugin:
 
     def handle_command(self, origin: str, data: str) -> None:
         parts = data.strip().split()
-        if not parts:
-            return
+        if not parts: return
 
+        command = parts[0].lower()
+        
         for registered_command, alias, callback in self.register._handlers:
-            if parts[0] == registered_command or parts[0] == alias:
+            if command == registered_command or command == alias:
                 args = [origin] + parts[1:]
 
                 def run_callback():

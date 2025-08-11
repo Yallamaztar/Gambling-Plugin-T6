@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Dict, List, Callable, Any
+from typing import Optional, Dict, List, Callable, Any
 from threading import Thread, Lock
 import time
 
@@ -7,11 +7,16 @@ from core.database.owners import OwnerManager
 from core.wrapper import Wrapper
 from core.utils import format_time
 
-def rate_limit(*, hours: int = None, minutes: int = None) -> Callable:
-    if hours == None and minutes == None:
-        raise ValueError("missing hours or minutes")
+def rate_limit(*, 
+    hours: Optional[int] = None, 
+    minutes: Optional[int] = None, 
+    seconds: Optional[int] = None
+) -> Callable:
     
-    rate_limit_time: int = (hours or 0) * 3600 + (minutes or 0) * 60
+    if hours is None and minutes is None and seconds is None:
+        raise ValueError("missing hours, minutes or seconds")
+    
+    rate_limit_time: int = (hours or 0) * 3600 + (minutes or 0) * 60 + (seconds or 0)
     threads: Dict[tuple, Lock] = {}
     last_call: Dict[tuple, float] = {}
 

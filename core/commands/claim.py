@@ -2,29 +2,36 @@ from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
 
-class HourlyClaimCommand:
-    def __init__(self, player: str) -> None:
-        amount = 5000
-        BankManager().deposit(player, amount)
-        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${amount}")
+class ClaimCommand:
+    def __init__(self, player: str, amount: int) -> None:
+        self.bank     = BankManager()
+        self.commands = Wrapper().commands
 
-class DailyClaimCommand:
-    def __init__(self, player: str) -> None:
-        amount = 50000
-        BankManager().deposit(player, amount)
-        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${amount}")
+        self.player = player
+        self.amount = amount
 
-class WeeklyClaimCommand:
-    def __init__(self, player: str) -> None:
-        amount = 450_000
-        BankManager().deposit(player, amount)
-        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${amount}")
+        self.claim()
 
-class MonthlyClaimCommand:
+    def claim(self) -> None:
+        self.bank.deposit(self.player, self.amount)
+        self.commands.privatemessage(self.player, f"^2Successfully ^7claimed ^5${self.amount}")
+
+class HourlyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:
-        amount = 4_000_000
-        BankManager().deposit(player, amount)
-        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${amount}")
+        super().__init__(player, 5_000)
+
+class DailyClaimCommand(ClaimCommand):
+    def __init__(self, player: str) -> None:
+        super().__init__(player, 50_000)
+
+class WeeklyClaimCommand(ClaimCommand):
+    def __init__(self, player: str) -> None:
+        super().__init__(player, 450_000)
+
+class MonthlyClaimCommand(ClaimCommand):
+    def __init__(self, player: str) -> None:
+        super().__init__(player, 4_000_000)
+
 
 @rate_limit(hours=1)
 def hourly(player: str) -> None:

@@ -6,7 +6,7 @@ from core.commands.gamble import gamble
 from core.commands.give import give, give_all
 from core.commands.pay import pay
 from core.commands.reset import reset
-from core.commands.stats import stats
+from core.commands.rich import richest
 from core.commands.take import take, take_all
 from core.commands.usage import usage
 from core.commands.claim import hourly, daily, weekly, monthly
@@ -15,19 +15,19 @@ from core.commands.shop import shop
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
         self.prefix = prefix
-        self._handlers: List[Tuple[str, Callable]] = []
-        self.impl_commands()
+        self._handlers: List[Tuple[str, str, Callable]] = []
+        self.register_commands()
     
     def register_command(self, command: str, *, alias: str, callback: Callable) -> None:
         self._handlers.append((command, alias, callback))
 
-    def impl_commands(self) -> None:
+    def register_commands(self) -> None:
         # Client commands
         self.register_command(f"{self.prefix}usage",   alias=f"{self.prefix}u",    callback=usage)
         self.register_command(f"{self.prefix}gamble",  alias=f"{self.prefix}g",    callback=gamble)
         self.register_command(f"{self.prefix}balance", alias=f"{self.prefix}bal",  callback=balance)
         self.register_command(f"{self.prefix}pay",     alias=f"{self.prefix}p",    callback=pay)
-        self.register_command(f"{self.prefix}richest", alias=f"{self.prefix}rich", callback=stats)
+        self.register_command(f"{self.prefix}richest", alias=f"{self.prefix}rich", callback=richest)
 
         # Claimable commands
         self.register_command(f"{self.prefix}hourly",  alias=f"{self.prefix}hrl",  callback=hourly)

@@ -3,82 +3,47 @@ from core.wrapper import Wrapper
 import time
 from typing import Optional
 
+USAGE_PAGES = {
+    "1": [
+        "^7-- ^3Usage ^7Page ^51^7/^44 --",
+        "^3!gamble ^7or !g ^7<amount> - ^250^7/^150^7 chance to double or lose your bet",
+        "^3!balance ^7or !bal ^7<player (optional)> - ^5Check ^7your or another players balance",
+        "^3!pay ^7<player> <amount> - ^5Send ^7money to another player",
+        "^3!richest ^7- See the ^5top 5 ^7richest players",
+        "^3Use ^3k^7, ^3m^7, ^3b^7, ^3t^7, ^3q^7 or ^3z^7 (e.g, 5k, 2m) for amounts",
+    ],
+    "2": [
+        "^7-- ^3Usage ^7Page ^52^7/^44 --",
+        "^5Daily Claims^7:",
+        "^3!hourly ^7- Claim ^2$5,000 ^7(1h cooldown)"
+        "^3!daily ^7- Claim ^2$50_000 ^7(24h cooldown)",
+        "^3!weekly ^7- Claim ^2$450_000 ^7(7 days cooldown)",
+        "^3!monthly ^7- Claim ^2$4_000_000 ^7(30 days cooldown)",
+    ],
+    "3": [
+        "-- ^3Usage ^7Page ^54/4 --",
+        "^5Shop Commands^7:",
+        "^3!shop ^7- Open the shop menu",
+        "^3!shop ^7<item_number> - ^5Purchase ^7an item or role",
+        "^7Example: ^3!shop 1 ^7to buy the Gambler role",
+    ],
+    "4": [
+        "^5Other tips^7:",
+        "^7Use ^3!help ^7<command> for detailed info on any command",
+        "^7Check your balance regularly with ^3!balance ^7to avoid ^1surprises",
+        "^7Use shorthand amounts like ^35k^7 for 5,000 or ^32m^7 for 2,000,000",
+        "^7Join the community Discord for help! (discord.gg/DtktFBNf5T)",
+    ]
+}
+
 class UsageCommand:
     def __init__(self, player: str, page: Optional[str] = None ) -> None:
-        if not page or page == "1":
-            Wrapper().commands.privatemessage(player, "-- ^3Usage ^7Page ^51/3 --")
-            Wrapper().commands.privatemessage(
-                player, "^7!gamble <amount> - ^250/50^7 chance to double or lose your bet"
-            ); time.sleep(.5)
+        commands = Wrapper().commands
+        key = page if page in USAGE_PAGES else "1"
 
-            Wrapper().commands.privatemessage(
-                player, "^7!balance or !bal <player (optional)> - ^2Check your or another's balance"
-            );time.sleep(.5)
+        for line in USAGE_PAGES[key]:
+            commands.privatemessage(player, line)
+            time.sleep(.25)
 
-            Wrapper().commands.privatemessage(
-                player, "^7!pay <player> <amount> - ^2Send money to another player"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7!richest - ^2See the top 5 richest players"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7Type ^3!usage 2 ^7for claiming commands!"
-            ); time.sleep(.5)
-        
-        elif page == "2":
-            Wrapper().commands.privatemessage(player, "-- ^3Usage ^7Page ^52/3 --")
-            Wrapper().commands.privatemessage(
-                player, "^7Use ^3k^7, ^3m^7, ^3b^7, ^3t^7, ^3q^7 or ^3z^7 (e.g., 5k, 2m) for amounts"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(player, "^5Daily Claims:")
-            Wrapper().commands.privatemessage(
-                player, "^7!daily - Claim ^2$1,000,000 ^7(24h cooldown)"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7!weekly - Claim ^2$15,000,000 ^7(7 days cooldown)"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7!monthly - Claim ^2$100,000,000 ^7(30 days cooldown)"
-            ); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7Type ^3!usage 3 ^7for admin commands!"
-            ); time.sleep(.5)
-        
-        elif page == "3":
-            Wrapper().commands.privatemessage(player, "-- ^3Usage ^7Page ^53/3 --")
-            Wrapper().commands.privatemessage(player, "^1Admin Commands:"); time.sleep(.5)
-
-            Wrapper().commands.privatemessage(
-                player, "^7!give <player> <amount> - ^1Give money to a player"
-            ); time.sleep(.5)
-            
-            Wrapper().commands.privatemessage(
-                player, "^7!giveall <amount> - ^1Give money to all players"
-            ); time.sleep(.5)
-            
-            Wrapper().commands.privatemessage(
-                player, "^7!take <player> <amount> - ^1Take money from a player"
-            ); time.sleep(.5)
-            
-            Wrapper().commands.privatemessage(
-                player, "^7!takeall <amount> - ^1Take money from all players"
-            ); time.sleep(.5)
-            
-            Wrapper().commands.privatemessage(
-                player, "^7!reset - ^1Reset all bank accounts"
-            ); time.sleep(.5)
-            
-            Wrapper().commands.privatemessage(
-                player, "^7!addowner/!removeowner <player> - ^1Manage owners"
-            ); time.sleep(.5)
-        
-        return
-    
 def usage(player: str, page: Optional[str] = None) -> None:
     run_command_threaded(UsageCommand, player, page)

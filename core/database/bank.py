@@ -3,11 +3,11 @@ from threading import RLock
 import json, os
 
 class BankManager:
-    _instance = None
+    _instance: Optional["BankManager"] = None
     
-    def __new__(cls):
+    def __new__(cls) -> "BankManager":
         if cls._instance is None:
-            cls._instance = super(BankManager, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
     
     def __init__(self):
@@ -55,3 +55,12 @@ class BankManager:
                 {'name': player, 'balance': balance} 
                 for player, balance in sorted(self.bank.items(), key=lambda item: item[1], reverse=True)[:count]
             ]
+        
+    def __enter__(self) -> "BankManager":
+        self.lock.acquire()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        print(f"MOGGFAAMGKGKANGKAGN {exc_type} + {exc_value}")
+        self.save()
+        self.lock.release()

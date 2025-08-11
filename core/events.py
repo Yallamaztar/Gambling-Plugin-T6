@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from gsc_events import GSCClient
 from core.database.bank import BankManager
-from core.wrapper import Wrapper
 from iw4m import IW4MWrapper
 
 class EventManager:
@@ -12,13 +11,13 @@ class EventManager:
         self.bank = bank
         self.commands = commands
 
-        executor = ThreadPoolExecutor(max_workers=10)
+        executor = ThreadPoolExecutor(max_workers=5)
 
-        self.events()
+        self.register_events()
         executor.submit(self.client.run)
         print("[EventManager]: Running")
 
-    def events(self) -> None:
+    def register_events(self) -> None:
         @self.client.on("player_connected")
         def on_connected(player: str) -> None:
             print(f"[EventManager]: {player} connected")
@@ -30,3 +29,4 @@ class EventManager:
             print(f"[EventManager]: {player} killed by {attacker} - {reason}")
             self.bank.deposit(attacker, 400)
             self.commands.privatemessage(attacker, "Kill Bonus: ^5$400")
+            

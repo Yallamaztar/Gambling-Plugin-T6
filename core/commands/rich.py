@@ -1,10 +1,10 @@
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
-from core.commands import run_command_threaded
+from core.commands import run_command_threaded, rate_limit
 
 import time
 
-class StatsCommand:
+class RichestCommand:
     def __init__(self, player: str) -> None:
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
@@ -12,11 +12,10 @@ class StatsCommand:
 
         self.commands.say("^7Top 5 ^5richest ^7players:")
         time.sleep(.5)
-        for i, player in enumerate(self.bank.top_balances()):
-            self.commands.say(f"^7#{i + 1} {player['name']} - ^5{player['balance']}")
+        for i, p in enumerate(self.bank.top_balances()):
+            self.commands.say(f"^7#{i + 1} {p['name']} - ^5{p['balance']}")
             time.sleep(.2)
 
-        return
-
-def stats(player: str) -> None:
-    run_command_threaded(StatsCommand, player)
+@rate_limit(seconds=15)
+def richest(player: str) -> None:
+    run_command_threaded(RichestCommand, player)
