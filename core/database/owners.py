@@ -6,6 +6,7 @@ class OwnerManager:
         database = os.path.dirname(os.path.abspath(__file__))
         self.owners_db = os.path.join(database, "data", "owners.json")
         os.makedirs(os.path.dirname(self.owners_db), exist_ok=True)
+        print("[OwnerManager] Database initialized")
 
     def load(self) -> List[str]:
         try:

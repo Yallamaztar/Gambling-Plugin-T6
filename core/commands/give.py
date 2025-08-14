@@ -47,7 +47,7 @@ class GiveAllCommand:
             self.commands.privatemessage(player, f"Gave {p['name']} ${amount}")
             self.commands.privatemessage(p['name'], f"You've gotten ^2${amount} ^7from {player}")
         
-        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players {amount}")
+        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ${amount}")
 
 def give(player: str, target: str, amount: str) -> None:
     run_command_threaded(GiveCommand, player, target, amount)

@@ -11,12 +11,14 @@ from core.commands.take import take, take_all
 from core.commands.usage import usage
 from core.commands.claim import hourly, daily, weekly, monthly
 from core.commands.shop import shop 
+from core.commands.banflip import banflip
 
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
         self.prefix = prefix
         self._handlers: List[Tuple[str, str, Callable]] = []
         self.register_commands()
+        print(f"[Register] {len(self._handlers)} Commands registered")
     
     def register_command(self, command: str, *, alias: str, callback: Callable) -> None:
         self._handlers.append((command, alias, callback))
@@ -28,6 +30,8 @@ class Register:
         self.register_command(f"{self.prefix}balance", alias=f"{self.prefix}bal",  callback=balance)
         self.register_command(f"{self.prefix}pay",     alias=f"{self.prefix}p",    callback=pay)
         self.register_command(f"{self.prefix}richest", alias=f"{self.prefix}rich", callback=richest)
+        self.register_command(f"{self.prefix}banflip", alias=f"{self.prefix}bf",   callback=banflip)
+        # add steal command too
 
         # Claimable commands
         self.register_command(f"{self.prefix}hourly",  alias=f"{self.prefix}hrl",  callback=hourly)

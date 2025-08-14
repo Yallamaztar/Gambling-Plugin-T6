@@ -8,6 +8,7 @@ class BankManager:
     def __new__(cls) -> "BankManager":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            print("[BankManager] Creating new instance")
         return cls._instance
     
     def __init__(self):
@@ -21,6 +22,7 @@ class BankManager:
         self.lock = RLock()
         self.bank = self.load()
         self.initialized = True
+        print("[BankManager] Database initialized")
 
     def load(self) -> Dict[str, int]:
         with self.lock:
@@ -59,8 +61,3 @@ class BankManager:
     def __enter__(self) -> "BankManager":
         self.lock.acquire()
         return self
-
-    def __exit__(self, exc_type, exc_value, traceback) -> None:
-        print(f"MOGGFAAMGKGKANGKAGN {exc_type} + {exc_value}")
-        self.save()
-        self.lock.release()

@@ -22,12 +22,12 @@ class GamblingPlugin:
         self.executor = ThreadPoolExecutor(max_workers=30)
 
         bank = BankManager()
-        bank.reset()
+        # bank.reset()
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
 
-        print("Plugin running")
+        print("[Gambling] Plugin running")
         self.run()
         
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
@@ -46,6 +46,7 @@ class GamblingPlugin:
 
                 def run_callback():
                     try:
+                        print(f"[Gambling] {origin} - {command}")
                         callback(*args)
                     except Exception:
                         self.commands.privatemessage(origin, "Do ^1!usage ^7to see ^3help ^7page")
