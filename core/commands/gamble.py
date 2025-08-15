@@ -21,14 +21,14 @@ class GambleCommand:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
     def validate(self, player: str, amount: str) -> int | None:
-        if amount.lower() == "all":
+        if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(player)
             if bet <= 0:
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
             
             return bet
         
-        elif amount.lower() == "half":
+        elif amount.lower() == "half" or amount.lower() == "h":
             bet = self.bank.balance(player) // 2
             if bet <= 0:
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return

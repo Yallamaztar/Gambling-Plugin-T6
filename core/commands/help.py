@@ -1,3 +1,5 @@
+# Not in use yet
+
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
 from typing import Optional

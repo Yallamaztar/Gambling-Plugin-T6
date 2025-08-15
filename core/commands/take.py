@@ -22,10 +22,10 @@ class TakeCommand:
         if balance == 0:
             self.commands.privatemessage(player, f"{target} has ^1no ^7money"); return
         
-        if _amount.lower() == "all":
+        if _amount.lower() == "all" or _amount.lower() == "a":
             amount = balance
 
-        elif _amount.lower() == "half":
+        elif _amount.lower() == "half" or _amount.lower() == "h":
             amount = balance // 2
             if amount <= 0:
                 self.commands.privatemessage(player, f"{target} doesnt have enough money to take half"); return
@@ -56,10 +56,10 @@ class TakeAllCommand:
             balance = self.bank.balance(p['name'])
             if balance == 0: continue
             
-            if _amount.lower() == "all":
+            if _amount.lower() == "all" or _amount.lower() == "a":
                 amount = balance
 
-            elif _amount.lower() == "half":
+            elif _amount.lower() == "half" or _amount.lower() == "h":
                 amount = balance // 2
                 if amount <= 0: continue
 

@@ -27,14 +27,14 @@ class BanFlip:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
     
     def validate(self, player: str, amount: str) -> int | None:
-        if amount.lower() == "all":
+        if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(player)
             if bet <= 0:
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
             
             return bet
         
-        elif amount.lower() == "half":
+        elif amount.lower() == "half" or amount.lower() == "h":
             bet = self.bank.balance(player) // 2
             if bet <= 0:
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
@@ -70,19 +70,32 @@ class BanFlip:
             self.commands.privatemessage(player, "Days cannot exceed 30"); return
 
         if unit == "m":
-            if dur < 10: return 1
-            elif dur < 30: return 2
-            else: return 3
+            if dur < 5: return 1
+            elif dur < 10: return 2
+            elif dur < 20: return 3
+            elif dur < 30: return 4
+            elif dur < 45: return 5
+            else: return 6
     
         elif unit == "h":
-            if dur < 3: return 4
-            elif dur < 6: return 6
-            else: return 8
+            if dur < 2: return 4
+            elif dur < 3: return 5
+            elif dur < 4: return 6
+            elif dur < 6: return 7
+            elif dur < 8: return 9
+            else: return 10
 
         elif unit == "d":
-            if dur < 3: return 10
-            elif dur < 7: return 15
-            else: return 20
+            if dur < 2: return 10
+            elif dur <= 3: return 12
+            elif dur <= 5: return 15
+            elif dur <= 7: return 17
+            elif dur <= 10: return 20
+            elif dur <= 15: return 22
+            elif dur <= 20: return 25
+            elif dur <= 25: return 30
+            else: return 40
+
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> str:
         if random.choice([True, False]):

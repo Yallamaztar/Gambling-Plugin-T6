@@ -30,12 +30,12 @@ class PayCommand:
         if player == target:
             self.commands.privatemessage(player, "You cannot pay yourself.."); return
 
-        if amount.lower() == "all":
+        if amount.lower() == "all" or amount.lower() == "a":
             payment = self.bank.balance(player)
             if payment <= 0:
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
 
-        elif amount.lower() == "half":
+        elif amount.lower() == "half" or amount.lower() == "h":
             payment = self.bank.balance(player) // 2
             if payment <= 0:    
                 self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return

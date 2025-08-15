@@ -6,12 +6,12 @@ from iw4m import IW4MWrapper
 class EventManager:
     def __init__(self, bank: BankManager, commands: IW4MWrapper.Commands) -> None:
         self.client = GSCClient()
-        self.client.delete_event_logs()
+        self.client.clear_events()
 
         self.bank = bank
         self.commands = commands
 
-        executor = ThreadPoolExecutor(max_workers=5)
+        executor = ThreadPoolExecutor()
 
         self.register_events()
         executor.submit(self.client.run)

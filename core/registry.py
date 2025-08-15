@@ -12,6 +12,7 @@ from core.commands.usage import usage
 from core.commands.claim import hourly, daily, weekly, monthly
 from core.commands.shop import shop 
 from core.commands.banflip import banflip
+from core.commands.link import link
 
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
@@ -41,6 +42,9 @@ class Register:
         
         # Shop command
         self.register_command(f"{self.prefix}shop", alias=f"{self.prefix}shp", callback=shop)
+
+        # Discord link
+        self.register_command(f"{self.prefix}link", alias=f"{self.prefix}lnk", callback=link)
 
         # Admin commands
         self.register_command(f"{self.prefix}give",        alias=f"{self.prefix}gi",  callback=give)

@@ -9,6 +9,8 @@ from core.wrapper import Wrapper
 from core.events import EventManager
 from core.database.bank import BankManager
 
+from core.bot import run_bot
+
 class GamblingPlugin:
     def __init__(self) -> None:
         self.last_seen = deque(maxlen=50)
@@ -26,6 +28,8 @@ class GamblingPlugin:
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
+        
+        self.executor.submit(run_bot)
 
         print("[Gambling] Plugin running")
         self.run()
@@ -46,7 +50,6 @@ class GamblingPlugin:
 
                 def run_callback():
                     try:
-                        print(f"[Gambling] {origin} - {command}")
                         callback(*args)
                     except Exception:
                         self.commands.privatemessage(origin, "Do ^1!usage ^7to see ^3help ^7page")
