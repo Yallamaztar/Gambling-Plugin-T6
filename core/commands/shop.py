@@ -15,9 +15,9 @@ class ShopCommand:
     def show_shop(self, player: str) -> None:
         self.commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
         self.commands.privatemessage(player, "^7[1] ^5Fast^7Restart Map  - $150m")
-        self.commands.privatemessage(player, "^7[3] ^5Gambler ^7Role     - $10b")
-        self.commands.privatemessage(player, "^7[4] ^5SeniorAdmin ^7Role - $250q")
-        self.commands.privatemessage(player, "^7[5] ^5Gambling ^7Owner   - $100z")
+        self.commands.privatemessage(player, "^7[2] ^5Gambler ^7Role     - $10b")
+        self.commands.privatemessage(player, "^7[3] ^5SeniorAdmin ^7Role - $250q")
+        self.commands.privatemessage(player, "^7[4] ^5Gambling ^7Owner   - $100z")
 
     def buy_item(self, player: str, item: str) -> None:
         if item.lower() == "fastrestart" or item.lower() == "fr" or item == "1":
