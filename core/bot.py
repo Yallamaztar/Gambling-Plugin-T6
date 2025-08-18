@@ -91,6 +91,7 @@ async def unban(
     if not player.startswith("@"):
         player = Wrapper().player.player_client_id_from_name(player)
 
+    # BankManager().deposit() # get play username from discord id
     Wrapper().commands.unban(f"@{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
 
     return await interaction.response.send_message(
