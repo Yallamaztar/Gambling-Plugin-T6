@@ -3,13 +3,15 @@ from core.utils import parse_amount
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 
+from typing import Optional
+
 class PayCommand:
     def __init__(self, player: str, target: str, amount: str) -> None:
         self._player   = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
-        target = self._player.find_player_by_partial_name(target)
+        target = self._player.find_player_by_partial_name(target) # type: ignore
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
 
@@ -21,12 +23,12 @@ class PayCommand:
             self.bank.deposit(target, payment)
 
             self.commands.privatemessage(player, f"you have paid ^2${payment}^7 to {target} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.privatemessage(target, f"{player} paid you ^2${amount}^7 | Your new balance: ^5${self.bank.balance(target)}")
+            self.commands.privatemessage(target, f"{player} paid you ^2${payment}^7 | Your new balance: ^5${self.bank.balance(target)}")
         
         except ValueError:
             return self.commands.privatemessage(player, f"^1{amount}^7 is ^1not^7 a valid number")
 
-    def validate(self, player: str, target: str, amount: str) -> int | None:
+    def validate(self, player: str, target: str, amount: str) -> Optional[int]:
         if player == target:
             self.commands.privatemessage(player, "You cannot pay yourself.."); return
 

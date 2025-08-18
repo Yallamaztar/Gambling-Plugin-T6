@@ -14,7 +14,7 @@ class TakeCommand:
     
     @owners_only()
     def take(self, player: str, target: str, _amount: str) -> None:
-        target = self.player.find_player_by_partial_name(target)
+        target = self.player.find_player_by_partial_name(target) # type: ignore
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         

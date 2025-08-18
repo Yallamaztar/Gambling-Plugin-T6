@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from threading import RLock
 import json, os
 
@@ -21,7 +21,6 @@ class BankManager:
         self.lock = RLock()
         self.bank = self.load()
         self.initialized = True
-        print("[BankManager] Database loaded")
 
     def load(self) -> Dict[str, int]:
         with self.lock:
@@ -50,7 +49,7 @@ class BankManager:
             self.bank.clear()
             self.save()
 
-    def top_balances(self, count: Optional[int] = 5) -> List[Dict[str, str | int]]:
+    def top_balances(self, count: Optional[int] = 5) -> List[Dict[str, Union[str, int]]]:
         with self.lock:
             return [
                 {"name": player, "balance": balance} 

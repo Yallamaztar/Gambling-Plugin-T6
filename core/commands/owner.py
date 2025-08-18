@@ -11,7 +11,7 @@ class OwnerAddCommand:
     
     @owners_only()
     def add(self, player: str, target: str) -> None:
-        target = self.player.find_player_by_partial_name(target)
+        target = self.player.find_player_by_partial_name(target) # type: ignore
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         
@@ -27,7 +27,7 @@ class OwnerRemoveCommand:
 
     @owners_only()
     def remove(self, player: str, target: str) -> None:
-        target = self.player.find_player_by_partial_name(target)
+        target = self.player.find_player_by_partial_name(target) # type: ignore
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         

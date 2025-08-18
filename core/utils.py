@@ -1,5 +1,5 @@
 import re, random
-from typing import Union, Optional
+from typing import Union
 
 def safe_int(value: Union[str, int], default: int = 0) -> int:
     try:

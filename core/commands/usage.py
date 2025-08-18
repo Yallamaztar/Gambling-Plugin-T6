@@ -13,7 +13,7 @@ USAGE_PAGES = {
         "^3Use ^3k^7, ^3m^7, ^3b^7, ^3t^7, ^3q^7 or ^3z^7 (e.g, 5k, 2m) for amounts",
     ],
     "2": [
-        "^7-- ^3Usage ^7Page ^52^7/^44 --",
+        "^7-- ^3Usage ^7Page ^52^7/^45 --",
         "^5Daily Claims^7:",
         "^3!hourly ^7- Claim ^2$5,000 ^7(1h cooldown)"
         "^3!daily ^7- Claim ^2$50_000 ^7(24h cooldown)",
@@ -21,13 +21,21 @@ USAGE_PAGES = {
         "^3!monthly ^7- Claim ^2$4_000_000 ^7(30 days cooldown)",
     ],
     "3": [
-        "-- ^3Usage ^7Page ^54/4 --",
+        "^7-- ^3Usage ^7Page ^53^7/^45 --",
+        "-- ^3Usage ^7Page ^54^7/^44 ^7--",
+        "^3!bf ^7250k ^55d ^7- Bet $250,000, risk a 5-day ban if you lose",
+        "^3!bf ^7all ^530m ^7- Bet everything you own, 30-minute ban on loss"
+        "^3!bf ^7half ^52h ^7- Bet half your balance, 2-hour ban on loss",
+        "The longer the ^1ban ^7the ^5bigger ^7the ^5multiplier!",
+    ],
+    "4": [
+        "-- ^3Usage ^7Page ^54^7/^44 ^7--",
         "^5Shop Commands^7:",
         "^3!shop ^7- Open the shop menu",
         "^3!shop ^7<item_number> - ^5Purchase ^7an item or role",
         "^7Example: ^3!shop 1 ^7to buy the Gambler role",
     ],
-    "4": [
+    "5": [
         "^5Other tips^7:",
         "^7Use ^3!help ^7<command> for detailed info on any command",
         "^7Check your balance regularly with ^3!balance ^7to avoid ^1surprises",

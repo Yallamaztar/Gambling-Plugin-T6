@@ -2,7 +2,10 @@ from core.database.bank import BankManager
 from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
+
+from typing import Optional
 import random 
+
 
 class BanFlip:
     def __init__(self, player: str, amount: str, duration: str) -> None:
@@ -26,7 +29,7 @@ class BanFlip:
         except ValueError:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
     
-    def validate(self, player: str, amount: str) -> int | None:
+    def validate(self, player: str, amount: str) -> Optional[int]:
         if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(player)
             if bet <= 0:
@@ -52,15 +55,15 @@ class BanFlip:
         
         return bet
     
-    def calc_multiplier(self, player: str, duration: str) -> int | None:
+    def calc_multiplier(self, player: str, duration: str) -> Optional[int]:
         unit = duration[-1].lower()
         dur  = int(duration[:-1])
 
         if unit not in ["m", "h", "d"]:
             self.commands.privatemessage(player, "Invalid time unit, use m, h, or d"); return
 
-        if dur <= 0:
-            self.commands.privatemessage(player, "Duration has to be greater than 0"); return
+        if dur <= 5:
+            self.commands.privatemessage(player, "Duration has to be greater than 5"); return
         
         if unit == "m" and dur > 60:
             self.commands.privatemessage(player, "Minutes cannot exceed 60"); return
@@ -94,7 +97,7 @@ class BanFlip:
             elif dur <= 15: return 22
             elif dur <= 20: return 25
             elif dur <= 25: return 30
-            else: return 40
+            else: return 45
 
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> str:

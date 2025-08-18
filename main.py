@@ -8,8 +8,7 @@ from core.registry import Register
 from core.wrapper import Wrapper
 from core.events import EventManager
 from core.database.bank import BankManager
-
-from core.bot import run_bot
+# from core.bot import run_bot
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -21,15 +20,14 @@ class GamblingPlugin:
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor(max_workers=30)
+        self.executor = ThreadPoolExecutor()
 
         bank = BankManager()
         # bank.reset()
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
-        
-        self.executor.submit(run_bot)
+        # self.executor.submit(run_bot)
 
         print("[Gambling] Plugin running")
         self.run()
@@ -61,17 +59,12 @@ class GamblingPlugin:
         while True:
             audit_log = self.server.get_recent_audit_log()
 
-            if audit_log is None:
-                time.sleep(.01)
-                continue
-
-            if not self.is_valid_audit_log(audit_log):
-                time.sleep(.01)
-                continue
+            if audit_log is None: time.sleep(.01); continue
+            if not self.is_valid_audit_log(audit_log): time.sleep(.01); continue
 
             self.last_seen.clear()
             self.last_seen.append((audit_log['origin'], audit_log['data'], audit_log['time']))
-            self.handle_command(audit_log['origin'], audit_log['data'])
+            self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data']) # better ?
 
             time.sleep(.01)
 

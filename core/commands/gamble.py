@@ -2,6 +2,8 @@ from core.database.bank import BankManager
 from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
+
+from typing import Optional
 import random
 
 class GambleCommand:
@@ -20,7 +22,7 @@ class GambleCommand:
         except ValueError:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
-    def validate(self, player: str, amount: str) -> int | None:
+    def validate(self, player: str, amount: str) -> Optional[int]:
         if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(player)
             if bet <= 0:

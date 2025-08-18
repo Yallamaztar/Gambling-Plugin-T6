@@ -14,7 +14,7 @@ class BalanceCommand:
             self.commands.privatemessage(player, f"your balance is ^1${bal}")
             return
         
-        bal = self.bank.balance(self.player.find_player_by_partial_name(target))
+        bal = self.bank.balance(self.player.find_player_by_partial_name(target)) # type: ignore
         self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
     
 def balance(player: str, target: Optional[str] = None) -> None:
