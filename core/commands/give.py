@@ -1,5 +1,5 @@
 from core.database.bank import BankManager
-from core.permissions import owners_only, admins_only
+from core.permissions import PermissionManager, owners_only, admins_only
 from core.commands import run_command_threaded, rate_limit
 from core.utils import parse_amount
 from core.wrapper import Wrapper
@@ -55,8 +55,6 @@ class GiveAdminCommand:
         self.bank = BankManager()
 
         self.MAX_ADMIN_GIVE     = 250_000_000_000_000 # 250t
-        self.MAX_ADMIN_GIVE_ALL = 10_000_000_000 # 10b
-        
         self.give(player, target, amount)
 
     @admins_only()
@@ -69,7 +67,7 @@ class GiveAdminCommand:
         if amount <= 0:
             self.commands.privatemessage(player, "Amount must be positive"); return
         
-        if amount > self.MAX_ADMIN_GIVE:
+        if amount > self.MAX_ADMIN_GIVE and not PermissionManager().is_owner(player):
             self.commands.privatemessage(player, f"Admins can only give up to ${self.MAX_ADMIN_GIVE}"); return
         
         self.bank.deposit(target, amount)
@@ -83,7 +81,6 @@ class GiveAllAdminCommand:
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
-        self.MAX_ADMIN_GIVE     = 250_000_000_000_000 # 250t
         self.MAX_ADMIN_GIVE_ALL = 10_000_000_000 # 10b
         
         self.give_all(player, amount)
@@ -94,6 +91,9 @@ class GiveAllAdminCommand:
         if amount <= 0:
             self.commands.privatemessage(player, "Amount must be positive"); return
         
+        if amount > self.MAX_ADMIN_GIVE_ALL and not PermissionManager().is_owner(player):
+            self.commands.privatemessage(player, f"Admins can only give up to ${self.MAX_ADMIN_GIVE_ALL}"); return
+
         for p in self.server.get_players():
             self.bank.deposit(p['name'], amount)
             self.commands.privatemessage(player, f"Gave {p['name']} ${amount}")
