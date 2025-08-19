@@ -5,7 +5,7 @@ from nextcord import SlashOption, Interaction
 from core.database.bank import BankManager
 from core.database.links import LinkManager
 from core.wrapper import Wrapper
-from core.utils import parse_amount
+from core.utils import parse_amount, split_clan_tag
 
 import random
 from typing import Optional
@@ -14,7 +14,7 @@ class GambleCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.bank = BankManager()
-        self.wrapper = Wrapper().commands
+        self.commands = Wrapper().commands
         self.links = LinkManager()
 
     @nextcord.slash_command(
@@ -46,6 +46,7 @@ class GambleCog(commands.Cog):
             )
 
         result = self.update_balance(player, bet)
+        self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
         await interaction.response.send_message(
             f"🎲 **You {result} ${bet}!** Your new balance: ${self.bank.balance(player)}",
             ephemeral=True

@@ -8,8 +8,8 @@ bot = commands.Bot()
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
-    await bot.http.bulk_upsert_global_commands(bot.user.id, []) # type: ignore
-    print("Cleared all global commands!")
+    #await bot.http.bulk_upsert_global_commands(bot.user.id, []) # type: ignore
+    #print("Cleared all global commands!")
 
 cogs = [
     "core.cogs.link",
