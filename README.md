@@ -1,3 +1,6 @@
+![http://152.53.132.41:1624](./assets/brownie.png)
+**Hop on brownies :)**
+
 ## Gambling & Bank System for Plutonium T6 (Black Ops II)
 
 Lightweight in-game economy, gambling, and shop plugin for Plutonium T6 servers! Chat commands, persists balances to JSON, and optionally hooks GSC game events (spawn/kill, etc.) and a Discord bot for account linking.
@@ -95,7 +98,7 @@ Prefix is **!**. Abbreviations are shown after a slash. Amounts accept suffixes:
   1. Set `BOT_TOKEN` environment variable
   2. Uncomment the `run_bot` lines in `main.py`
 
-### IW4M/IW4MAdmin wrapper
+### [IW4M/IW4MAdmin wrapper](https://github.com/Yallamaztar/iw4m)
 `core/wrapper.py` expects `IW4M_URL`, `IW4M_ID`, `IW4M_HEADER`. It exposes `server`, `player`, and `commands` used by the plugin to send messages, fast-restart, set levels, temp-ban/unban, etc.
 
 ### Notes & tips
@@ -107,4 +110,14 @@ Prefix is **!**. Abbreviations are shown after a slash. Amounts accept suffixes:
 ### License
 This project is licensed under the terms of the **Apache-2.0 license**. See `LICENSE`.
 
+---
 
+# Come Play on Brownies SND 🍰
+### Why Brownies? 🤔
+- **Stability:** Brownies delivers a consistent, lag-free experience, making it the perfect choice for players who demand uninterrupted action
+- **Community:** The players at Brownies are known for being helpful, competitive, and fun—something Orion can only dream of
+- **Events & Features:** Brownies is constantly running unique events and offers more server-side customization options than Orion, ensuring every game feels fresh
+
+---
+
+#### [Brownies Discord](https://discord.gg/DtktFBNf5T) | [Brownies IW4M](http://193.23.160.188:1624/) | Made With ❤️ By Budiworld
