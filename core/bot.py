@@ -83,24 +83,9 @@ async def unban(
                 ephemeral=True
             )
         
-    try:
-        player_id = Wrapper().player.player_client_id_from_name(player)
-    except Exception:
-        return await interaction.response.send_message(
-            "❌ **Could not find this player in the game database**",
-            ephemeral=True
-        )
-
-    # Check ban reason
-    try:
-        ban_reason = Wrapper().player.ban_reason(player_id)
-    except Exception:
-        return await interaction.response.send_message(
-            "❌ **Could not retrieve ban information for this player**",
-            ephemeral=True
-        )
-
-    if not ban_reason.startswith("You lost gamble lol"):
+    player_id = Wrapper().player.player_client_id_from_name(player)
+    ban_reason = Wrapper().player.ban_reason(player_id)
+    if not ban_reason.startswith("You lost gamble lol"): 
         return await interaction.response.send_message(
             "❌ **This player wasn't banned for losing a gamble**",
             ephemeral=True
@@ -108,13 +93,12 @@ async def unban(
 
     unban_target = player_id if player_id.startswith("@") else f"@{player_id}"
     try:
-        Wrapper().commands.unban(unban_target, f"You got unbanned by {interaction.user.name}")  # type: ignore
+        Wrapper.commands.unban(unban_target, f"You got unbanned by {interaction.user.name}")  # type: ignore
     except Exception:
         return await interaction.response.send_message(
-            "❌ **Failed to unban this player. Please try again later**",
+            "❌ **Failed to unban this player. Please try again later.**",
             ephemeral=True
         )
-    
     await interaction.response.send_message(
         f"✅ **Successfully unbanned {player}**",
         ephemeral=True
