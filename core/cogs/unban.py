@@ -55,9 +55,9 @@ class UnbanCog(commands.Cog):
                 ephemeral=True
             )
 
-        unban_target = f"@{player_id}" if not str(player_id).startswith("@") else str(player_id)
+        unban = f"@{player_id}" if not str(player_id).startswith("@") else str(player_id)
         try:
-            Wrapper().commands.unban(unban_target, f"You got unbanned by {interaction.user.name}")  # type: ignore
+            Wrapper().commands.unban(unban, f"You got unbanned by {interaction.user.name}")  # type: ignore
         except Exception:
             return await interaction.response.send_message(
                 "❌ **Failed to unban this player. Try again later**",

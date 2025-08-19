@@ -1,4 +1,5 @@
 from core.database.bank import BankManager
+from core.database.stats import StatsManager
 from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
@@ -51,9 +52,11 @@ class GambleCommand:
                 
     def update_balance(self, bet: int) -> str:
         if random.choice([True, False]):
-            self.bank.deposit(self.player, bet); return "^2won^7"
+            self.bank.deposit(self.player, bet)
+            StatsManager().win(self.player, bet); return "^2won^7"
         else:
-            self.bank.deposit(self.player, -bet); return "^1lost^7"
+            self.bank.deposit(self.player, -bet)
+            StatsManager().loss(self.player, bet); return "^1lost^7"
 
 def gamble(player: str, amount: str) -> None:
     run_command_threaded(GambleCommand, player, amount)

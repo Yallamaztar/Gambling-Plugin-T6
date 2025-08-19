@@ -4,6 +4,7 @@ from nextcord import SlashOption, Interaction
 
 from core.database.bank import BankManager
 from core.database.links import LinkManager
+from core.database.stats import StatsManager
 from core.wrapper import Wrapper
 from core.utils import parse_amount, split_clan_tag
 
@@ -70,9 +71,11 @@ class GambleCog(commands.Cog):
     def update_balance(self, player: str, bet: int) -> str:
         if random.choice([True, False]):
             self.bank.deposit(player, bet)
+            StatsManager().win(player, bet)
             return "won"
         else:
             self.bank.deposit(player, -bet)
+            StatsManager().loss(player, bet)
             return "lost"
 
 def setup(bot: commands.Bot):

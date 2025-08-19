@@ -1,6 +1,4 @@
-import nextcord
 from nextcord.ext import commands
-
 from os import environ
 
 bot = commands.Bot()
@@ -8,8 +6,6 @@ bot = commands.Bot()
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
-    #await bot.http.bulk_upsert_global_commands(bot.user.id, []) # type: ignore
-    #print("Cleared all global commands!")
 
 cogs = [
     "core.cogs.link",
