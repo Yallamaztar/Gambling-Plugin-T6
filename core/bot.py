@@ -3,12 +3,20 @@ from core.database.tokens import TokenManager
 from core.database.links import LinkManager
 from core.wrapper import Wrapper
 
+import nextcord
 from nextcord.ext import commands
 from nextcord import SlashOption, Interaction
 
 from os import environ
 
-bot = commands.Bot()
+intents = nextcord.Intents.all()
+bot = commands.Bot(intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f"Logged in as {bot.user}")
+    await bot.http.bulk_upsert_global_commands(bot.user.id, []) # type: ignore
+    print("Cleared all global commands!")
 
 @bot.slash_command(name="link", description="Link your ingame account with a token", force_global=True)
 @commands.cooldown(1, 120, commands.BucketType.user)
