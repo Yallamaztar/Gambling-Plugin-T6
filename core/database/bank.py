@@ -59,3 +59,6 @@ class BankManager:
     def __enter__(self) -> "BankManager":
         self.lock.acquire()
         return self
+    
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.lock.release()

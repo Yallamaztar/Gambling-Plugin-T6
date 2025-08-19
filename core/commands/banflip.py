@@ -3,7 +3,7 @@ from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 
-from typing import Optional
+from typing import Optional, Tuple
 import random 
 
 
@@ -19,9 +19,9 @@ class BanFlip:
             multiplier = self.calc_multiplier(player, duration)
             if multiplier is None: return
 
-            result = self.update_balance(player, bet, multiplier)
+            result, total = self.update_balance(player, bet, multiplier)
             self.commands.privatemessage(player, f"you {result} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
+            self.commands.say(f"^7{split_clan_tag(player)} {result} ${total}")
 
             if result == "^1lost^7":
                 self.commands.tempban(player, duration, "You lost gamble lol")
@@ -100,12 +100,12 @@ class BanFlip:
             else: return 45
 
 
-    def update_balance(self, player: str, bet: int, multiplier: int) -> str:
+    def update_balance(self, player: str, bet: int, multiplier: int) -> Tuple[str, Optional[int]]:
         if random.choice([True, False]):
             total = bet * multiplier
-            self.bank.deposit(player, total); return "^2won^7"
+            self.bank.deposit(player, total); return ("^2won^7", total)
         else:
-            self.bank.deposit(player, -bet); return "^1lost^7"
+            self.bank.deposit(player, -bet); return ("^1lost^7", bet)
 
 def banflip(player: str, amount: str, duration: str) -> None:
     run_command_threaded(BanFlip, player, amount, duration)

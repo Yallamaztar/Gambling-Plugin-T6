@@ -8,7 +8,7 @@ from core.registry import Register
 from core.wrapper import Wrapper
 from core.events import EventManager
 from core.database.bank import BankManager
-# from core.bot import run_bot
+from core.bot import run_bot
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -27,7 +27,7 @@ class GamblingPlugin:
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
-        # self.executor.submit(run_bot)
+        self.executor.submit(run_bot)
 
         print("[Gambling] Plugin running")
         self.run()

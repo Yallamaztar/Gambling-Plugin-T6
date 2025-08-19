@@ -1,5 +1,6 @@
 from core.database.bank import BankManager
-from core.commands import owners_only, run_command_threaded
+from core.permissions import owners_only
+from core.commands import run_command_threaded
 from core.wrapper import Wrapper
 
 class ResetCommand:

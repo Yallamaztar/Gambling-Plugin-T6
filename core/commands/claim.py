@@ -42,15 +42,17 @@ def monthly(player: str) -> None:
 # Trusted role only aka certified gambla (brownies reference fr)
 class RoleClaimDaily(ClaimCommand):
     def __init__(self, player: str, role: str) -> None:
-        if role != "Trusted": 
-            Wrapper().commands.privatemessage(player, "You dont have perms for this command"); return
-        super().__init__(player, 5_000_000)
+        if role.lower() not in ["trusted", "administrator", "senioradmin", "owner", "creator" ]: return
+        else: 
+            Wrapper().commands.privatemessage(player, "You dont have perms for this command")
+            super().__init__(player, 6_000_000)
 
 class RoleClaimWeekly(ClaimCommand):
     def __init__(self, player: str, role: str) -> None:
-        if role != "Trusted":
-            Wrapper().commands.privatemessage(player, "You dont have perms for this command"); return
-        super().__init__(player, 17_000_000)
+        if role.lower() not in ["trusted", "administrator", "senioradmin", "owner", "creator" ]: return
+        else: 
+            Wrapper().commands.privatemessage(player, "You dont have perms for this command")
+            super().__init__(player, 17_000_000)
 
 @rate_limit(hours=24)
 def role_daily(player: str) -> None:

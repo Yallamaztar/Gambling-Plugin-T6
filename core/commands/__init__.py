@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Optional, Dict, List, Callable, Any
+from typing import Optional, Dict, Callable, Any
 from threading import Thread, Lock
 import time
 
@@ -41,17 +41,6 @@ def rate_limit(*,
                 last_call[key] = now
 
             return func(player, *args, **kwargs)
-        return wrapper
-    return decorator
-
-def owners_only(owners: List[str] = OwnerManager().load()) -> Callable:
-    def decorator(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(self, player: str, *args, **kwargs) -> Any:
-            if player not in owners:
-                Wrapper().commands.privatemessage(player, "You ^1don't^7 have the ^3permission ^7to use this command")
-                return
-            return func(self, player, *args, **kwargs)
         return wrapper
     return decorator
 

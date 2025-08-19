@@ -1,11 +1,12 @@
 from core.database.bank import BankManager
+from core.database.tokens import TokenManager
+from core.database.links import LinkManager
 from core.wrapper import Wrapper
 
 from nextcord.ext import commands
 from nextcord import SlashOption, Interaction
 
-from os import environ, path
-import json
+from os import environ
 
 bot = commands.Bot()
 
@@ -19,82 +20,76 @@ async def link(
         required    = True
     )
 ):
-    core  = path.dirname(path.abspath(__file__))
-    tokens_db = path.join(core, "database", "data", "tokens.json")
-    linked_db = path.join(core, "database", "data", "linked.json")
 
-    with open(tokens_db, "r") as f:
-        try: tokens = json.load(f)
-        except json.JSONDecodeError: tokens = {}
-
-    with open(linked_db, "r") as f:
-        try: linked = json.load(f)
-        except json.JSONDecodeError: linked = {}
-
-    for player, saved_token in tokens.items():
-        if saved_token == token: break
-
-    else:
+    player = TokenManager().get_player_by_token(token)
+    if not player:
         return await interaction.response.send_message(
             "❌ **Invalid token**",
             ephemeral=True
         )
     
-    del tokens[player]
-    with open(tokens_db, "w") as f:
-        json.dump(tokens, f, indent=4)
-    
-    linked[str(interaction.user.id)] = player # type: ignore
-    with open(linked_db, "w") as f:
-        json.dump(linked, f, indent=4)
+    TokenManager().delete(player)
+    LinkManager().link_account(interaction.user.id, player) # type: ignore
 
-    BankManager().deposit(player, 50000000)
-    Wrapper().commands.privatemessage(player, "You got ^5$5,000,000 ^7($5m) reward for linking your account")
-    print(f"[Bot] {player} linked theyre account")
+    BankManager().deposit(player, 50_000_000)
+    Wrapper().commands.privatemessage(player, "You got ^5$50,000,000 ^7($50m) reward for linking your account")
+    print(f"[Bot] {player} linked their account")
 
-    return await interaction.response.send_message(
-        f"✅ **Successfully linked your account**",
+    await interaction.response.send_message(
+        "✅ **Successfully linked your account ($50m reward)**",
         ephemeral=True
     )
 
-@bot.slash_command(name="unban", description="Unban a player if they are linked (costs 500m)", force_global=True)
+@bot.slash_command(name="unban", description="Unban a player if they are linked (costs $500m)", force_global=True)
 async def unban(
     interaction: Interaction,
     player: str = SlashOption(
         name        = "player",
-        description = "players name or discord id of the player to unban",
+        description = "Players name or Discord ID to unban",
         required    = True
     )
-):
-    core  = path.dirname(path.abspath(__file__))
-    linked_db = path.join(core, "database", "data", "linked.json")
+):     
+    price = 500_000_000
+    
+    executor = LinkManager().get_player_by_discord(interaction.user.id) # type: ignore
+    if not executor:
+        return await interaction.response.send_message(
+            "❌ **You must link your account first to use this command**",
+            ephemeral=True
+        )
+    
+    balance = BankManager().balance(executor)
+    if balance == 0:
+        return await interaction.response.send_message("🏳️‍🌈 **You are gay and poor**")
 
-    with open(linked_db, "r") as f:
-        try: linked = json.load(f)
-        except json.JSONDecodeError: linked = {}
+    if balance < price:
+        return await interaction.response.send_message(
+            "❌ **You don't have enough money to pay the unban cost ($500M)**",
+            ephemeral=True
+        )
 
     if player.isdigit():
-        name = linked.get(player)
-        if not name: 
+        discord_id = LinkManager().get_player_by_discord(int(player))
+        if not discord_id:
             return await interaction.response.send_message(
-                "❌ **This Discord user is not linked to any account**",
+                "❌ **You must link your account first to use this command**",
                 ephemeral=True
             )
-    
+        player = discord_id
     else:
-        if player not in linked.values():
+        if not LinkManager().is_linked(player):
             return await interaction.response.send_message(
                 "❌ **This player is not linked or does not exist**",
                 ephemeral=True
             )
-    
+        
     if not player.startswith("@"):
         player = Wrapper().player.player_client_id_from_name(player)
+        Wrapper().commands.unban(f"@{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
+    else:
+        Wrapper().commands.unban(f"{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
 
-    # BankManager().deposit() # get play username from discord id
-    Wrapper().commands.unban(f"@{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
-
-    return await interaction.response.send_message(
+    await interaction.response.send_message(
         f"✅ **Successfully unbanned {player}**",
         ephemeral=True
     )

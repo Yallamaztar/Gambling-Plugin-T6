@@ -25,7 +25,7 @@ class EventManager:
             self.commands.privatemessage(player, "Spawn Bonus: ^5$2500")
         
         @self.client.on("player_killed")
-        def on_killed(player: str, attacker: str, reason: str) -> None:
+        def on_killed(player: str, attacker: str, reason: str, weapon: str, hit_loc: str) -> None:
             if player == attacker: # suicide
                 self.bank.deposit(player, 25000)
                 self.commands.privatemessage(player, "Suicide Bonus: ^5$25,000")

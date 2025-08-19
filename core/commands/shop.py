@@ -1,104 +1,146 @@
 from core.database.bank import BankManager
-from core.database.owners import OwnerManager
+from core.database.admins import AdminManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
-from typing import Optional
+
+from typing import TypedDict, Optional, List, Callable
+
+class ShopItem(TypedDict):
+    alias: List[str]
+    price: int
+    callback: Callable[[], None]
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
         self.commands = Wrapper().commands
         self.bank     = BankManager()
 
+        self.player = player
+        self.target = target and Wrapper().player.find_player_by_partial_name(target)
+
         if item is None or item == "":
-            self.show_shop(player); return
+            self.show_shop(); return
 
-        if target:
-            target = Wrapper().player.find_player_by_partial_name(target)
-            if not target: 
-                self.commands.privatemessage(player, f"Player {target} not found"); return
+        if target and not self.target:
+            self.commands.privatemessage(player, f"Player {target} not found"); return
 
-        self.buy_item(player, item, target)
+        self.buy_item(item.lower())
     
-    def show_shop(self, player: str) -> None:
-        self.commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
-        self.commands.privatemessage(player, "^7[1] ^5Fast^7Restart Map  - $2b")
-        self.commands.privatemessage(player, "^7[3] ^5Gambler ^7Role     - $500b")
-        self.commands.privatemessage(player, "^7[4] ^5SeniorAdmin ^7Role - $250q")
-        self.commands.privatemessage(player, "^7[5] ^5Gambling ^7Owner   - $500z")
+    def show_shop(self) -> None:
+        shop = {
+            1: "^7[1] ^5Fast^7Restart Map  - $20b",
+            2: "^7[2] ^5Gambler ^7Role     - $500t",
+            3: "^7[3] ^5Map ^7Change       - 250q",
+            4: "^7[4] ^5SeniorAdmin ^7Role - $100z",
+            5: "^7[5] ^5Gambling ^7Admin   - $500z",
+        }
+        
+        self.commands.privatemessage(self.player, "^7-- ^5Brow^7nies ^5Shop ^7--")
+        for _, item in shop.items(): 
+            self.commands.privatemessage(self.player, item)
 
-    def buy_item(self, player: str, item: str, target: Optional[str] = None) -> None:
-        if item.lower() == "fastrestart" or item.lower() == "fr" or item == "1":
-            price = 2_000_000_000
-            balance = self.bank.balance(player)
+    def buy_item(self, item: str) -> None:
+        if item in [ "fastrestart", "fr", "1" ]:
+            price = 20_000_000_000
+            balance = self.bank.balance(self.player)
 
             if balance == 0:
-                self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
             if balance < price: 
-                self.commands.privatemessage(player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
             
-            self.bank.deposit(player, -price)
+            self.bank.deposit(self.player, -price)
             self.commands.fastrestart()
 
-        elif item.lower() == "gambler" or item == "2":
-            price = 500_000_000_000 # 500 billion
-            balance = self.bank.balance(player)
+        elif item in [ "gambler", "gambla", "2" ]:
+            price = 500_000_000_000_000 # 500t
+            balance = self.bank.balance(self.player)
             
             if balance == 0:
-                self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price: 
-                self.commands.privatemessage(player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
             
-            self.bank.deposit(player, -price)
+            self.bank.deposit(self.player, -price)
 
-            if target: 
-                self.commands.setlevel(target, "trusted")
-                self.commands.privatemessage(target, f"You have been ^3promoted ^7to ^2Gambler By {player}"); return
+            if self.target: 
+                self.commands.setlevel(self.target, "trusted")
+                self.commands.privatemessage(self.player, f"Promoted {self.target} to ^2Certified Gambla"); return
             
-            self.commands.setlevel(player, "trusted")
-            self.commands.privatemessage(player, "You have been ^3promoted ^7to ^2Gambler")
+            self.commands.setlevel(self.player, "trusted")
+            self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambler")
         
-        elif item.lower() == "senioradmin" or item.lower() == "sr" or item == "3":
-            price = 250_000_000_000_000_000 # 100q
-            balance = self.bank.balance(player)
+        elif item in [ "mapchange", "map", "3" ]:
+            price = 250_000_000_000_000_000 # 250q
+            balance = self.bank.balance(self.player)
+
+            allowed_maps: List[str] = [ 
+                "carrier", "express", "hijacked", "overflow", "plaza", 
+                "raid", "slums", "standoff", "turbine", "yemen", "mr" 
+            ]
+
+            if balance == 0:
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
+
+            if balance < price: 
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+            
+            if not self.target:
+                self.commands.privatemessage(self.player, "You need to do ^3!shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) ^5<map_name>")
+                self.commands.privatemessage(self.player, "^5All ^7Possible ^5Maps: ")
+                self.commands.privatemessage(self.player, ", ".join(allowed_maps[:5]))
+                self.commands.privatemessage(self.player, ", ".join(allowed_maps[5:]))
+                return
+
+            if self.target not in allowed_maps:
+                self.commands.privatemessage(self.player, "Do !shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) to see help page"); return
+
+            self.bank.deposit(self.player, -price)
+            self.commands.change_map(self.target)
+
+        elif item in [ "senioradmin", "sr", "4" ]:
+            price = 100_000_000_000_000_000_000 # 100z
+            balance = self.bank.balance(self.player)
             
             if balance == 0:
-                self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price:
-                self.commands.privatemessage(player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
             
-            self.bank.deposit(player, -price)
+            self.bank.deposit(self.player, -price)
 
-            if target:
-                self.commands.setlevel(target, "senioradmin")
-                self.commands.privatemessage(target, f"You have been ^3promoted ^7to ^2SeniorAdmin By {player}"); return
+            if self.target:
+                self.commands.setlevel(self.target, "administrator")
+                self.commands.privatemessage(self.player, f"Promoted {self.target} to ^6SeniorAdmin"); return
 
-            self.commands.setlevel(player, "senioradmin")
-            self.commands.privatemessage(player, "You have been ^3promoted ^7to ^2SeniorAdmin")
+            self.commands.setlevel(self.player, "administrator")
+            self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2SeniorAdmin")
         
-        elif item.lower() == "owner" or item == "4":
+        elif item in [ "administrator", "admin", "5" ]:
             price = 500_000_000_000_000_000_000 # 500z
-            balance = self.bank.balance(player)
+            balance = self.bank.balance(self.player)
 
             if balance == 0:
-                self.commands.say(f"^7@{player} is ^1^Fgay n poor"); return
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
             if balance < price: 
-                self.commands.privatemessage(player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
             
-            self.bank.deposit(player, -price)
+            self.bank.deposit(self.player, -price)
 
-            if target:
-                OwnerManager().add(target)
-                self.commands.privatemessage(player, f"You have been ^3promoted ^7to ^2Gambling Admin By {player}"); return
+            if self.target:
+                AdminManager().add(self.target)
+                self.commands.privatemessage(self.player, f"Promoted {self.target} to ^5Gambling Admin")
+                self.commands.privatemessage(self.target, f"You have been ^3promoted ^7to ^2Gambling Admin By {self.player}"); return
             
-            OwnerManager().add(player)
-            self.commands.privatemessage(player, "You have been ^3promoted ^7to ^2Gambling Admin")
+            AdminManager().add(self.player)
+            self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambling Admin")
 
         else: 
-            self.commands.privatemessage(player, "Invalid item selected"); return
+            self.commands.privatemessage(self.player, "Invalid item selected"); return
 
 @rate_limit(seconds=5)
 def shop(player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:

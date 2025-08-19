@@ -1,13 +1,13 @@
 from core.commands import run_command_threaded
 from core.permissions import owners_only
-from core.database.owners import OwnerManager
+from core.database.admins import AdminManager
 from core.wrapper import Wrapper
 
-class OwnerAddCommand:
+class AdminAddCommand:
     def __init__(self, player: str, target: str) -> None:
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
-        self.manager  = OwnerManager()
+        self.manager  = AdminManager()
         self.add(player, target)
     
     @owners_only()
@@ -19,11 +19,11 @@ class OwnerAddCommand:
         self.manager.add(target)
         self.commands.privatemessage(player, f"Added {target} as an owner")
 
-class OwnerRemoveCommand:
+class AdminRemoveCommand:
     def __init__(self, player: str, target: str) -> None:
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
-        self.manager = OwnerManager()
+        self.manager = AdminManager()
         self.remove(player, target)
 
     @owners_only()
@@ -35,8 +35,8 @@ class OwnerRemoveCommand:
         self.manager.delete(target)
         self.commands.privatemessage(player, f"Removed {target} from owners")
 
-def add_owner(player: str, target: str) -> None:
-    run_command_threaded(OwnerAddCommand, player, target)
+def add_admin(player: str, target: str) -> None:
+    run_command_threaded(AdminAddCommand, player, target)
 
-def remove_owner(player: str, target: str) -> None:
-    run_command_threaded(OwnerRemoveCommand, player, target)
+def remove_admin(player: str, target: str) -> None:
+    run_command_threaded(AdminRemoveCommand, player, target)
