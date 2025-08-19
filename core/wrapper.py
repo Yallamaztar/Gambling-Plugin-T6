@@ -12,6 +12,3 @@ class Wrapper:
         self.server   = iw4m.Server(iw4m)
         self.player   = iw4m.Player(iw4m)
         self.commands = iw4m.Commands(iw4m)
-
-
-print(Wrapper().server.get_recent_audit_log())
