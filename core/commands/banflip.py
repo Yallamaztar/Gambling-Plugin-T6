@@ -6,7 +6,6 @@ from core.commands import run_command_threaded
 from typing import Optional, Tuple
 import random 
 
-
 class BanFlip:
     def __init__(self, player: str, amount: str, duration: str) -> None:
         self.commands = Wrapper().commands
