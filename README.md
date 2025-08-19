@@ -80,7 +80,7 @@ Prefix is **!**. Abbreviations are shown after a slash. Amounts accept suffixes:
 
 ### Passive income & events
 - **Passive income**: Every 10 minutes, each connected player receives $250,000.
-- **GSC events (optional)** via `scripts/mp/gsc-events.gsc`:
+- [**GSC events (optional)**](https://github.com/Yallamaztar/gsc-events-py/) via `scripts/mp/gsc-events.gsc`:
   - On spawn: +$2,500
   - On kill: attacker +$15,000
   - On suicide: player +$25,000
