@@ -69,5 +69,5 @@ class UnbanCog(commands.Cog):
             ephemeral=True
         )
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(UnbanCog(bot))
