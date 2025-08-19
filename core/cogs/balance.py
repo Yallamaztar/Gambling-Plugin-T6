@@ -64,3 +64,7 @@ class BalanceCog(commands.Cog):
         return await interaction.response.send_message(
             f"💰 {target}'s balance is **${bal:,}**"
         )
+    
+
+def setup(bot: commands.Bot):
+    bot.add_cog(BalanceCog(bot))

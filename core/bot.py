@@ -10,7 +10,8 @@ async def on_ready():
 cogs = [
     "core.cogs.link",
     "core.cogs.unban",
-    "core.cogs.gamble"
+    "core.cogs.gamble",
+    "core.cogs.balance"
 ]
 
 for cog in cogs:
