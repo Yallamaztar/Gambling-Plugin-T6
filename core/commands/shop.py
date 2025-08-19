@@ -9,7 +9,7 @@ class ShopCommand:
         self.commands = Wrapper().commands
         self.bank     = BankManager()
 
-        if item is None or item == "": 
+        if item is None or item == "":
             self.show_shop(player); return
 
         if target:
@@ -17,7 +17,7 @@ class ShopCommand:
             if not target: 
                 self.commands.privatemessage(player, f"Player {target} not found"); return
 
-        else: self.buy_item(player, item)
+        self.buy_item(player, item, target)
     
     def show_shop(self, player: str) -> None:
         self.commands.privatemessage(player, "^7-- ^5Brow^7nies ^5Shop ^7--")
