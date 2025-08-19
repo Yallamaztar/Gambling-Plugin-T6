@@ -3,8 +3,7 @@ from nextcord.ext import commands
 
 from os import environ
 
-intents = nextcord.Intents.all()
-bot = commands.Bot(intents=intents)
+bot = commands.Bot()
 
 @bot.event
 async def on_ready():
@@ -12,7 +11,12 @@ async def on_ready():
     await bot.http.bulk_upsert_global_commands(bot.user.id, []) # type: ignore
     print("Cleared all global commands!")
 
-cogs = ["cogs.link", "cogs.unban", "cogs.gamble"]
+cogs = [
+    "core.cogs.link",
+    "core.cogs.unban",
+    "core.cogs.gamble"
+]
+
 for cog in cogs:
     bot.load_extension(cog)
 
