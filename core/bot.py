@@ -16,6 +16,7 @@ cogs = [
 
 for cog in cogs:
     bot.load_extension(cog)
+    print(f"[Bot] loaded {cog}")
 
 def run_bot() -> None:
     print("[Bot] Starting Bot")

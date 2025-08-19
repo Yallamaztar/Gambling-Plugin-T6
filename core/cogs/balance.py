@@ -2,7 +2,6 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import SlashOption, Interaction
 
-from core.database.tokens import TokenManager
 from core.database.links import LinkManager
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
@@ -37,7 +36,8 @@ class BalanceCog(commands.Cog):
         if not player:
             bal = BankManager().balance(client)
             return await interaction.response.send_message(
-                f"Your balance is **${bal}**"
+                f"Your balance is **${bal}**",
+                ephemeral=True
             )
 
         if isinstance(player, nextcord.Member):
@@ -50,7 +50,8 @@ class BalanceCog(commands.Cog):
         
             bal = BankManager().balance(client)
             return await interaction.response.send_message(
-                f"{player.display_name}s balance is **${bal}**"
+                f"{player.display_name}s balance is **${bal}**",
+                ephemeral=True
             )
         
         target = Wrapper().player.find_player_by_partial_name(player)
@@ -62,7 +63,8 @@ class BalanceCog(commands.Cog):
         
         bal = BankManager().balance(target)
         return await interaction.response.send_message(
-            f"💰 {target}'s balance is **${bal:,}**"
+            f"{target}s balance is **${bal}**",
+            ephemeral=True
         )
     
 
