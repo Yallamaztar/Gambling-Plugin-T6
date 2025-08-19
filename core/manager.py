@@ -14,6 +14,7 @@ class GamblingManager:
         self.executor = ThreadPoolExecutor()
         self.executor.submit(self.passive_income)
         self.executor.submit(self.broadcast_hint)
+        self.executor.submit(self.broadcast_socialmedia)
         print("[GamblingManager] Running")
     
     def passive_income(self, amount: int = 250_000) -> None:
