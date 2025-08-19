@@ -83,8 +83,16 @@ async def unban(
                 ephemeral=True
             )
         
+    player_id = Wrapper().player.player_client_id_from_name(player)
+    ban_reason = Wrapper().player.ban_reason(player_id)
+    
+    if not ban_reason.startswith("You lost gamble lol"):
+        return await interaction.response.send_message(
+            "❌ **This player wasn't banned for losing a gamble**",
+            ephemeral=True
+        )
+
     if not player.startswith("@"):
-        player = Wrapper().player.player_client_id_from_name(player)
         Wrapper().commands.unban(f"@{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
     else:
         Wrapper().commands.unban(f"{player}", f"You got unbanned by {interaction.user.name}") # type: ignore
