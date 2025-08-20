@@ -4,6 +4,8 @@ from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 
+from core.webhook import win_webhook, loss_webhook
+
 from typing import Optional
 import random
 
@@ -53,9 +55,11 @@ class GambleCommand:
     def update_balance(self, bet: int) -> str:
         if random.choice([True, False]):
             self.bank.deposit(self.player, bet)
+            win_webhook(self.player, str(bet))
             StatsManager().win(self.player, bet); return "^2won^7"
         else:
             self.bank.deposit(self.player, -bet)
+            loss_webhook(self.player, str(bet))
             StatsManager().loss(self.player, bet); return "^1lost^7"
 
 def gamble(player: str, amount: str) -> None:

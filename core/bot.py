@@ -19,6 +19,8 @@ for cog in cogs:
     bot.load_extension(cog)
     print(f"[Bot] loaded {cog}")
 
+print(f"[Bot] Loaded {len(cogs)} cogs")
+
 def run_bot() -> None:
     print("[Bot] Starting Bot")
     bot.run(environ["BOT_TOKEN"])

@@ -5,6 +5,7 @@ from nextcord import Interaction, SlashOption
 from core.database.links import LinkManager
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
+from core.webhook import unban_webhook
 
 class UnbanCog(commands.Cog):
     def __init__(self, bot):
@@ -65,6 +66,7 @@ class UnbanCog(commands.Cog):
             )
 
         print(f"[Bot] {executor} unbanned {unban}")
+        unban_webhook(executor, unban)
         await interaction.response.send_message(
             f"✅ **Successfully unbanned {player}**",
             ephemeral=True

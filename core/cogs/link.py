@@ -6,6 +6,7 @@ from core.database.tokens import TokenManager
 from core.database.links import LinkManager
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
+from core.webhook import link_webhook
 
 class LinkCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -36,6 +37,8 @@ class LinkCog(commands.Cog):
         LinkManager().link_account(interaction.user.id, player)  # type: ignore
         BankManager().deposit(player, 50_000_000)
         Wrapper().commands.privatemessage(player, "You got $50M reward for linking your account")
+
+        link_webhook(player, str(interaction.user.id)) # type: ignore
         print(f"[Bot] {player} linked their account")
 
         await interaction.response.send_message(
