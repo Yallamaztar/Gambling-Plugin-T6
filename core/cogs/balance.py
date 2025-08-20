@@ -13,10 +13,10 @@ class BalanceCog(commands.Cog):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="balance",
-        description="Check your own or another players balance",
-        force_global=True
-    )
+    name="balance",
+    description="Check your own or another players balance",
+    force_global=True
+)
     async def balance(
         self,
         interaction: Interaction,
@@ -26,16 +26,18 @@ class BalanceCog(commands.Cog):
             required=False,
         )
     ):
-        client = LinkManager().get_player_by_discord(interaction.user.id) # type: ignore
+        await interaction.response.defer(ephemeral=True)
+
+        client = LinkManager().get_player_by_discord(interaction.user.id)  # type: ignore
         if not client:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "❌ **You must link your account first to check balance**",
                 ephemeral=True
             )
 
         if not player:
             bal = BankManager().balance(client)
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 f"Your balance is **${bal}**",
                 ephemeral=True
             )
@@ -43,27 +45,27 @@ class BalanceCog(commands.Cog):
         if isinstance(player, nextcord.Member):
             client = LinkManager().get_player_by_discord(player.id)  # type: ignore
             if not client:
-                return await interaction.response.send_message(
+                return await interaction.followup.send(
                     f"❌ {player.mention} has not linked their account",
                     ephemeral=True
                 )
         
             bal = BankManager().balance(client)
-            return await interaction.response.send_message(
-                f"{player.display_name}s balance is **${bal}**",
+            return await interaction.followup.send(
+                f"{player.display_name}'s balance is **${bal}**",
                 ephemeral=True
             )
         else:
             target = Wrapper().player.find_player_by_partial_name(player)
             if not target:
-                return await interaction.response.send_message(
+                return await interaction.followup.send(
                     f"❌ Could not find player matching {player}",
                     ephemeral=True
                 )
         
             bal = BankManager().balance(target)
-            return await interaction.response.send_message(
-                f"{target}s balance is **${bal}**",
+            return await interaction.followup.send(
+                f"{target}'s balance is **${bal}**",
                 ephemeral=True
             )
     
