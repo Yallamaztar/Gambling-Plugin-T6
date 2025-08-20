@@ -13,7 +13,7 @@ class UnbanCog(commands.Cog):
 
     @nextcord.slash_command(
         name="unban",
-        description="Unban a player if they are linked (costs $500q)",
+        description="Unban a player if they are linked (costs $10b)",
         force_global=True
     )
     async def unban(
@@ -25,7 +25,7 @@ class UnbanCog(commands.Cog):
             required=True
         )
     ):
-        price = 500_000_000_000_000
+        price = 10_000_000_000
         executor = LinkManager().get_player_by_discord(interaction.user.id)  # type: ignore
 
         if not executor:

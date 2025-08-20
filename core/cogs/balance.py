@@ -41,7 +41,7 @@ class BalanceCog(commands.Cog):
             )
 
         if isinstance(player, nextcord.Member):
-            client = LinkManager( ).get_player_by_discord(player.id)  # type: ignore
+            client = LinkManager().get_player_by_discord(player.id)  # type: ignore
             if not client:
                 return await interaction.response.send_message(
                     f"❌ {player.mention} has not linked their account",
@@ -53,19 +53,19 @@ class BalanceCog(commands.Cog):
                 f"{player.display_name}s balance is **${bal}**",
                 ephemeral=True
             )
+        else:
+            target = Wrapper().player.find_player_by_partial_name(player)
+            if not target:
+                return await interaction.response.send_message(
+                    f"❌ Could not find player matching {player}",
+                    ephemeral=True
+                )
         
-        target = Wrapper().player.find_player_by_partial_name(player)
-        if not target:
+            bal = BankManager().balance(target)
             return await interaction.response.send_message(
-                f"❌ Could not find player matching {player}",
+                f"{target}s balance is **${bal}**",
                 ephemeral=True
             )
-        
-        bal = BankManager().balance(target)
-        return await interaction.response.send_message(
-            f"{target}s balance is **${bal}**",
-            ephemeral=True
-        )
     
 
 def setup(bot: commands.Bot):
