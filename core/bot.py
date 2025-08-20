@@ -12,6 +12,7 @@ cogs = [
     "core.cogs.unban",
     "core.cogs.gamble",
     "core.cogs.balance"
+    "core.cogs.stats"
 ]
 
 for cog in cogs:
