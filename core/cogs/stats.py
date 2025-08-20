@@ -45,39 +45,32 @@ class StatsCog(commands.Cog):
                 f"**Net: ${stats["net"]}**",
                 ephemeral=True
             )
+        
+        target = None
+        if player.startswith("<@") and player.endswith(">"):
+            try:
+                player_id = int(player.strip("<@!>"))
+                target = LinkManager().get_player_by_discord(player_id)  # type: ignore
+            except ValueError:
+                pass
 
-        if isinstance(player, nextcord.Member):
-            target = LinkManager().get_player_by_discord(player.id)  # type: ignore
-            if not target:
-                return await interaction.response.send_message(
-                    f"❌ {player.mention} has not linked their account",
-                    ephemeral=True
-                )
-            
-            StatsManager().ensure(target)
-            stats = StatsManager().stats[target]
-            return await interaction.response.send_message(
-                f"### {player.display_name}s Stats\n"
-                f"**Wins: {stats["wins"]}**\n"
-                f"**Losses: {stats["losses"]}**\n"
-                f"**Net: ${stats["net"]}**",
-                ephemeral=True
-            )
+        if not target:
+            player_clean = player.strip().lower()
+            target = Wrapper().player.find_player_by_partial_name(player_clean)
 
-        target = Wrapper().player.find_player_by_partial_name(player)
         if not target:
             return await interaction.response.send_message(
                 f"❌ Could not find player matching {player}",
                 ephemeral=True
             )
-        
+
         StatsManager().ensure(target)
         stats = StatsManager().stats[target]
         return await interaction.response.send_message(
-            f"### {target}s Stats\n"
-            f"**Wins: {stats["wins"]}**\n"
-            f"**Losses: {stats["losses"]}**\n"
-            f"**Net: ${stats["net"]}**",
+            f"### {player}'s Stats\n"
+            f"**Wins: {stats['wins']}**\n"
+            f"**Losses: {stats['losses']}**\n"
+            f"**Net: ${stats['net']}**",
             ephemeral=True
         )
     
