@@ -73,6 +73,7 @@ class GiveAdminCommand:
         self.bank.deposit(target, amount)
         self.commands.privatemessage(player, f"Gave {target} ${amount}")
         self.commands.privatemessage(target, f"You have gotten ^2${amount} ^7from {player}")
+        print(f"[GiveAdmin] {player} gave {target} ${amount}")
 
 class GiveAllAdminCommand:
     def __init__(self, player: str, amount: str) -> None:
@@ -100,6 +101,7 @@ class GiveAllAdminCommand:
             self.commands.privatemessage(p['name'], f"You've gotten ^2${amount} ^7from {player}")
         
         self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ${amount}")
+        print(f"[GiveAllAdmin] {player} gave {len(self.server.get_players())} players ${amount}")
     
 
 def give(player: str, target: str, amount: str) -> None:
