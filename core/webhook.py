@@ -54,7 +54,7 @@ def banflip_win_webhook(player: str, amount: str, duration: str) -> None:
         "embeds": [{
             "title": "Banflip Win 🔥",
             "description": (
-                f"**{player}** won a banflip with duration {duration}!\n"
+                f"**{player}** won a banflip with duration **duration {duration}!**\n"
                 f"**Winnings:** ${amount}\n"
             ),
             "color": 0x1abc9c,
@@ -68,7 +68,7 @@ def banflip_loss_webhook(player: str, amount: str, duration: str) -> None:
         "embeds": [{
             "title": "Banflip Loss 💀",
             "description": (
-                f"**{player}** lost a banflip with duration {duration}!\n"
+                f"**{player}** lost a banflip with **duration {duration}!**\n"
                 f"**Lost Amount:** ${amount}\n"
             ),
             "color": 0xe74c3c,

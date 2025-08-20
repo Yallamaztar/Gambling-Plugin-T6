@@ -33,23 +33,26 @@ class GambleCog(commands.Cog):
             required=True
         )
     ):
+        await interaction.response.defer(ephemeral=True)
+
         player = self.links.get_player_by_discord(interaction.user.id) # type: ignore
         if not player:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "❌ **You must link your account first to gamble**",
                 ephemeral=True
             )
 
         bet = self.validate_bet(player, amount)
         if not bet:
-            return await interaction.response.send_message(
-                f"❌ Invalid bet amount or insufficient balance",
+            return await interaction.followup.send(
+                "❌ Invalid bet amount or insufficient balance",
                 ephemeral=True
             )
 
         result = self.update_balance(player, bet)
         self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
-        await interaction.response.send_message(
+
+        await interaction.followup.send(
             f"🎲 **You {result} ${bet}!** Your new balance: ${self.bank.balance(player)}",
             ephemeral=True
         )
