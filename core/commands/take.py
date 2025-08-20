@@ -1,6 +1,6 @@
 from core.database.bank import BankManager
 from core.commands import run_command_threaded
-from core.permissions import admins_only
+from core.permissions import admins_only, owners_only
 from core.utils import parse_amount
 from core.wrapper import Wrapper
 
@@ -49,7 +49,7 @@ class TakeAllCommand:
 
         self.take_all(player, amount)
     
-    @admins_only()
+    @owners_only()
     def take_all(self, player: str, _amount: str) -> None:
         count = 0
 
