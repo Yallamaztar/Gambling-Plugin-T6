@@ -49,7 +49,7 @@ class UnbanCog(commands.Cog):
 
         player_id = Wrapper().player.player_client_id_from_name(player)
         ban_reason = Wrapper().player.ban_reason(player_id)
-        if not ban_reason.startswith("You lost gamble lol"):
+        if not ban_reason or not ban_reason.startswith("You lost gamble lol"):
             return await interaction.response.send_message(
                 "❌ **This player wasn't banned for losing a gamble**",
                 ephemeral=True
