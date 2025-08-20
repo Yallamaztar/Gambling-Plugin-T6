@@ -5,14 +5,14 @@ bot = commands.Bot()
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user}")
+    print(f"[Bot] Logged in as {bot.user}")
 
 cogs = [
     "core.cogs.link",
     "core.cogs.unban",
     "core.cogs.gamble",
-    "core.cogs.balance"
-    "core.cogs.stats"
+    "core.cogs.balance",
+    "core.cogs.stats",
 ]
 
 for cog in cogs:
