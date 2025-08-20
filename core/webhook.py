@@ -48,3 +48,31 @@ def unban_webhook(player: str, unbanned: str) -> None:
         }]
     }
     requests.post(environ["DISCORD_UNBAN_WEBHOOK"], json=data, timeout=5)
+
+def banflip_win_webhook(player: str, amount: str, duration: str) -> None:
+    data = {
+        "embeds": [{
+            "title": "Banflip Win 🔥",
+            "description": (
+                f"**{player}** won a banflip with duration {duration}!\n"
+                f"**Winnings:** ${amount}\n"
+            ),
+            "color": 0x1abc9c,
+            "timestamp": current_timestamp()
+        }]
+    }
+    requests.post(environ["DISCORD_BANFLIP_WIN_WEBHOOK"], json=data, timeout=5)
+
+def banflip_loss_webhook(player: str, amount: str, duration: str) -> None:
+    data = {
+        "embeds": [{
+            "title": "Banflip Loss 💀",
+            "description": (
+                f"**{player}** lost a banflip with duration {duration}!\n"
+                f"**Lost Amount:** ${amount}\n"
+            ),
+            "color": 0xe74c3c,
+            "timestamp": current_timestamp()
+        }]
+    }
+    requests.post(environ["DISCORD_BANFLIP_LOSS_WEBHOOK"], json=data, timeout=5)

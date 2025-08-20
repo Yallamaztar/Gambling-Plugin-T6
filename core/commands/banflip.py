@@ -2,6 +2,7 @@ from core.database.bank import BankManager
 from core.utils import parse_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
+from core.webhook import banflip_win_webhook, banflip_loss_webhook
 
 from typing import Optional, Tuple
 import random 
@@ -23,7 +24,10 @@ class BanFlip:
             self.commands.say(f"^7{split_clan_tag(player)} {result} ${total}")
 
             if result == "^1lost^7":
+                banflip_loss_webhook(player, str(total), duration)
                 self.commands.tempban(player, duration, "You lost gamble lol")
+            else:
+                banflip_win_webhook(player, str(total), duration)
 
         except ValueError:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
