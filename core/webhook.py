@@ -19,7 +19,7 @@ def win_webhook(player: str, amount: str) -> None:
 def loss_webhook(player: str, amount: str) -> None:
     data = {
         "embeds": [{
-            "title": "Gamble Loss 🎉",
+            "title": "Gamble Loss 😿",
             "description": f"**{player}** lost **${amount}**",
             "color": 0xff0000,
             "timestamp": current_timestamp()
