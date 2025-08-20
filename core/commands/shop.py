@@ -15,8 +15,9 @@ class ShopCommand:
         self.commands = Wrapper().commands
         self.bank     = BankManager()
 
-        self.player = player
-        self.target = target and Wrapper().player.find_player_by_partial_name(target)
+        self.player   = player
+        self.map_name = target
+        self.target   = target and Wrapper().player.find_player_by_partial_name(target)
 
         if item is None or item == "":
             self.show_shop(); return
@@ -87,18 +88,18 @@ class ShopCommand:
             if balance < price: 
                 self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
             
-            if not self.target:
+            if not self.map_name:
                 self.commands.privatemessage(self.player, "You need to do ^3!shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) ^5<map_name>")
                 self.commands.privatemessage(self.player, "^5All ^7Possible ^5Maps: ")
                 self.commands.privatemessage(self.player, ", ".join(allowed_maps[:5]))
                 self.commands.privatemessage(self.player, ", ".join(allowed_maps[5:]))
                 return
 
-            if self.target not in allowed_maps:
+            if self.map_name not in allowed_maps:
                 self.commands.privatemessage(self.player, "Do !shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) to see help page"); return
 
             self.bank.deposit(self.player, -price)
-            self.commands.change_map(self.target)
+            self.commands.change_map(self.map_name)
 
         elif item in [ "senioradmin", "sr", "4" ]:
             price = 100_000_000_000_000_000_000 # 100z

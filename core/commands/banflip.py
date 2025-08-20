@@ -61,8 +61,8 @@ class BanFlip:
         if unit not in ["m", "h", "d"]:
             self.commands.privatemessage(player, "Invalid time unit, use m, h, or d"); return
 
-        if dur <= 5:
-            self.commands.privatemessage(player, "Duration has to be greater than 5"); return
+        if dur < 5 and unit == "m":
+            self.commands.privatemessage(player, "Duration has to be greater than 5m"); return
         
         if unit == "m" and dur > 60:
             self.commands.privatemessage(player, "Minutes cannot exceed 60"); return
@@ -73,31 +73,30 @@ class BanFlip:
 
         if unit == "m":
             if dur < 5: return 1
-            elif dur < 10: return 2
-            elif dur < 20: return 3
-            elif dur < 30: return 4
-            elif dur < 45: return 5
-            else: return 6
-    
+            elif dur < 10: return 1
+            elif dur < 20: return 2
+            elif dur < 30: return 2
+            elif dur < 45: return 3
+            else: return 4
+
         elif unit == "h":
-            if dur < 2: return 4
-            elif dur < 3: return 5
-            elif dur < 4: return 6
-            elif dur < 6: return 7
+            if dur < 2: return 5
+            elif dur < 3: return 6
+            elif dur < 4: return 7
+            elif dur < 6: return 8
             elif dur < 8: return 9
             else: return 10
 
         elif unit == "d":
-            if dur < 2: return 10
+            if dur < 2: return 11
             elif dur <= 3: return 12
-            elif dur <= 5: return 15
-            elif dur <= 7: return 17
-            elif dur <= 10: return 20
-            elif dur <= 15: return 22
-            elif dur <= 20: return 25
-            elif dur <= 25: return 30
-            else: return 45
-
+            elif dur <= 5: return 13
+            elif dur <= 7: return 14
+            elif dur <= 10: return 15
+            elif dur <= 15: return 16
+            elif dur <= 20: return 17
+            elif dur <= 25: return 18
+            else: return 19
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> Tuple[str, Optional[int]]:
         if random.choice([True, False]):

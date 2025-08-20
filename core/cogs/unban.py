@@ -64,6 +64,7 @@ class UnbanCog(commands.Cog):
                 ephemeral=True
             )
 
+        print(f"[Bot] {executor} unbanned {unban}")
         await interaction.response.send_message(
             f"✅ **Successfully unbanned {player}**",
             ephemeral=True
