@@ -1,5 +1,5 @@
 import re, random
-from typing import Union
+from typing import Union, Dict, List
 
 def safe_int(value: Union[str, int], default: int = 0) -> int:
     try:
@@ -8,13 +8,29 @@ def safe_int(value: Union[str, int], default: int = 0) -> int:
         return default
 
 def parse_amount(amount: str) -> int:
-    prefixes = {"k": 1000, "m": 1000000, "b": 1000000000, "t": 1000000000000, "q": 1000000000000000, "z":1000000000000000000}
+    prefixes: Dict[str, int] = {"k": 1000, "m": 1000000, "b": 1000000000, "t": 1000000000000, "q": 1000000000000000, "z":1000000000000000000}
 
     amount = amount.lower().strip()
     if amount[-1] in prefixes:
         return safe_int(amount[:-1]) * prefixes[amount[-1]]
     else:
         return safe_int(amount)
+    
+def parse_prefix_amount(amount: int) -> str:
+    prefixes: List = [
+        (10**18, "z"),
+        (10**15, "q"),
+        (10**12, "t"),
+        (10**9, "b"),
+        (10**6, "m"),
+        (10**3, "k")
+    ]
+
+    for value, prefix in prefixes:
+        if amount % value == 0 and amount >= value:
+            return f"{amount // value}{prefix}"
+
+    return str(amount)
 
 def split_clan_tag(name: str) -> str:
     match = re.match(r"^(\[[^\[\]]{1,10}\])(.+)", name)
