@@ -7,6 +7,7 @@ from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.webhook import unban_webhook
 
+
 class UnbanCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -21,7 +22,7 @@ class UnbanCog(commands.Cog):
         interaction: Interaction,
         player: str = SlashOption(
             name="player",
-            description="Players name or Discord ID to unban",
+            description="Player name (partial), exact name, or Discord ID",
             required=True
         )
     ):
@@ -45,25 +46,30 @@ class UnbanCog(commands.Cog):
                 f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
                 ephemeral=True
             )
-
+        
+        target_player = None
         if player.isdigit():
-            linked = link_manager.get_player_by_discord(int(player))
-            if not linked:
+            target_player = link_manager.get_player_by_discord(int(player))
+            if not target_player:
                 return await interaction.followup.send(
                     "❌ **That Discord ID is not linked to any player**",
                     ephemeral=True
                 )
-            player = linked
-        elif not link_manager.is_linked(player):
-            return await interaction.followup.send(
-                "❌ **This player is not linked or does not exist**",
-                ephemeral=True
-            )
+        else:
+            if link_manager.is_linked(player):
+                target_player = player
+            else:
+                target_player = link_manager.find_linked_by_partial_name(player)
+                if not target_player:
+                    return await interaction.followup.send(
+                        "❌ **This player is not linked, does not exist, or no partial match found**",
+                        ephemeral=True
+                    )
 
         try:
-            player_id = wrapper.player.player_client_id_from_name(player)
+            player_id = wrapper.player.player_client_id_from_name(target_player)
         except (IndexError, ValueError, TypeError) as e:
-            print(f"[DEBUG] Failed to resolve player_id for {player}: {e}")
+            print(f"[DEBUG] Failed to resolve player_id for {target_player}: {e}")
             return await interaction.followup.send(
                 "❌ **Could not resolve this player in the database**",
                 ephemeral=True
@@ -99,10 +105,9 @@ class UnbanCog(commands.Cog):
         unban_webhook(executor, unban_target)
 
         await interaction.followup.send(
-            f"✅ **Successfully unbanned {player}**",
+            f"✅ **Successfully unbanned {target_player}**",
             ephemeral=True
         )
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(UnbanCog(bot))

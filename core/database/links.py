@@ -56,6 +56,14 @@ class LinkManager:
     def get_all(self) -> dict:
         return self.load()
 
+    def find_linked_by_partial_name(self, player: str) -> str: # type: ignore
+        player = player.lower()
+        links  = self.get_all()
+
+        for discord_id, linked in links.items():
+            if player in linked.lower():
+                return linked
+
     def __enter__(self) -> "LinkManager":
         self.lock.acquire()
         return self
