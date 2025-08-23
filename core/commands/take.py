@@ -1,5 +1,5 @@
 from core.database.bank import BankManager
-from core.commands import run_command_threaded
+from core.commands import run_command_threaded, rate_limit
 from core.permissions import admins_only, owners_only
 from core.utils import parse_amount
 from core.wrapper import Wrapper
@@ -37,6 +37,7 @@ class TakeCommand:
                 amount = balance
 
         self.bank.deposit(target, -amount)
+        print(f"[TakeCommand] {player} took {amount} from {target}")
         self.commands.privatemessage(player, f"Took ^1${amount} ^7from player")
         self.commands.privatemessage(target, f"{player} took ^1${amount} ^7from you")
 
@@ -76,6 +77,7 @@ class TakeAllCommand:
         self.commands.privatemessage(player, f"Took {count} players money")
 
 
+@rate_limit(hours=1)
 def take(player: str, target: str, amount: str) -> None:
     run_command_threaded(TakeCommand, player, target, amount)
 
