@@ -1,5 +1,5 @@
 from nextcord.ext import commands
-from os import environ
+import os
 
 bot = commands.Bot()
 
@@ -7,20 +7,11 @@ bot = commands.Bot()
 async def on_ready():
     print(f"[Bot] Logged in as {bot.user}")
 
-cogs = [
-    "core.cogs.link",
-    "core.cogs.unban",
-    "core.cogs.gamble",
-    "core.cogs.balance",
-    "core.cogs.stats",
-]
-
-for cog in cogs:
-    bot.load_extension(cog)
-    print(f"[Bot] loaded {cog}")
-
-print(f"[Bot] Loaded {len(cogs)} cogs")
+for file in os.listdir("cogs"):
+    if not file.startswith("__"):
+        bot.load_extension(file)
+        print("[Bot] loaded cog: ", file)
 
 def run_bot() -> None:
     print("[Bot] Starting Bot")
-    bot.run(environ["BOT_TOKEN"])
+    bot.run(os.environ["BOT_TOKEN"])
