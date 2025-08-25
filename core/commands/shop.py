@@ -3,22 +3,28 @@ from core.database.admins import AdminManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
 
-from typing import Optional, List
+from typing import Optional
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
         self.commands = Wrapper().commands
         self.bank     = BankManager()
-
         self.player   = player
-        self.map_name = target
-        self.target   = target and Wrapper().player.find_player_by_partial_name(target)
+        
+        allowed_maps = [ 
+            "carrier", "express", "hijacked", "overflow", "plaza", 
+            "raid", "slums", "standoff", "turbine", "yemen", "mr" 
+        ]
 
         if item is None or item == "":
             self.show_shop(); return
 
-        if target and not self.target:
-            self.commands.privatemessage(player, f"Player {target} not found"); return
+        if target:
+            if target.lower() in allowed_maps: self.map = target
+            else:
+                self.target = Wrapper().player.find_player_by_partial_name(target)
+                if not self.target:
+                    self.commands.privatemessage(player, f"{target} not found"); return
 
         self.buy_item(item.lower())
     
@@ -72,29 +78,14 @@ class ShopCommand:
             price = 550_000_000_000_000_000 # 500q
             balance = self.bank.balance(self.player)
 
-            allowed_maps: List[str] = [ 
-                "carrier", "express", "hijacked", "overflow", "plaza", 
-                "raid", "slums", "standoff", "turbine", "yemen", "mr" 
-            ]
-
             if balance == 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price: 
                 self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
-            
-            if not self.map_name:
-                self.commands.privatemessage(self.player, "You need to do ^3!shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) ^5<map_name>")
-                self.commands.privatemessage(self.player, "^5All ^7Possible ^5Maps: ")
-                self.commands.privatemessage(self.player, ", ".join(allowed_maps[:5]))
-                self.commands.privatemessage(self.player, ", ".join(allowed_maps[5:]))
-                return
-
-            if self.map_name not in allowed_maps:
-                self.commands.privatemessage(self.player, "Do !shop ^7(^5mapchange ^7| ^5map ^7| ^53^7) to see help page"); return
 
             self.bank.deposit(self.player, -price)
-            self.commands.change_map(self.map_name)
+            self.commands.change_map(self.map)
 
         elif item in [ "senioradmin", "sr", "4" ]:
             price = 100_000_000_000_000_000_000_000 # 100,000z
