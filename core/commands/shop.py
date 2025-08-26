@@ -19,6 +19,8 @@ class ShopCommand:
         if item is None or item == "":
             self.show_shop(); return
 
+        self.target = None; self.map = None
+
         if target:
             if target.lower() in allowed_maps: self.map = target
             else:
@@ -85,7 +87,7 @@ class ShopCommand:
                 self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
 
             self.bank.deposit(self.player, -price)
-            self.commands.change_map(self.map)
+            self.commands.change_map(self.map) # type: ignore
 
         elif item in [ "senioradmin", "sr", "4" ]:
             price = 100_000_000_000_000_000_000_000 # 100,000z
