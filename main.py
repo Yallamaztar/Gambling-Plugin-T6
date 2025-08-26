@@ -20,7 +20,7 @@ class GamblingPlugin:
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor(max_workers=12)
+        self.executor = ThreadPoolExecutor(max_workers=10)
 
         bank = BankManager()
         # bank.reset()
@@ -59,12 +59,13 @@ class GamblingPlugin:
         while True:
             audit_log = self.server.get_recent_audit_log()
             if audit_log is None or not self.is_valid_audit_log(audit_log):
-                time.sleep(0.01)
-                continue
+                time.sleep(.05); continue
+            
+            if len(self.last_seen) > 50: self.last_seen.clear()
 
             self.last_seen.add((audit_log['origin'], audit_log['data'], audit_log['time']))
             self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data'])
-            time.sleep(0.01)
+            time.sleep(.05)
 
 if __name__ == '__main__':
     GamblingPlugin()
