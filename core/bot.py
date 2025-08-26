@@ -7,10 +7,10 @@ bot = commands.Bot()
 async def on_ready():
     print(f"[Bot] Logged in as {bot.user}")
 
-for file in os.listdir("cogs"):
+for file in os.listdir("core/cogs"):
     if not file.startswith("__"):
-        bot.load_extension(file)
-        print("[Bot] loaded cog: ", file)
+        bot.load_extension(f"core.cogs.{file[:-3]}")
+        print(f"[Bot] loaded core.cogs.{file[:-3]}")
 
 def run_bot() -> None:
     print("[Bot] Starting Bot")
