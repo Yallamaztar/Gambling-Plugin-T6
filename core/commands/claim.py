@@ -1,11 +1,12 @@
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
+from core.utils import parse_prefix_amount
 
 class ClaimCommand:
     def __init__(self, player: str, amount: int) -> None:
         BankManager().deposit(player, amount)
-        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${amount}")
+        Wrapper().commands.privatemessage(player, f"^2Successfully ^7claimed ^5${parse_prefix_amount(amount)}")
 
 class HourlyClaimCommand(ClaimCommand):
     def __init__(self, player: str) -> None:

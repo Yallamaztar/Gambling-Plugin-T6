@@ -20,8 +20,8 @@ class BanFlip:
             if multiplier is None: return
 
             result, total = self.update_balance(player, bet, multiplier)
-            self.commands.privatemessage(player, f"you {result} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.say(f"^7{split_clan_tag(player)} {result} (${parse_prefix_amount(total)}) ${total}") # type: ignore
+            self.commands.privatemessage(player, f"you {result} ${parse_prefix_amount(bet)} | Your new balance: ^5${self.bank.balance(player)}")
+            self.commands.say(f"^7{split_clan_tag(player)} {result} ${parse_prefix_amount(bet)}")
 
             if result == "^1lost^7":
                 banflip_loss_webhook(player, str(total), duration)

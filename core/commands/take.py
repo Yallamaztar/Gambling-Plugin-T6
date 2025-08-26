@@ -1,7 +1,7 @@
 from core.database.bank import BankManager
 from core.commands import run_command_threaded, rate_limit
 from core.permissions import admins_only, owners_only
-from core.utils import parse_amount
+from core.utils import parse_amount, parse_prefix_amount
 from core.wrapper import Wrapper
 
 class TakeCommand:
@@ -37,9 +37,9 @@ class TakeCommand:
                 amount = balance
 
         self.bank.deposit(target, -amount)
-        print(f"[TakeCommand] {player} took {amount} from {target}")
-        self.commands.privatemessage(player, f"Took ^1${amount} ^7from player")
-        self.commands.privatemessage(target, f"{player} took ^1${amount} ^7from you")
+        print(f"[TakeCommand] {player} took ^5${parse_prefix_amount(amount)}^7 from {target}")
+        self.commands.privatemessage(player, f"Took ^5${parse_prefix_amount(amount)}^7 ^7from player")
+        self.commands.privatemessage(target, f"{player} took ^5${parse_prefix_amount(amount)}^7 ^7from you")
 
 class TakeAllCommand:
     def __init__(self, player: str, amount: str) -> None:
@@ -70,7 +70,7 @@ class TakeAllCommand:
                 if amount > balance: amount = balance
 
             self.bank.deposit(p['name'], -amount)
-            self.commands.privatemessage(player, f"Took ^1${amount} ^7from {p['name']}")
+            self.commands.privatemessage(player, f"Took ^5${parse_prefix_amount(amount)}^7 ^7from {p['name']}")
             self.commands.privatemessage(p['name'], f"{player} took ^1${balance} ^7from you")
             count += 1
 

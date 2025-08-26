@@ -50,10 +50,10 @@ class GambleCog(commands.Cog):
             )
 
         result = self.update_balance(player, bet)
-        self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
+        self.commands.say(f"^7{split_clan_tag(player)} {result} ^5${parse_prefix_amount(bet)}^7")
 
         await interaction.followup.send(
-            f"🎲 **You {result} (${parse_prefix_amount(bet)}) ${bet}!** Your new balance: ${self.bank.balance(player)}",
+            f"🎲 **You {result} ${parse_prefix_amount(bet)}** Your new balance: ${self.bank.balance(player)}",
             ephemeral=True
         )
 

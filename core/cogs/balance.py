@@ -38,7 +38,7 @@ class BalanceCog(commands.Cog):
         if not player:
             bal = BankManager().balance(client)
             return await interaction.followup.send(
-                f"Your balance is **${bal}** (${parse_prefix_amount(bal)})",
+                f"Your balance is ${parse_prefix_amount(bal)}",
                 ephemeral=True
             )
         
@@ -55,7 +55,7 @@ class BalanceCog(commands.Cog):
         
         bal = BankManager().balance(target)
         return await interaction.followup.send(
-            f"{target}'s balance is **${bal}** (${parse_prefix_amount(bal)})",
+            f"{target}'s balance is ${parse_prefix_amount(bal)}",
             ephemeral=True
         )
     

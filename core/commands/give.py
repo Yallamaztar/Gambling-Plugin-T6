@@ -1,7 +1,7 @@
 from core.database.bank import BankManager
 from core.permissions import PermissionManager, owners_only, admins_only
 from core.commands import run_command_threaded, rate_limit
-from core.utils import parse_amount
+from core.utils import parse_amount, parse_prefix_amount
 from core.wrapper import Wrapper
 
 class GiveCommand:
@@ -23,8 +23,8 @@ class GiveCommand:
             self.commands.privatemessage(player, "Amount must be positive"); return
 
         self.bank.deposit(target, amount)
-        self.commands.privatemessage(player, f"Gave {target} ${amount}")
-        self.commands.privatemessage(target, f"You have gotten ^2${amount} ^7from {player}")
+        self.commands.privatemessage(player, f"Gave {target} ^5${parse_prefix_amount(amount)}^7")
+        self.commands.privatemessage(target, f"You have gotten ^2^5${parse_prefix_amount(amount)}^7 ^7from {player}")
 
 class GiveAllCommand:
     def __init__(self, player: str, amount: str) -> None:
@@ -43,10 +43,10 @@ class GiveAllCommand:
         
         for p in self.server.get_players():
             self.bank.deposit(p['name'], amount)
-            self.commands.privatemessage(player, f"Gave {p['name']} ${amount}")
-            self.commands.privatemessage(p['name'], f"You've gotten ^2${amount} ^7from {player}")
+            self.commands.privatemessage(player, f"Gave {p['name']} ^5${parse_prefix_amount(amount)}^7")
+            self.commands.privatemessage(p['name'], f"You've gotten ^2^5${parse_prefix_amount(amount)}^7 ^7from {player}")
         
-        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ${amount}")
+        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ^5${parse_prefix_amount(amount)}^7")
 
 class GiveAdminCommand:
     def __init__(self, player: str, target: str, amount: str) -> None:
@@ -71,9 +71,9 @@ class GiveAdminCommand:
             self.commands.privatemessage(player, f"Admins can only give up to ${self.MAX_ADMIN_GIVE}"); return
         
         self.bank.deposit(target, amount)
-        self.commands.privatemessage(player, f"Gave {target} ${amount}")
-        self.commands.privatemessage(target, f"You have gotten ^2${amount} ^7from {player}")
-        print(f"[GiveAdmin] {player} gave {target} ${amount}")
+        self.commands.privatemessage(player, f"Gave {target} ^5${parse_prefix_amount(amount)}^7")
+        self.commands.privatemessage(target, f"You have gotten ^5${parse_prefix_amount(amount)}^7")
+        print(f"[GiveAdmin] {player} gave {target} ^5${parse_prefix_amount(amount)}^7")
 
 class GiveAllAdminCommand:
     def __init__(self, player: str, amount: str) -> None:
@@ -97,11 +97,11 @@ class GiveAllAdminCommand:
 
         for p in self.server.get_players():
             self.bank.deposit(p['name'], amount)
-            self.commands.privatemessage(player, f"Gave {p['name']} ${amount}")
-            self.commands.privatemessage(p['name'], f"You've gotten ^2${amount} ^7from {player}")
+            self.commands.privatemessage(player, f"Gave {p['name']} ^5${parse_prefix_amount(amount)}^7")
+            self.commands.privatemessage(p['name'], f"You've gotten ^2^5${parse_prefix_amount(amount)}^7 ^7from {player}")
         
-        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ${amount}")
-        print(f"[GiveAllAdmin] {player} gave {len(self.server.get_players())} players ${amount}")
+        self.commands.say(f"^7Gave ^3{len(self.server.get_players())} ^7players ^5${parse_prefix_amount(amount)}^7")
+        print(f"[GiveAllAdmin] {player} gave {len(self.server.get_players())} players ^5${parse_prefix_amount(amount)}^7")
     
 
 def give(player: str, target: str, amount: str) -> None:

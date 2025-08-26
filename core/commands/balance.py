@@ -13,11 +13,11 @@ class BalanceCommand:
 
         if target == None:
             bal = self.bank.balance(player)
-            self.commands.privatemessage(player, f"your balance is (${parse_prefix_amount(bal)}) ^1${bal}")
+            self.commands.privatemessage(player, f"your balance is ${parse_prefix_amount(bal)}")
             return
         
         bal = self.bank.balance(self.player.find_player_by_partial_name(target)) # type: ignore
-        self.commands.privatemessage(player, f"{target}'s balance is (${parse_prefix_amount(bal)}) ^1${bal}")
+        self.commands.privatemessage(player, f"{target}'s balance is ${parse_prefix_amount(bal)}")
     
 def balance(player: str, target: Optional[str] = None) -> None:
     run_command_threaded(BalanceCommand, player, target)

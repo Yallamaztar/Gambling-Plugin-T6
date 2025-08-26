@@ -1,6 +1,7 @@
 from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
+from core.utils import parse_prefix_amount
 
 import time
 
@@ -13,7 +14,7 @@ class RichestCommand:
         self.commands.say("^7Top 5 ^5richest ^7players:")
         time.sleep(.5)
         for i, p in enumerate(self.bank.top_balances()):
-            self.commands.say(f"^7#{i + 1} {p['name']} - ^5{p['balance']}")
+            self.commands.say(f"^7#{i + 1} {p['name']} - ^5${parse_prefix_amount(int(p['balance']))}^7") 
             time.sleep(.2)
 
 @rate_limit(seconds=15)

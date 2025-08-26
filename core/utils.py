@@ -1,5 +1,5 @@
 import re, random
-from typing import Union, Dict, List
+from typing import Union, Dict
 
 def safe_int(value: Union[str, int], default: int = 0) -> int:
     try:
@@ -17,7 +17,7 @@ def parse_amount(amount: str) -> int:
         return safe_int(amount)
     
 def parse_prefix_amount(amount: int) -> str:
-    prefixes: List = [
+    prefixes = [
         (10**18, "z"),
         (10**15, "q"),
         (10**12, "t"),
@@ -27,8 +27,12 @@ def parse_prefix_amount(amount: int) -> str:
     ]
 
     for value, prefix in prefixes:
-        if amount % value == 0 and amount >= value:
-            return f"{amount // value}{prefix}"
+        if amount >= value:
+            val = amount / value
+            if val.is_integer():
+                return f"{int(val)}{prefix}"
+            else:
+                return f"{val:.1f}{prefix}"
 
     return str(amount)
 

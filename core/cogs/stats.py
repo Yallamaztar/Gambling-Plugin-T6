@@ -40,12 +40,13 @@ class StatsCog(commands.Cog):
             StatsManager().ensure(client)
             stats = StatsManager().stats[client]
             balance = BankManager().balance(client)
+            prefix  = f"(${parse_prefix_amount(balance)})" if balance > 0 else ""
 
             return await interaction.followup.send(
                 "### Your Stats:\n"
                 f"**Wins: {stats["wins"]}**\n"
                 f"**Losses: {stats["losses"]}**\n"
-                f"**Balance: ${parse_prefix_amount(balance)}**"
+                f"**Balance: {prefix} ${balance}**\n"
                 f"**Net: ${stats["net"]}**",
                 ephemeral=True
             )
@@ -64,12 +65,13 @@ class StatsCog(commands.Cog):
         StatsManager().ensure(target)
         stats   = StatsManager().stats[target]
         balance = BankManager().balance(target)
+        prefix  = f"(${parse_prefix_amount(balance)})" if balance > 0 else ""
         
         return await interaction.followup.send(
             f"### {target}'s Stats\n"
             f"**Wins: {stats['wins']}**\n"
             f"**Losses: {stats['losses']}**\n"
-            f"**Balance: ${parse_prefix_amount(balance)}**"
+            f"**Balance: {prefix} ${balance}**\n"
             f"**Net: ${stats['net']}**",
             ephemeral=True
         )
