@@ -73,10 +73,11 @@ class GambleCog(commands.Cog):
         return bet
 
     def update_balance(self, player: str, bet: int) -> str:
-        if random.choice([True, False]):
-            self.bank.deposit(player, bet)
-            win_webhook(player, str(bet))
-            StatsManager().win(player, bet)
+        if random.random() < 0.45:
+            win_amount = int(bet * 0.95)
+            self.bank.deposit(player, win_amount)
+            win_webhook(player, str(win_amount))
+            StatsManager().win(player, win_amount)
             return "won"
         else:
             self.bank.deposit(player, -bet)

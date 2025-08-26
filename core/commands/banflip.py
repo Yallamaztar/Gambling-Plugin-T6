@@ -96,8 +96,8 @@ class BanFlip:
             else: return 15
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> Tuple[str, Optional[int]]:
-        if random.choice([True, False]):
-            total = bet * multiplier
+        if random.random() < 0.40:
+            total = int(bet * multiplier * 0.90)
             self.bank.deposit(player, total); return ("^2won^7", total)
         else:
             self.bank.deposit(player, -bet); return ("^1lost^7", bet)

@@ -54,14 +54,15 @@ class GambleCommand:
         return bet
                 
     def update_balance(self, bet: int) -> str:
-        if random.choice([True, False]):
-            self.bank.deposit(self.player, bet)
-            win_webhook(self.player, str(bet))
-            StatsManager().win(self.player, bet); return "^2won^7"
-        else:
-            self.bank.deposit(self.player, -bet)
-            loss_webhook(self.player, str(bet))
-            StatsManager().loss(self.player, bet); return "^1lost^7"
+        if random.random() < 0.45:
+            win_amount = int(bet * 0.95)
+            self.bank.deposit(self.player, win_amount)
+            win_webhook(self.player, str(win_amount))
+            StatsManager().win(self.player, win_amount); return "^2won^7"
+        
+        self.bank.deposit(self.player, -bet)
+        loss_webhook(self.player, str(bet))
+        StatsManager().loss(self.player, bet); return "^1lost^7"
 
 def gamble(player: str, amount: str) -> None:
     run_command_threaded(GambleCommand, player, amount)
