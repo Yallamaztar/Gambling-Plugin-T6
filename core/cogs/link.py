@@ -26,7 +26,7 @@ class LinkCog(commands.Cog):
             description="Token to link your account with",
             required=True
         )
-    ):
+    ):  
         player = TokenManager().get_player_by_token(token)
         if not player:
             return await interaction.response.send_message(

@@ -12,7 +12,7 @@ from core.bot import run_bot
 
 class GamblingPlugin:
     def __init__(self) -> None:
-        self.last_seen = deque(maxlen=50)
+        self.last_seen = set()
         
         wrapper = Wrapper()
         self.server = wrapper.server
@@ -20,7 +20,7 @@ class GamblingPlugin:
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor()
+        self.executor = ThreadPoolExecutor(max_workers=12)
 
         bank = BankManager()
         # bank.reset()
@@ -58,15 +58,13 @@ class GamblingPlugin:
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
+            if audit_log is None or not self.is_valid_audit_log(audit_log):
+                time.sleep(0.01)
+                continue
 
-            if audit_log is None: time.sleep(.01); continue
-            if not self.is_valid_audit_log(audit_log): time.sleep(.01); continue
-
-            self.last_seen.clear()
-            self.last_seen.append((audit_log['origin'], audit_log['data'], audit_log['time']))
-            self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data']) # better ?
-
-            time.sleep(.01)
+            self.last_seen.add((audit_log['origin'], audit_log['data'], audit_log['time']))
+            self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data'])
+            time.sleep(0.01)
 
 if __name__ == '__main__':
     GamblingPlugin()

@@ -26,7 +26,9 @@ class StatsCog(commands.Cog):
             description="view the stats of another player",
             required=False,
         )
-    ):
+    ):  
+        await interaction.response.defer(ephemeral=True)
+
         client = LinkManager().get_player_by_discord(interaction.user.id)  # type: ignore
         if not client:
             return await interaction.followup.send(
