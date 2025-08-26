@@ -32,11 +32,12 @@ class ShopCommand:
     
     def show_shop(self) -> None:
         shop = {
-            1: "^7[1] ^5Fast^7Restart Map  - $200t",
-            2: "^7[2] ^5Gambler ^7Role     - $10q",
+            1: "^7[1] ^5Fast^7Restart Map  - $500t",
+            2: "^7[2] ^5Gambler ^7Role     - $40q",
             3: "^7[3] ^5Map ^7Change       - $550q",
-            4: "^7[4] ^5SeniorAdmin ^7Role - $100,000z",
-            5: "^7[5] ^5Gambling ^7Admin   - $50,000z",
+            4: "^7[4] ^5SeniorAdmin ^7Role - $150,000z",
+            5: "^7[5] ^5Gambling ^7Admin   - $500,000z",
+            6: "^7[6] ^5Kill ^7Player      - $10z"
         }
         
         self.commands.privatemessage(self.player, "^7-- ^5Brow^7nies ^5Shop ^7--")
@@ -45,7 +46,7 @@ class ShopCommand:
 
     def buy_item(self, item: str) -> None:
         if item in [ "fastrestart", "fr", "1" ]:
-            price = 200_000_000_000_000
+            price = 500_000_000_000_000
             balance = self.bank.balance(self.player)
 
             if balance == 0:
@@ -58,7 +59,7 @@ class ShopCommand:
             self.commands.fastrestart()
 
         elif item in [ "gambler", "gambla", "2" ]:
-            price = 10_000_000_000_000 # 10q
+            price = 40_000_000_000_000 # 40q
             balance = self.bank.balance(self.player)
             
             if balance == 0:
@@ -90,7 +91,7 @@ class ShopCommand:
             self.commands.change_map(self.map) # type: ignore
 
         elif item in [ "senioradmin", "sr", "4" ]:
-            price = 100_000_000_000_000_000_000_000 # 100,000z
+            price = 150_000_000_000_000_000_000_000 # 150,000z
             balance = self.bank.balance(self.player)
             
             if balance == 0:
@@ -109,7 +110,7 @@ class ShopCommand:
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2SeniorAdmin")
         
         elif item in [ "administrator", "admin", "5" ]:
-            price = 50_000_000_000_000_000_000_000 # 50,000z
+            price = 500_000_000_000_000_000_000_000 # 500,000z
             balance = self.bank.balance(self.player)
 
             if balance == 0:
@@ -127,6 +128,21 @@ class ShopCommand:
             
             AdminManager().add(self.player)
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambling Admin")
+
+        elif item in [ "killplayer", "kpl", "6" ]:
+            price = 10_000_000_000_000_000_000 # 10z
+            balance = self.bank.balance(self.player)
+
+            if balance == 0:
+                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
+            
+            if balance < price: 
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return           
+
+            self.bank.deposit(self.player, -price)
+            self.commands.kill(self.target)
+
+            self.commands.privatemessage(self.target, f"You got killed by {self.player}")
 
         else: 
             self.commands.privatemessage(self.player, "Invalid item selected"); return

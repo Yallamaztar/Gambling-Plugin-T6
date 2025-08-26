@@ -10,7 +10,7 @@ from core.utils import parse_prefix_amount
 
 from typing import Optional
 
-class StatsCog(commands.Cog):
+class PayCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
@@ -67,4 +67,4 @@ class StatsCog(commands.Cog):
         )
     
 def setup(bot: commands.Bot):
-    bot.add_cog(StatsCog(bot))
+    bot.add_cog(PayCog(bot))

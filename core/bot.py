@@ -9,7 +9,8 @@ async def on_ready():
 
 for file in os.listdir("core/cogs"):
     if not file.startswith("__"):
-        bot.load_extension(f"core.cogs.{file[:-3]}")
+        cog = f"core.cogs.{file[:-3]}"
+        bot.load_extension(cog)
         print(f"[Bot] loaded core.cogs.{file[:-3]}")
 
 def run_bot() -> None:

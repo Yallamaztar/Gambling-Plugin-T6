@@ -54,7 +54,7 @@ class GiveAdminCommand:
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
-        self.MAX_ADMIN_GIVE     = 250_000_000_000_000 # 250t
+        self.MAX_ADMIN_GIVE     = 250_000_000_000 # 250b
         self.give(player, target, amount)
 
     @admins_only()
@@ -82,7 +82,7 @@ class GiveAllAdminCommand:
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
-        self.MAX_ADMIN_GIVE_ALL = 10_000_000_000 # 10b
+        self.MAX_ADMIN_GIVE_ALL = 100_000_000_000 # 100b
         
         self.give_all(player, amount)
 
@@ -110,10 +110,10 @@ def give(player: str, target: str, amount: str) -> None:
 def give_all(player: str, amount: str) -> None:
     run_command_threaded(GiveAllCommand, player, amount)
 
-@rate_limit(minutes=5)
+@rate_limit(minutes=30)
 def admin_give(player: str, target: str, amount: str) -> None:
     run_command_threaded(GiveAdminCommand, player, target, amount)
 
-@rate_limit(minutes=15)
+@rate_limit(minutes=30)
 def admin_give_all(player: str, amount: str) -> None:
     run_command_threaded(GiveAllAdminCommand, player, amount)
