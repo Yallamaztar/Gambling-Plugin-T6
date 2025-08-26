@@ -8,7 +8,7 @@ def safe_int(value: Union[str, int], default: int = 0) -> int:
         return default
 
 def parse_amount(amount: str) -> int:
-    prefixes: Dict[str, int] = {"k": 1000, "m": 1000000, "b": 1000000000, "t": 1000000000000, "q": 1000000000000000, "z":1000000000000000000}
+    prefixes: Dict[str, int] = {"k": 1000, "m": 1000000, "b": 1000000000, "t": 1000000000000, "q": 1000000000000000, "z":1000000000000000000, "o": 1000000000000000000000, "y": 1000000000000000000000000}
 
     amount = amount.lower().strip()
     if amount[-1] in prefixes:
@@ -18,6 +18,8 @@ def parse_amount(amount: str) -> int:
     
 def parse_prefix_amount(amount: int) -> str:
     prefixes = [
+        (10**24, "y"),
+        (10**21, "o"),
         (10**18, "z"),
         (10**15, "q"),
         (10**12, "t"),

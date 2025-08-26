@@ -77,30 +77,23 @@ class BanFlip:
 
         if unit == "m":
             if dur < 5: return 1
-            elif dur < 10: return 1
-            elif dur < 20: return 2
             elif dur < 30: return 2
-            elif dur < 45: return 3
-            else: return 4
+            else: return 3
 
         elif unit == "h":
-            if dur < 2: return 5
-            elif dur < 3: return 6
-            elif dur < 4: return 7
-            elif dur < 6: return 8
-            elif dur < 8: return 9
-            else: return 10
+            if dur < 2: return 4
+            elif dur < 6: return 5
+            else: return 6
 
         elif unit == "d":
-            if dur < 2: return 11
-            elif dur <= 3: return 12
-            elif dur <= 5: return 13
-            elif dur <= 7: return 14
-            elif dur <= 10: return 15
-            elif dur <= 15: return 16
-            elif dur <= 20: return 17
-            elif dur <= 25: return 18
-            else: return 19
+            if dur < 2: return 7
+            elif dur <= 3: return 8
+            elif dur <= 5: return 9
+            elif dur <= 7: return 10
+            elif dur <= 10: return 11
+            elif dur <= 15: return 12
+            elif dur <= 25: return 14
+            else: return 15
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> Tuple[str, Optional[int]]:
         if random.choice([True, False]):
