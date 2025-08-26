@@ -29,7 +29,7 @@ class StatsCog(commands.Cog):
     ):
         client = LinkManager().get_player_by_discord(interaction.user.id)  # type: ignore
         if not client:
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "❌ **You must link your account first to check stats**",
                 ephemeral=True
             )
@@ -39,7 +39,7 @@ class StatsCog(commands.Cog):
             stats = StatsManager().stats[client]
             balance = BankManager().balance(client)
 
-            return await interaction.response.send_message(
+            return await interaction.followup.send(
                 "### Your Stats:\n"
                 f"**Wins: {stats["wins"]}**\n"
                 f"**Losses: {stats["losses"]}**\n"
@@ -63,7 +63,7 @@ class StatsCog(commands.Cog):
         stats   = StatsManager().stats[target]
         balance = BankManager().balance(target)
         
-        return await interaction.response.send_message(
+        return await interaction.followup.send(
             f"### {target}'s Stats\n"
             f"**Wins: {stats['wins']}**\n"
             f"**Losses: {stats['losses']}**\n"
