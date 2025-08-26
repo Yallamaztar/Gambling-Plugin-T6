@@ -63,7 +63,7 @@ class PayCog(commands.Cog):
         BankManager().deposit(client, -amount)
         BankManager().deposit(target, amount)
 
-        Wrapper().commands.privatemessage(target, f"{player} paid you ^2$^5${parse_prefix_amount(amount)}^7^7 | Your new balance: ^5${BankManager().balance(target)}")
+        Wrapper().commands.privatemessage(target, f"{player} paid you ^5${parse_prefix_amount(amount)}^7 | Your new balance: ^5${BankManager().balance(target)}")
 
         return await interaction.followup.send(
             f"✅ paid **{target}** ${parse_prefix_amount(amount)}",

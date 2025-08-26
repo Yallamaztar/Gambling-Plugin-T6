@@ -77,7 +77,7 @@ class TakeAllCommand:
         self.commands.privatemessage(player, f"Took {count} players money")
 
 
-@rate_limit(hours=1)
+@rate_limit(hours=2)
 def take(player: str, target: str, amount: str) -> None:
     run_command_threaded(TakeCommand, player, target, amount)
 
