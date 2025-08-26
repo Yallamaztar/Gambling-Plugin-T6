@@ -33,81 +33,54 @@ class UnbanCog(commands.Cog):
         bank_manager = BankManager()
         wrapper = Wrapper()
 
-        executor = link_manager.get_player_by_discord(interaction.user.id)  # type: ignore
-        if not executor:
+        client = link_manager.get_player_by_discord(interaction.user.id)  # type: ignore
+        if not client:
             return await interaction.followup.send(
                 "❌ **You must link your account first**",
                 ephemeral=True
             )
 
-        balance = bank_manager.balance(executor)
-        if balance < price:
+        if not player:
+            if bank_manager.balance(client) < price:
+                return await interaction.followup.send(
+                    f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
+                    ephemeral=True
+                )
+            
+        links = LinkManager().load()
+
+        if player in links: target = links[player]
+        elif player in links.values(): target = player
+        else:
+            target = LinkManager().find_linked_by_partial_name(player)
+            if not target:
+                return await interaction.followup.send(
+                    f"❌ Could not find a linked account for {player}",
+                    ephemeral=True
+                )
+            
+        target_id = wrapper.player.player_client_id_from_name(target)
+        if not target_id:
             return await interaction.followup.send(
-                f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
+                f"❌ Could not find client ID of {target}",
                 ephemeral=True
             )
         
-        target_player = None
-        if player.isdigit():
-            target_player = link_manager.get_player_by_discord(int(player))
-            if not target_player:
-                return await interaction.followup.send(
-                    "❌ **That Discord ID is not linked to any player**",
-                    ephemeral=True
-                )
-        else:
-            if link_manager.is_linked(player):
-                target_player = player
-            else:
-                target_player = link_manager.find_linked_by_partial_name(player)
-                if not target_player:
-                    return await interaction.followup.send(
-                        "❌ **This player is not linked, does not exist, or no partial match found**",
-                        ephemeral=True
-                    )
-
-        try:
-            player_id = wrapper.player.player_client_id_from_name(target_player)
-        except (IndexError, ValueError, TypeError) as e:
-            print(f"[DEBUG] Failed to resolve player_id for {target_player}: {e}")
-            return await interaction.followup.send(
-                "❌ **Could not resolve this player in the database**",
-                ephemeral=True
-            )
-
-        try:
-            ban_reason = wrapper.player.ban_reason(player_id)
-        except Exception as e:
-            print(f"[DEBUG] Failed to fetch ban_reason for {player_id}: {e}")
-            return await interaction.followup.send(
-                "❌ **Failed to check ban status. Try again later**",
-                ephemeral=True
-            )
-
+        ban_reason = wrapper.player.ban_reason(target_id)
         if not ban_reason or not ban_reason.startswith("You lost gamble lol"):
             return await interaction.followup.send(
                 "❌ **This player wasn't banned for losing a gamble**",
                 ephemeral=True
             )
+        
+        wrapper.commands.unban(f"@{target_id}", f"Gambling unban - {interaction.user.name}")  # type: ignore
+        bank_manager.deposit(client, -price)
+        unban_webhook(interaction.user.name, target) # type: ignore
 
-        unban_target = f"@{player_id}" if not str(player_id).startswith("@") else str(player_id)
-
-        try:
-            wrapper.commands.unban(unban_target, f"You got unbanned by {interaction.user.name}")  # type: ignore
-        except Exception as e:
-            print(f"[DEBUG] Unban failed for {unban_target}: {e}")
-            return await interaction.followup.send(
-                "❌ **Failed to unban this player. Try again later**",
-                ephemeral=True
-            )
-
-        print(f"[Bot] {executor} unbanned {unban_target}")
-        unban_webhook(executor, unban_target)
-
-        await interaction.followup.send(
-            f"✅ **Successfully unbanned {target_player}**",
+        return await interaction.followup.send(
+            f"✅ **{target}** has been unbanned (cost: ${price:,})",
             ephemeral=True
         )
-
+    
 def setup(bot: commands.Bot):
     bot.add_cog(UnbanCog(bot))
