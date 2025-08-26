@@ -9,6 +9,7 @@ def win_webhook(player: str, amount: str) -> None:
     data = {
         "embeds": [{
             "title": "Gamble Win 🎉",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/gambla_win.png?raw=true",
             "description": f"**{player}** won **${amount}**",
             "color": 0x00ff00,
             "timestamp": current_timestamp()
@@ -20,6 +21,7 @@ def loss_webhook(player: str, amount: str) -> None:
     data = {
         "embeds": [{
             "title": "Gamble Loss 😿",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/gambla_loss.png?raw=true",
             "description": f"**{player}** lost **${amount}**",
             "color": 0xff0000,
             "timestamp": current_timestamp()
@@ -31,6 +33,7 @@ def link_webhook(player: str, discord_id: str) -> None:
     data = {
         "embeds": [{
             "title": "Account Linked 🔗",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/gambla_no_avatar.png?raw=true",
             "description": f"Player **{player}** has linked their account to Discord <@{discord_id}>",
             "color": 0x3498db,
             "timestamp": current_timestamp()
@@ -42,6 +45,7 @@ def unban_webhook(player: str, unbanned: str) -> None:
     data = {
         "embeds": [{
             "title": "Player Unbanned ✅",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/gambla_no_avatar.png?raw=true",
             "description": f"Player **{unbanned}** has been unbanned by **{player}**",
             "color": 0x2ecc71,
             "timestamp": current_timestamp()
@@ -53,6 +57,7 @@ def banflip_win_webhook(player: str, amount: str, duration: str) -> None:
     data = {
         "embeds": [{
             "title": "Banflip Win 🔥",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/banflip_win.png?raw=true",
             "description": (
                 f"**{player}** won a banflip with duration **duration {duration}!**\n"
                 f"**Winnings:** ${amount}\n"
@@ -67,6 +72,7 @@ def banflip_loss_webhook(player: str, amount: str, duration: str) -> None:
     data = {
         "embeds": [{
             "title": "Banflip Loss 💀",
+            "avatar_url": "https://github.com/Yallamaztar/Gambling-Plugin-T6/blob/main/assets/banflip_loss.png?raw=true",
             "description": (
                 f"**{player}** lost a banflip with **duration {duration}!**\n"
                 f"**Lost Amount:** ${amount}\n"

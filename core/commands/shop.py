@@ -126,29 +126,6 @@ class ShopCommand:
             AdminManager().add(self.player)
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambling Admin")
 
-        elif item in [ "randomeffect", "effect", "6" ]:
-            price = 5_000_000_000
-            balance = self.bank.balance(self.player)
-
-            if balance == 0:
-                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
-            
-            if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
-            
-            self.bank.deposit(self.player, -price)
-
-            effects = [
-                "TakeWeapons",
-                "GiveWeapon"
-                "TeamSwitch",
-                "Kill",
-                "SetSpectator",
-                "PlayerToMe",
-                "LockControls",
-                "m"
-            ]
-
         else: 
             self.commands.privatemessage(self.player, "Invalid item selected"); return
 
