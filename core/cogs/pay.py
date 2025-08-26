@@ -65,3 +65,6 @@ class StatsCog(commands.Cog):
             f"✅ **{target}** has been unbanned (cost: ${parse_prefix_amount(amount)})",
             ephemeral=True
         )
+    
+def setup(bot: commands.Bot):
+    bot.add_cog(StatsCog(bot))
