@@ -1,6 +1,6 @@
 from core.database.bank import BankManager
 from core.database.stats import StatsManager
-from core.utils import parse_amount, split_clan_tag
+from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 
@@ -19,8 +19,9 @@ class GambleCommand:
             bet = self.validate(amount)
             if bet == None or bet <= 0: return
             
-            result = self.update_balance(bet)
-            self.commands.privatemessage(player, f"you {result} | Your new balance: ^5${self.bank.balance(player)}")
+            result  = self.update_balance(bet)
+            balance = self.bank.balance(player)
+            self.commands.privatemessage(player, f"you {result} | Your new balance: (${parse_prefix_amount(balance)}) ^5${balance}")
             self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
         
         except ValueError:

@@ -1,5 +1,5 @@
 from core.database.bank import BankManager
-from core.utils import parse_amount, split_clan_tag
+from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 from core.webhook import banflip_win_webhook, banflip_loss_webhook
@@ -21,7 +21,7 @@ class BanFlip:
 
             result, total = self.update_balance(player, bet, multiplier)
             self.commands.privatemessage(player, f"you {result} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.say(f"^7{split_clan_tag(player)} {result} ${total}")
+            self.commands.say(f"^7{split_clan_tag(player)} {result} (${parse_prefix_amount(total)}) ${total}") # type: ignore
 
             if result == "^1lost^7":
                 banflip_loss_webhook(player, str(total), duration)

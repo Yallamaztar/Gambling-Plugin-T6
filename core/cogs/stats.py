@@ -2,11 +2,10 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import SlashOption, Interaction
 
-from core.database.tokens import TokenManager
 from core.database.links import LinkManager
 from core.database.bank import BankManager
 from core.database.stats import StatsManager
-from core.wrapper import Wrapper
+from core.utils import parse_prefix_amount
 
 from typing import Optional
 
@@ -38,10 +37,13 @@ class StatsCog(commands.Cog):
         if not player:
             StatsManager().ensure(client)
             stats = StatsManager().stats[client]
+            balance = BankManager().balance(client)
+
             return await interaction.response.send_message(
                 "### Your Stats:\n"
                 f"**Wins: {stats["wins"]}**\n"
                 f"**Losses: {stats["losses"]}**\n"
+                f"**Balance: ${parse_prefix_amount(balance)}**"
                 f"**Net: ${stats["net"]}**",
                 ephemeral=True
             )
@@ -58,12 +60,14 @@ class StatsCog(commands.Cog):
                 )
 
         StatsManager().ensure(target)
-        stats = StatsManager().stats[target]
+        stats   = StatsManager().stats[target]
+        balance = BankManager().balance(target)
+        
         return await interaction.response.send_message(
             f"### {target}'s Stats\n"
             f"**Wins: {stats['wins']}**\n"
             f"**Losses: {stats['losses']}**\n"
-            f"**Balance: {BankManager().balance(target)}**"
+            f"**Balance: ${parse_prefix_amount(balance)}**"
             f"**Net: ${stats['net']}**",
             ephemeral=True
         )

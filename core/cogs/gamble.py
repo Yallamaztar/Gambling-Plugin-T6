@@ -7,7 +7,7 @@ from core.database.links import LinkManager
 from core.database.stats import StatsManager
 from core.wrapper import Wrapper
 from core.webhook import win_webhook, loss_webhook
-from core.utils import parse_amount, split_clan_tag
+from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 
 import random
 from typing import Optional
@@ -53,7 +53,7 @@ class GambleCog(commands.Cog):
         self.commands.say(f"^7{split_clan_tag(player)} {result} ${bet}")
 
         await interaction.followup.send(
-            f"🎲 **You {result} ${bet}!** Your new balance: ${self.bank.balance(player)}",
+            f"🎲 **You {result} (${parse_prefix_amount(bet)}) ${bet}!** Your new balance: ${self.bank.balance(player)}",
             ephemeral=True
         )
 

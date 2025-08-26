@@ -4,7 +4,7 @@ from nextcord import SlashOption, Interaction
 
 from core.database.links import LinkManager
 from core.database.bank import BankManager
-from core.wrapper import Wrapper
+from core.utils import parse_prefix_amount
 
 from typing import Optional
 
@@ -38,7 +38,7 @@ class BalanceCog(commands.Cog):
         if not player:
             bal = BankManager().balance(client)
             return await interaction.followup.send(
-                f"Your balance is **${bal}**",
+                f"Your balance is **${bal}** (${parse_prefix_amount(bal)})",
                 ephemeral=True
             )
         
@@ -55,7 +55,7 @@ class BalanceCog(commands.Cog):
         
         bal = BankManager().balance(target)
         return await interaction.followup.send(
-            f"{target}'s balance is **${bal}**",
+            f"{target}'s balance is **${bal}** (${parse_prefix_amount(bal)})",
             ephemeral=True
         )
     
