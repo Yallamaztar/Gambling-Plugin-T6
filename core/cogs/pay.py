@@ -59,10 +59,14 @@ class PayCog(commands.Cog):
                     f"❌ Could not find a linked account for {player}",
                     ephemeral=True
                 )
-                
+        
+        BankManager().deposit(client, -amount)
         BankManager().deposit(target, amount)
+
+        Wrapper().commands.privatemessage(target, f"{player} paid you ^2$^5${parse_prefix_amount(amount)}^7^7 | Your new balance: ^5${BankManager().balance(target)}")
+
         return await interaction.followup.send(
-            f"✅ **{target}** has been unbanned (cost: ${parse_prefix_amount(amount)})",
+            f"✅ paid **{target}** ${parse_prefix_amount(amount)}",
             ephemeral=True
         )
     
