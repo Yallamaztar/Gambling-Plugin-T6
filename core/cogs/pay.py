@@ -16,7 +16,7 @@ class StatsCog(commands.Cog):
 
     @nextcord.slash_command(
         name="pay",
-        description="Pay a player money (online & offline)",
+        description="Pay a player money (only linked players)",
         force_global=True
     )
     async def stats(
@@ -48,18 +48,17 @@ class StatsCog(commands.Cog):
                 ephemeral=True
             )
         
-        target = Wrapper().player.find_player_by_partial_name(target) # type: ignore
-        if not target:
-            links = LinkManager().load()
-            if player in links: target = links[player]
-            elif player in links.values(): target = player
-            else:
-                target = LinkManager().find_linked_by_partial_name(player)
-                if not target:
-                    return await interaction.followup.send(
-                        f"❌ Could not find a linked account for {player}",
-                        ephemeral=True
-                    )
+        links = LinkManager().load()
+
+        if player in links: target = links[player]
+        elif player in links.values(): target = player
+        else:
+            target = LinkManager().find_linked_by_partial_name(player)
+            if not target:
+                return await interaction.followup.send(
+                    f"❌ Could not find a linked account for {player}",
+                    ephemeral=True
+                )
                 
         BankManager().deposit(target, amount)
         return await interaction.followup.send(
