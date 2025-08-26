@@ -39,14 +39,18 @@ class UnbanCog(commands.Cog):
                 ephemeral=True
             )
 
-        price = int(0.33 * bank_manager.balance(client))
-
-        if not player:
-            if bank_manager.balance(client) < price:
-                return await interaction.followup.send(
+        price = int(0.35 * bank_manager.balance(client))
+        if price <= 0: 
+            return await interaction.followup.send(
                     f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
                     ephemeral=True
                 )
+        
+        if price <= 500_000_000_000_000: # 500t
+            return await interaction.followup.send(
+                f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
+                ephemeral=True
+            )
             
         links = LinkManager().load()
 
