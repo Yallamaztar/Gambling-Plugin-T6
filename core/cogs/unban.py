@@ -14,7 +14,7 @@ class UnbanCog(commands.Cog):
 
     @nextcord.slash_command(
         name="unban",
-        description="Unban a player if they are linked (costs $10b)",
+        description=r"Unban a player if they are linked (costs 1/3rd of your balance)",
         force_global=True
     )
     async def unban(
@@ -28,7 +28,6 @@ class UnbanCog(commands.Cog):
     ):
         await interaction.response.defer(ephemeral=True)
 
-        price = 10_000_000_000
         link_manager = LinkManager()
         bank_manager = BankManager()
         wrapper = Wrapper()
@@ -39,6 +38,8 @@ class UnbanCog(commands.Cog):
                 "❌ **You must link your account first**",
                 ephemeral=True
             )
+
+        price = int(0.33 * bank_manager.balance(client))
 
         if not player:
             if bank_manager.balance(client) < price:
