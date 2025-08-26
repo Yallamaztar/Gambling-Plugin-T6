@@ -46,30 +46,24 @@ class StatsCog(commands.Cog):
                 ephemeral=True
             )
         
-        target = None
-        if player.startswith("<@") and player.endswith(">"):
-            try:
-                player_id = int(player.strip("<@!>"))
-                target = LinkManager().get_player_by_discord(player_id)  # type: ignore
-            except ValueError:
-                pass
-
-        if not target:
-            player_clean = player.strip().lower()
-            target = Wrapper().player.find_player_by_partial_name(player_clean)
-
-        if not target:
-            return await interaction.response.send_message(
-                f"❌ Could not find player matching {player}",
-                ephemeral=True
-            )
+        links = LinkManager().load()
+        if player in links: target = links[player]
+        elif player in links.values(): target = player
+        else:
+            target = LinkManager().find_linked_by_partial_name(player)
+            if not target:
+                return await interaction.followup.send(
+                    f"❌ Could not find a linked account for {player}",
+                    ephemeral=True
+                )
 
         StatsManager().ensure(target)
         stats = StatsManager().stats[target]
         return await interaction.response.send_message(
-            f"### {player}'s Stats\n"
+            f"### {target}'s Stats\n"
             f"**Wins: {stats['wins']}**\n"
             f"**Losses: {stats['losses']}**\n"
+            f"**Balance: {BankManager().balance(target)}**"
             f"**Net: ${stats['net']}**",
             ephemeral=True
         )
