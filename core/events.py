@@ -20,8 +20,8 @@ class EventManager:
     def register_events(self) -> None:
         @self.client.on("player_spawned")
         def on_spawned(player: str) -> None:
-            if self.bank.balance(player) > 100_000:
-                connect = int(0.01 * self.bank.balance(player))
+            if self.bank.balance(player) > 1_000_000:
+                connect = int(0.001 * self.bank.balance(player))
             else:
                 connect = 2500
             self.bank.deposit(player, connect)
@@ -29,8 +29,8 @@ class EventManager:
         
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str, weapon: str, hit_loc: str) -> None:
-            if self.bank.balance(player) > 100_000:
-                kill = int(0.1 * self.bank.balance(player))
+            if self.bank.balance(player) > 1_000_000:
+                kill = int(0.005 * self.bank.balance(player))
             else:
                 kill = 10_000
             self.bank.deposit(attacker, kill)
@@ -47,7 +47,7 @@ class EventManager:
 
         @self.client.on("player_death")
         def on_death(player: str) -> None:
-            if self.bank.balance(player) > 100_000:
+            if self.bank.balance(player) > 1_000_000:
                 death = int(0.05 * self.bank.balance(player))
             else:
                 death = 10000 
@@ -56,7 +56,7 @@ class EventManager:
 
         @self.client.on("player_disconnected")
         def on_disconnect(player: str) -> None:
-            if self.bank.balance(player) > 100_000:
+            if self.bank.balance(player) > 1_000_000:
                 disconnect = int(0.025 * self.bank.balance(player))
             else:
                 disconnect = 25000

@@ -11,7 +11,7 @@ from core.webhook import unban_webhook
 class UnbanCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+        self.cooldown = commands.CooldownMapping.from_cooldown(1, 6000, commands.BucketType.user)
     @commands.cooldown(1, 6000, commands.BucketType.user)
     @nextcord.slash_command(
         name="unban",

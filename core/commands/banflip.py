@@ -72,38 +72,24 @@ class BanFlip:
         unit = duration[-1].lower()
         dur  = int(duration[:-1])
 
-        if unit not in ["m", "h", "d"]:
+        if unit not in ["h", "d"]:
             self.commands.privatemessage(player, "Invalid time unit, use m, h, or d"); return
 
         if dur < 5 and unit == "m":
             self.commands.privatemessage(player, "Duration has to be greater than 5m"); return
-        
-        if unit == "m" and dur > 60:
-            self.commands.privatemessage(player, "Minutes cannot exceed 60"); return
         if unit == "h" and dur > 24:
             self.commands.privatemessage(player, "Hours cannot exceed 24"); return
         if unit == "d" and dur > 30:
             self.commands.privatemessage(player, "Days cannot exceed 30"); return
 
-        if unit == "m":
-            if dur < 5: return 1
-            elif dur < 30: return 2
+        elif unit == "h":
+            if dur < 12: return 2
             else: return 3
 
-        elif unit == "h":
-            if dur < 2: return 4
-            elif dur < 6: return 5
-            else: return 6
-
         elif unit == "d":
-            if dur < 2: return 7
-            elif dur <= 3: return 8
-            elif dur <= 5: return 9
-            elif dur <= 7: return 10
-            elif dur <= 10: return 11
-            elif dur <= 15: return 12
-            elif dur <= 25: return 14
-            else: return 15
+            if dur < 5: return 4
+            if dur < 16: return 5
+            else: return 5
 
     def update_balance(self, player: str, bet: int, multiplier: int) -> Tuple[str, Optional[int]]:
         if random.random() < 0.40:
