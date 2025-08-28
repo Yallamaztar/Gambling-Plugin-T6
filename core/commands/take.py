@@ -1,4 +1,5 @@
 from core.database.bank import BankManager
+from core.database.links import LinkManager
 from core.commands import run_command_threaded, rate_limit
 from core.permissions import admins_only, owners_only
 from core.utils import parse_amount, parse_prefix_amount
@@ -15,7 +16,7 @@ class TakeCommand:
     
     @admins_only()
     def take(self, player: str, target: str, _amount: str) -> None:
-        target = self.player.find_player_by_partial_name(target) # type: ignore
+        target = LinkManager().find_linked_by_partial_name(target)
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         

@@ -1,5 +1,6 @@
 from core.wrapper import Wrapper
 from core.database.bank import BankManager
+from core.database.links import LinkManager
 from core.commands import run_command_threaded
 from core.permissions import discord_linked_only
 from typing import Optional
@@ -14,7 +15,7 @@ class BalanceCommand:
             bal = self.bank.balance(player)
             self.commands.privatemessage(player, f"your balance is ^1${bal}"); return
         
-        bal = self.bank.balance(self.player.find_player_by_partial_name(target)) # type: ignore
+        bal = LinkManager.find_linked_by_partial_name(target) # type: ignore
         self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
 
 @discord_linked_only()

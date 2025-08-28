@@ -1,6 +1,7 @@
 from core.commands import run_command_threaded
 from core.permissions import owners_only
 from core.database.owners import OwnerManager
+from core.database.links import LinkManager
 from core.wrapper import Wrapper
 
 class OwnerAddCommand:
@@ -12,7 +13,7 @@ class OwnerAddCommand:
     
     @owners_only()
     def add(self, player: str, target: str) -> None:
-        target = self.player.find_player_by_partial_name(target) # type: ignore
+        target = LinkManager().find_linked_by_partial_name(target)
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         
@@ -28,7 +29,7 @@ class OwnerRemoveCommand:
 
     @owners_only()
     def remove(self, player: str, target: str) -> None:
-        target = self.player.find_player_by_partial_name(target) # type: ignore
+        target = LinkManager().find_linked_by_partial_name(target)
         if not target:
             self.commands.privatemessage(player, f"Player {target} not found"); return
         
