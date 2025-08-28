@@ -39,8 +39,8 @@ Lightweight in-game economy, gambling, and shop plugin for Plutonium T6 servers!
    - **IW4M_HEADER**: Cookie header value for an authenticated IW4M/IW4MAdmin session
    - PowerShell example:
      ```bash
-     $env:IW4M_URL = "http://127.0.0.1:1624"
-     $env:IW4M_ID = "1"
+     $env:IW4M_URL = "http://193.23.160.188:1624" # make sure to delete "/" the the end "http://193.23.160.188:1624/" <- this is not valid
+     $env:IW4M_ID = "193231601884988" # game_ip_addr + game_port
      $env:IW4M_HEADER = ".AspNetCore.Cookies=YOUR_COOKIE_HERE"
      ```
 
