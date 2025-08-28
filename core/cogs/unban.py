@@ -7,12 +7,11 @@ from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.webhook import unban_webhook
 
-
 class UnbanCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.cooldown = commands.CooldownMapping.from_cooldown(1, 6000, commands.BucketType.user)
-    @commands.cooldown(1, 6000, commands.BucketType.user)
+
     @nextcord.slash_command(
         name="unban",
         description=r"Unban a player if they are linked (costs 1/3rd of your balance)",
@@ -28,6 +27,15 @@ class UnbanCog(commands.Cog):
         )
     ):
         await interaction.response.defer(ephemeral=True)
+
+        bucket = self.cooldown.get_bucket(interaction.user.id) # type: ignore
+        retry_after = bucket.update_rate_limit()
+        if retry_after:
+            return await interaction.followup.send(
+                f"❌ You're on cooldown! Try again in {int(retry_after)}s.",
+                ephemeral=True
+            )
+
 
         link_manager = LinkManager()
         bank_manager = BankManager()
