@@ -1,12 +1,16 @@
 from core.database.bank import BankManager
+from core.database.links import LinkManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
-from core.permissions import discord_linked_only
 
 from typing import Optional
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
+        if not LinkManager().is_linked(player):
+            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            return
+        
         self.commands = Wrapper().commands
         self.bank     = BankManager()
         self.player   = player
@@ -148,6 +152,5 @@ class ShopCommand:
             self.commands.privatemessage(self.player, "Invalid item selected"); return
 
 @rate_limit(seconds=5)
-@discord_linked_only()
 def shop(player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
     run_command_threaded(ShopCommand, player, item, target)

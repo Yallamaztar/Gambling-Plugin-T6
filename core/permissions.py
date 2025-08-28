@@ -21,18 +21,6 @@ class PermissionManager:
         self.owners = OwnerManager().get_all()
         self.admins = AdminManager().get_all()
 
-def discord_linked_only() -> Callable:
-    def decorator(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(self, player: str, *args, **kwargs) -> Any:
-            if not LinkManager().is_linked(player) and not PermissionManager().is_owner(player):
-                Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
-                return
-            print(f"[DiscordLinkedOnly] {player} {args}")
-            return func(self, player, *args, **kwargs)
-        return wrapper
-    return decorator
-
 def owners_only() -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)

@@ -2,11 +2,14 @@ from core.wrapper import Wrapper
 from core.database.bank import BankManager
 from core.database.links import LinkManager
 from core.commands import run_command_threaded
-from core.permissions import discord_linked_only
 from typing import Optional
 
 class BalanceCommand:
     def __init__(self, player: str, target: Optional[str] = None) -> None:
+        if not LinkManager().is_linked(player):
+            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            return
+        
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
@@ -19,6 +22,5 @@ class BalanceCommand:
         bal = self.bank.balance(target)
         self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
 
-@discord_linked_only()
 def balance(player: str, target: Optional[str] = None) -> None:
     run_command_threaded(BalanceCommand, player, target)

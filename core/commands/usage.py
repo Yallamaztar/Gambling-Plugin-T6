@@ -1,6 +1,6 @@
 from core.commands import run_command_threaded
 from core.wrapper import Wrapper
-from core.permissions import discord_linked_only
+from core.database.links import LinkManager
 
 import time
 from typing import Optional
@@ -58,6 +58,10 @@ USAGE_PAGES = {
 
 class UsageCommand:
     def __init__(self, player: str, page: Optional[str] = None ) -> None:
+        if not LinkManager().is_linked(player):
+            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            return
+        
         commands = Wrapper().commands
         key = page if page in USAGE_PAGES else "1"
 
@@ -65,6 +69,5 @@ class UsageCommand:
             commands.privatemessage(player, line)
             time.sleep(.25)
 
-@discord_linked_only()
 def usage(player: str, page: Optional[str] = None) -> None:
     run_command_threaded(UsageCommand, player, page)

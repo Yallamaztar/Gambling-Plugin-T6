@@ -1,13 +1,17 @@
 from core.database.bank import BankManager
+from core.database.links import LinkManager
 from core.utils import parse_amount, parse_prefix_amount
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
-from core.permissions import discord_linked_only
 
 from typing import Optional
 
 class PayCommand:
     def __init__(self, player: str, target: str, amount: str) -> None:
+        if not LinkManager().is_linked(player):
+            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            return
+        
         self._player   = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
@@ -59,6 +63,5 @@ class PayCommand:
             
         return payment
     
-@discord_linked_only()
 def pay(player: str, target: str, amount: str) -> None:
     run_command_threaded(PayCommand, player, target, amount)

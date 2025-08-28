@@ -1,15 +1,19 @@
 from core.database.bank import BankManager
+from core.database.links import LinkManager
 from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 from core.webhook import banflip_win_webhook, banflip_loss_webhook
-from core.permissions import discord_linked_only
 
 from typing import Optional, Tuple
 import random 
 
 class BanFlip:
     def __init__(self, player: str, amount: str, duration: str) -> None:
+        if not LinkManager().is_linked(player):
+            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            return
+        
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
@@ -108,6 +112,5 @@ class BanFlip:
         else:
             self.bank.deposit(player, -bet); return ("^1lost^7", bet)
 
-@discord_linked_only()
 def banflip(player: str, amount: str, duration: str) -> None:
     run_command_threaded(BanFlip, player, amount, duration)
