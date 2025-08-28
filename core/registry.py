@@ -9,7 +9,7 @@ from core.commands.reset import reset
 from core.commands.rich import richest
 from core.commands.take import take, take_all
 from core.commands.usage import usage
-from core.commands.claim import hourly, daily, weekly, monthly, role_daily, role_weekly
+from core.commands.claim import hourly, daily, weekly, monthly
 from core.commands.shop import shop 
 from core.commands.banflip import banflip
 from core.commands.link import link
@@ -39,10 +39,6 @@ class Register:
         self.register_command(f"{self.prefix}daily",   alias=f"{self.prefix}day",  callback=daily)
         self.register_command(f"{self.prefix}weekly",  alias=f"{self.prefix}wkly", callback=weekly)
         self.register_command(f"{self.prefix}monthly", alias=f"{self.prefix}mnth", callback=monthly)
-
-        # Claimable (role) commands
-        self.register_command(f"{self.prefix}dailyCertified",  alias="dc", callback=role_daily)
-        self.register_command(f"{self.prefix}weeklyCertified", alias="wc", callback=role_weekly)
 
         # Shop command
         self.register_command(f"{self.prefix}shop", alias=f"{self.prefix}shp", callback=shop)
