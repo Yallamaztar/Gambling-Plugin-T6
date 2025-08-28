@@ -28,11 +28,6 @@ class GambleCommand:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
     def validate(self, amount: str) -> Optional[int]:
-        if Wrapper().player.is_banned(
-            Wrapper().player.player_client_id_from_name(self.player)
-        ):
-            self.commands.privatemessage(self.player, "You cannot run this command"); return
-    
         if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(self.player)
             if bet <= 0:

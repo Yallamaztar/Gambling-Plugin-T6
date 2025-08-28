@@ -36,11 +36,13 @@ class LinkManager:
                 json.dump(links, f, indent=2)
 
     def link_account(self, discord_id: int, player: str) -> None:
+        print(f"[LinkManager] {player} ({discord_id}) linked theyre account")
         links = self.load()
         links[str(discord_id)] = player
         self.save(links)
 
     def unlink_account(self, discord_id: int) -> None:
+        print(f"[LinkManager] {self.get_player_by_discord(discord_id)} ({discord_id}) unlinked theyre account")
         links = self.load()
         links.pop(str(discord_id), None)
         self.save(links)
