@@ -15,17 +15,7 @@ class GambleCommand:
         self.bank     = BankManager()
         self.player   = player
 
-        try:
-            bet = self.validate(amount)
-            if bet == None or bet <= 0: return
-            
-            result  = self.update_balance(bet)
-            balance = self.bank.balance(player)
-            self.commands.privatemessage(player, f"you {result} ^5${parse_prefix_amount(bet)}^7 | Your new balance: ^5${balance}")
-            self.commands.say(f"^7{split_clan_tag(player)} {result} ^5${parse_prefix_amount(bet)}^7")
-        
-        except ValueError:
-            self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
+        gamble(player, amount)
 
     def validate(self, amount: str) -> Optional[int]:
         if amount.lower() == "all" or amount.lower() == "a":
@@ -63,7 +53,21 @@ class GambleCommand:
         self.bank.deposit(self.player, -bet)
         loss_webhook(self.player, str(bet))
         StatsManager().loss(self.player, bet); return "^1lost^7"
+    
+    @discord_linked_only()
+    def gamble(self, player: str, amount: str) -> None:
+        try:
+            bet = self.validate(amount)
+            if bet == None or bet <= 0: return
+            
+            result  = self.update_balance(bet)
+            balance = self.bank.balance(player)
+            self.commands.privatemessage(player, f"you {result} ^5${parse_prefix_amount(bet)}^7 | Your new balance: ^5${balance}")
+            self.commands.say(f"^7{split_clan_tag(player)} {result} ^5${parse_prefix_amount(bet)}^7")
+        
+        except ValueError:
+            self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
-@discord_linked_only()
+
 def gamble(player: str, amount: str) -> None:
     run_command_threaded(GambleCommand, player, amount)
