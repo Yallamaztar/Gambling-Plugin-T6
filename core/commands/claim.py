@@ -2,6 +2,7 @@ from core.database.bank import BankManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
 from core.utils import parse_prefix_amount
+from core.permissions import discord_linked_only
 
 class ClaimCommand:
     def __init__(self, player: str, amount: int) -> None:
@@ -25,18 +26,22 @@ class MonthlyClaimCommand(ClaimCommand):
         super().__init__(player, 100_000_000)
 
 @rate_limit(hours=1)
+@discord_linked_only()
 def hourly(player: str) -> None:
     run_command_threaded(HourlyClaimCommand, player)
 
 @rate_limit(hours=24)
+@discord_linked_only()
 def daily(player: str) -> None:
     run_command_threaded(DailyClaimCommand, player)
 
 @rate_limit(hours=168) # Week
+@discord_linked_only()
 def weekly(player: str) -> None:
     run_command_threaded(WeeklyClaimCommand, player)
 
 @rate_limit(hours=720) # Month
+@discord_linked_only()
 def monthly(player: str) -> None:
     run_command_threaded(MonthlyClaimCommand, player)
 
@@ -56,11 +61,13 @@ class RoleClaimWeekly(ClaimCommand):
             super().__init__(player, 17_000_000)
 
 @rate_limit(hours=24)
+@discord_linked_only()
 def role_daily(player: str) -> None:
     rank = Wrapper().player.player_rank_from_name(player)
     run_command_threaded(RoleClaimDaily, player, rank)
 
 @rate_limit(hours=24)
+@discord_linked_only()
 def role_weekly(player: str) -> None:
     rank = Wrapper().player.player_rank_from_name(player)
     run_command_threaded(RoleClaimDaily, player, rank)

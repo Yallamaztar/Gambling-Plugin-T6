@@ -1,5 +1,7 @@
 from core.commands import run_command_threaded
 from core.wrapper import Wrapper
+from core.permissions import discord_linked_only
+
 import time
 from typing import Optional
 
@@ -63,5 +65,6 @@ class UsageCommand:
             commands.privatemessage(player, line)
             time.sleep(.25)
 
+@discord_linked_only()
 def usage(player: str, page: Optional[str] = None) -> None:
     run_command_threaded(UsageCommand, player, page)

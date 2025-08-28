@@ -3,6 +3,7 @@ from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
 from core.webhook import banflip_win_webhook, banflip_loss_webhook
+from core.permissions import discord_linked_only
 
 from typing import Optional, Tuple
 import random 
@@ -33,6 +34,11 @@ class BanFlip:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
     
     def validate(self, player: str, amount: str) -> Optional[int]:
+        if Wrapper().player.is_banned(
+            Wrapper().player.player_client_id_from_name(player)
+        ):
+            self.commands.privatemessage(player, "You cannot run this command"); return
+
         if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(player)
             if bet <= 0:
@@ -102,5 +108,6 @@ class BanFlip:
         else:
             self.bank.deposit(player, -bet); return ("^1lost^7", bet)
 
+@discord_linked_only()
 def banflip(player: str, amount: str, duration: str) -> None:
     run_command_threaded(BanFlip, player, amount, duration)

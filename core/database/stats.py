@@ -38,7 +38,8 @@ class StatsManager:
     def ensure(self, player: str) -> None:
         if player not in self.stats:
             self.stats[player] = {"wins": 0, "losses": 0, "net": 0}
-        
+            self.save()
+            
     def win(self, player: str, amount: int) -> None:
         with self.lock:
             self.ensure(player)

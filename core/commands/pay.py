@@ -2,6 +2,7 @@ from core.database.bank import BankManager
 from core.utils import parse_amount, parse_prefix_amount
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
+from core.permissions import discord_linked_only
 
 from typing import Optional
 
@@ -58,5 +59,6 @@ class PayCommand:
             
         return payment
     
+@discord_linked_only()
 def pay(player: str, target: str, amount: str) -> None:
     run_command_threaded(PayCommand, player, target, amount)

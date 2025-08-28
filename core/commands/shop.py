@@ -1,7 +1,7 @@
 from core.database.bank import BankManager
-from core.database.admins import AdminManager
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
+from core.permissions import discord_linked_only
 
 from typing import Optional
 
@@ -36,10 +36,9 @@ class ShopCommand:
             2: "^7[2] ^5Gambler ^7Role     - $40q",
             3: "^7[3] ^5Map ^7Change       - $550q",
             4: "^7[4] ^5SeniorAdmin ^7Role - $150,000y",
-            5: "^7[5] ^5Gambling ^7Admin   - $550,000o",
-            6: "^7[6] ^5Kill ^7Player      - $10z"
+            # 5: "^7[5] ^5Random ^7Effect    - $50t",
+            5: "^7[5] ^5Kill ^7Player      - $10z"
         }
-
         
         self.commands.privatemessage(self.player, "^7-- ^5Brow^7nies ^5Shop ^7--")
         for _, item in shop.items(): 
@@ -109,26 +108,26 @@ class ShopCommand:
 
             self.commands.setlevel(self.player, "administrator")
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2SeniorAdmin")
-        
-        elif item in [ "administrator", "admin", "5" ]:
-            price = 550_000_000_000_000_000_000_000_000 # 550,000o
-            balance = self.bank.balance(self.player)
 
-            if balance == 0:
-                self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
-            
-            if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
-            
-            self.bank.deposit(self.player, -price)
+        # elif item in [ "administrator", "admin", "5" ]:
+        #     price = 550_000_000_000_000_000_000_000_000 # 550,000o
+        #     balance = self.bank.balance(self.player)
 
-            if self.target:
-                AdminManager().add(self.target)
-                self.commands.privatemessage(self.player, f"Promoted {self.target} to ^5Gambling Admin")
-                self.commands.privatemessage(self.target, f"You have been ^3promoted ^7to ^2Gambling Admin By {self.player}"); return
+        #     if balance == 0:
+        #         self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
-            AdminManager().add(self.player)
-            self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambling Admin")
+        #     if balance < price: 
+        #         self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+            
+        #     self.bank.deposit(self.player, -price)
+
+        #     if self.target:
+        #         AdminManager().add(self.target)
+        #         self.commands.privatemessage(self.player, f"Promoted {self.target} to ^5Gambling Admin")
+        #         self.commands.privatemessage(self.target, f"You have been ^3promoted ^7to ^2Gambling Admin By {self.player}"); return
+            
+        #     AdminManager().add(self.player)
+        #     self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambling Admin")
 
         elif item in [ "killplayer", "kpl", "6" ]:
             price = 10_000_000_000_000_000_000 # 10z
@@ -149,5 +148,6 @@ class ShopCommand:
             self.commands.privatemessage(self.player, "Invalid item selected"); return
 
 @rate_limit(seconds=5)
+@discord_linked_only()
 def shop(player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
     run_command_threaded(ShopCommand, player, item, target)

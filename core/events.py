@@ -20,14 +20,32 @@ class EventManager:
     def register_events(self) -> None:
         @self.client.on("player_spawned")
         def on_connected(player: str) -> None:
-            self.bank.deposit(player, 2500)
-            self.commands.privatemessage(player, "Spawn Bonus: ^5$2500")
+            connect = int(0.01 * self.bank.balance(player))
+            self.bank.deposit(player, connect)
+            self.commands.privatemessage(player, f"Spawn Bonus: ^5${connect}")
         
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str, weapon: str, hit_loc: str) -> None:
-            if player == attacker: # suicide
-                self.bank.deposit(player, 25000)
-                self.commands.privatemessage(player, "Suicide Bonus: ^5$25,000")
-            else:
-                self.bank.deposit(attacker, 15000)
-                self.commands.privatemessage(attacker, "Kill Bonus: ^5$15,000")
+            kill = int(0.015 * self.bank.balance(player))
+            self.bank.deposit(attacker, kill)
+            self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")
+            
+            # if player == attacker: # suicide
+            #     suicide = int(0.02 * self.bank.balance(player))
+            #     self.bank.deposit(player, suicide)
+            #     self.commands.privatemessage(player, f"Suicide Bonus: ^5${suicide}")
+            # else:
+            #     kill = int(0.015 * self.bank.balance(player))
+            #     self.bank.deposit(attacker, kill)
+            #     self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")
+
+        @self.client.on("player_death")
+        def on_death(player: str) -> None:
+           death = int(0.05 * self.bank.balance(player))
+           self.bank.deposit(player, -death)
+           self.commands.privatemessage(player, f"Death Penalty: ${death}")
+
+        @self.client.on("player_disconnected")
+        def on_disconnect(player: str) -> None:
+            disconnect = int(0.025 * self.bank.balance(player))
+            self.bank.deposit(player, -disconnect)

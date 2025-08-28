@@ -3,7 +3,7 @@ from core.database.stats import StatsManager
 from core.utils import parse_amount, parse_prefix_amount, split_clan_tag
 from core.wrapper import Wrapper
 from core.commands import run_command_threaded
-
+from core.permissions import discord_linked_only
 from core.webhook import win_webhook, loss_webhook
 
 from typing import Optional
@@ -28,6 +28,11 @@ class GambleCommand:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
     def validate(self, amount: str) -> Optional[int]:
+        if Wrapper().player.is_banned(
+            Wrapper().player.player_client_id_from_name(self.player)
+        ):
+            self.commands.privatemessage(self.player, "You cannot run this command"); return
+    
         if amount.lower() == "all" or amount.lower() == "a":
             bet = self.bank.balance(self.player)
             if bet <= 0:
@@ -64,5 +69,6 @@ class GambleCommand:
         loss_webhook(self.player, str(bet))
         StatsManager().loss(self.player, bet); return "^1lost^7"
 
+@discord_linked_only()
 def gamble(player: str, amount: str) -> None:
     run_command_threaded(GambleCommand, player, amount)

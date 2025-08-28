@@ -12,6 +12,7 @@ class UnbanCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.cooldown(1, 6000, commands.BucketType.user)
     @nextcord.slash_command(
         name="unban",
         description=r"Unban a player if they are linked (costs 1/3rd of your balance)",
@@ -40,13 +41,7 @@ class UnbanCog(commands.Cog):
             )
 
         price = int(0.35 * bank_manager.balance(client))
-        if price <= 0: 
-            return await interaction.followup.send(
-                    f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
-                    ephemeral=True
-                )
-        
-        if price <= 500_000_000_000_000: # 500t
+        if price <= 0 or price <= 500_000_000_000_000: # 500t: 
             return await interaction.followup.send(
                 f"❌ **You don't have enough money to pay the unban cost (${price:,})**",
                 ephemeral=True

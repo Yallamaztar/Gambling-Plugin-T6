@@ -20,7 +20,7 @@ class GamblingPlugin:
         self.commands = wrapper.commands
 
         self.register = Register()
-        self.executor = ThreadPoolExecutor()
+        self.executor = ThreadPoolExecutor(max_workers=20)
 
         bank = BankManager()
         # bank.reset()

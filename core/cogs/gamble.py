@@ -41,6 +41,13 @@ class GambleCog(commands.Cog):
                 "❌ **You must link your account first to gamble**",
                 ephemeral=True
             )
+        
+        client_id = Wrapper().player.player_client_id_from_name(player)
+        if Wrapper().player.is_banned(client_id):
+            return await interaction.followup.send(
+                "❌ **You cannot run this command while banned**",
+                ephemeral=True
+            )
 
         bet = self.validate_bet(player, amount)
         if not bet:

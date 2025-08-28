@@ -1,6 +1,7 @@
 from core.wrapper import Wrapper
 from core.database.bank import BankManager
 from core.commands import run_command_threaded
+from core.permissions import discord_linked_only
 from typing import Optional
 
 class BalanceCommand:
@@ -15,6 +16,7 @@ class BalanceCommand:
         
         bal = self.bank.balance(self.player.find_player_by_partial_name(target)) # type: ignore
         self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
-    
+
+@discord_linked_only()
 def balance(player: str, target: Optional[str] = None) -> None:
     run_command_threaded(BalanceCommand, player, target)
