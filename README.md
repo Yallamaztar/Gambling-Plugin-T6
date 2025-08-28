@@ -8,13 +8,21 @@ Lightweight in-game economy, gambling, and shop plugin for Plutonium T6 servers!
 ### Features
 - **Bank system**: persistent balances in `core/database/data/bank.json`
 - **Gambling**: classic 50/50 gamble and a high-risk ban-flip mode
+- **Banflip multipliers**: win multipliers scale with ban duration, with safety caps
 - **Payments**: send money to other players
 - **Claims**: hourly/daily/weekly/monthly rewards (+ role-based claims)
 - **Richest leaderboard**: top 5 balances
 - **Shop**: buy server actions/roles with in-game money
-- **Admin tools**: give/take/reset balances, manage owners
+- **Admin/Owner tools**: give/take/reset, add/remove admins and owners
+- **Rate limiting**: per-command cooldowns; owners are exempt
+- **Aliases & amounts**: short aliases for commands and `k/m/b/t/q/z` amount suffixes
+- **Partial name matching**: target players with partial names where supported
+- **Abuse guards**: banned players cannot gamble/banflip; self-pay prevented
+- **Discord linking required**: most gameplay commands require a linked Discord
+- **Discord webhooks**: wins/losses/banflip/link/unban notifications
+- **Non-blocking webhooks**: webhook HTTP calls run off-thread to avoid lag
+- **Threaded commands**: command handlers run in a thread pool
 - **Events (optional)**: spawn/kill bonuses via GSC
-- **Discord (optional)**: `/link` token flow to link Discord ↔ in-game
 
 ### Requirements
 - **Python** 3.10+ (3.11+ recommended)
@@ -22,10 +30,8 @@ Lightweight in-game economy, gambling, and shop plugin for Plutonium T6 servers!
 
 ### Quick start
 #### 1. Clone this repo and install dependencies:
-     ```bash
      git clone https://github.com/Yallamaztar/Gambling-Plugin-T6.git
      pip install -r requirements.txt
-     ```
 
 #### 2. Set IW4M/IW4MAdmin environment variables (used by `core/wrapper.py`):
    - **IW4M_URL**: Base URL to your IW4M/IW4MAdmin API (e.g. `http://127.0.0.1:1624`)
