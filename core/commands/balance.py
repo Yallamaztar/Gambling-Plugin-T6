@@ -15,7 +15,8 @@ class BalanceCommand:
             bal = self.bank.balance(player)
             self.commands.privatemessage(player, f"your balance is ^1${bal}"); return
         
-        bal = LinkManager.find_linked_by_partial_name(target) # type: ignore
+        target = LinkManager().find_linked_by_partial_name(target) # type: ignore
+        bal = self.bank.balance(target)
         self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
 
 @discord_linked_only()
