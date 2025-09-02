@@ -26,16 +26,16 @@ class UnbanCog(commands.Cog):
             required=True
         )
     ):
-        await interaction.response.defer(ephemeral=True)
+        bucket = self.cooldown.get_bucket(interaction) # type: ignore
+        retry_after = bucket.update_rate_limit(interaction.user.id) # type: ignore
 
-        bucket = self.cooldown.get_bucket(interaction.user.id) # type: ignore
-        retry_after = bucket.update_rate_limit()
         if retry_after:
-            return await interaction.followup.send(
+            return await interaction.response.send_message(
                 f"❌ You're on cooldown! Try again in {int(retry_after)}s.",
                 ephemeral=True
             )
-
+        
+        await interaction.response.defer(ephemeral=True)
 
         link_manager = LinkManager()
         bank_manager = BankManager()

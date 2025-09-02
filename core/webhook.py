@@ -5,6 +5,10 @@ from os import environ
 def current_timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
+def send_webhook(data: dict[str, list) -> None:
+    try: requests.post(environ["DISCORD_WEBHOOK"], json=data, timeout=5)
+    except Exception: return
+
 def win_webhook(player: str, amount: str) -> None:
     data = {
         "embeds": [{
@@ -15,7 +19,7 @@ def win_webhook(player: str, amount: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_WIN_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
 
 def loss_webhook(player: str, amount: str) -> None:
     data = {
@@ -27,7 +31,7 @@ def loss_webhook(player: str, amount: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_LOSS_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
 
 def link_webhook(player: str, discord_id: str) -> None:
     data = {
@@ -39,7 +43,7 @@ def link_webhook(player: str, discord_id: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_LINK_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
 
 def unban_webhook(player: str, unbanned: str) -> None:
     data = {
@@ -51,7 +55,7 @@ def unban_webhook(player: str, unbanned: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_UNBAN_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
 
 def banflip_win_webhook(player: str, amount: str, duration: str) -> None:
     data = {
@@ -66,7 +70,7 @@ def banflip_win_webhook(player: str, amount: str, duration: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_BANFLIP_WIN_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
 
 def banflip_loss_webhook(player: str, amount: str, duration: str) -> None:
     data = {
@@ -81,4 +85,4 @@ def banflip_loss_webhook(player: str, amount: str, duration: str) -> None:
             "timestamp": current_timestamp()
         }]
     }
-    requests.post(environ["DISCORD_BANFLIP_LOSS_WEBHOOK"], json=data, timeout=5)
+    send_webhook(data)
