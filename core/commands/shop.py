@@ -7,6 +7,7 @@ from typing import Optional
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
+        print(f"[ShopCommand] {player} {item} {target if target != None else ''}")
         if not LinkManager().is_linked(player):
             Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return

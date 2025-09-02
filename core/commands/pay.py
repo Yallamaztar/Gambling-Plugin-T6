@@ -8,6 +8,7 @@ from typing import Optional
 
 class PayCommand:
     def __init__(self, player: str, target: str, amount: str) -> None:
+        print(f"[PayCommand] {player} {target} ${amount}")
         if not LinkManager().is_linked(player):
             Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return

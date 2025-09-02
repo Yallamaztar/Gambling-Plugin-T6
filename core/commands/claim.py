@@ -6,6 +6,7 @@ from core.utils import parse_prefix_amount
 
 class ClaimCommand:
     def __init__(self, player: str, amount: int) -> None:
+        print(f"[ClaimCommand] {player} ${amount}")
         if not LinkManager().is_linked(player):
             Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return

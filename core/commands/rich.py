@@ -7,6 +7,7 @@ import time
 
 class RichestCommand:
     def __init__(self, player: str) -> None:
+        print(f"[RichestCommand] {player}")
         self.player   = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
