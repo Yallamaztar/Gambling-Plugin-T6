@@ -34,7 +34,14 @@ class GamblingPlugin:
         
     def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
         origin, data, log_time = audit_log['origin'], audit_log['data'], audit_log['time']
-        return (origin, data, log_time) not in self.last_seen and origin != self.server.logged_in_as()
+        if (origin, data, log_time) in self.last_seen:
+            print("Duplicate audit log:", origin, data, log_time)
+            return False
+        if origin == self.server.logged_in_as():
+            print("Ignoring self:", origin)
+            return False
+        return True
+    
 
     def handle_command(self, origin: str, data: str) -> None:
         parts = data.strip().split()
@@ -58,11 +65,10 @@ class GamblingPlugin:
     def run(self) -> None:
         while True:
             audit_log = self.server.get_recent_audit_log()
-
+            print(audit_log)
             if audit_log is None: time.sleep(.01); continue
             if not self.is_valid_audit_log(audit_log): time.sleep(.01); continue
-
-            if len(self.last_seen) > 50: self.last_seen.clear()
+            # if len(self.last_seen) > 50: self.last_seen.clear()
             
             self.last_seen.append((audit_log['origin'], audit_log['data'], audit_log['time']))
             self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data']) # better ?
