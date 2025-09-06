@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from concurrent.futures import ThreadPoolExecutor
 from collections import deque
-import time
+import time, os
 
 from core.manager import GamblingManager
 from core.registry import Register
@@ -19,7 +19,7 @@ class GamblingPlugin:
         self.player = wrapper.player
         self.commands = wrapper.commands
 
-        self.register = Register()
+        self.register = Register()  
         self.executor = ThreadPoolExecutor(max_workers=20)
 
         bank = BankManager()
@@ -27,7 +27,9 @@ class GamblingPlugin:
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
-        self.executor.submit(run_bot)
+
+        if os.environ['BOT_TOKEN']: # Optional
+            self.executor.submit(run_bot)
 
         print("[Gambling] Plugin running")
         self.run()

@@ -23,6 +23,7 @@ async def update_presence() -> None:
             name=f"Watching {len(Wrapper().server.get_players())} gamblers on Brownies <3"
         )
     )
+
 @bot.event
 async def on_command_error(ctx, error) -> None:
     await ctx.send(f"Try again later lil man, it broke")

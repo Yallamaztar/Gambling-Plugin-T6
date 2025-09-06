@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# core/
+*/cogs/banflip.py
+*/commands/diceroll.py
+
 # Distribution / packaging
 .Python
 build/

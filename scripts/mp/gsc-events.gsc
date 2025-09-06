@@ -1,15 +1,15 @@
+// gsc-events.gsc is needed for the core/events.py module which gives players rewards and penalties on ingame events
+
 init() {
     setDvar("scr_allowFileIo", "1");
 
     level thread onPlayerConnected();
-    level thread onPlayerSay();
-
-    level thread onKillcam();
-    level thread onKillcamEnd();
-
     level.onplayerdisconnect = ::onPlayerDisconnected;
     level.onplayerkilled = ::onPlayerKilled;
-
+    
+    // level thread onPlayerSay();
+    // level thread onKillcam();
+    // level thread onKillcamEnd();
 }
 
 onPlayerConnected() {
@@ -17,11 +17,11 @@ onPlayerConnected() {
         level waittill( "connected", player );
         thread call_event("player_connected", player.name);
 
-        player thread onJoinedSpectators();
         player thread onPlayerSpawned();
-        player thread onWeaponChange();
         player thread onPlayerDeath();
-        player thread onJoinedTeam();
+        // player thread onJoinedSpectators();
+        // player thread onWeaponChange();
+        // player thread onJoinedTeam();
     }
 }
 
@@ -39,12 +39,12 @@ onPlayerDeath() {
     }
 }
 
-onJoinedSpectators() {
-    for (;;) {
-        self waittill( "joined_spectators" );
-        thread call_event("joined_spectators", self.name);
-    }
-}
+// onJoinedSpectators() {
+//     for (;;) {
+//         self waittill( "joined_spectators" );
+//         thread call_event("joined_spectators", self.name);
+//     }
+// }
 
 onPlayerKilled(einflictor, attacker, idamage, smeansofdeath, sweapon, vdir, shitloc, psoffsettime, deathanimduration) {
     thread call_event("player_killed", self.name, attacker.name, smeansofdeath, sweapon, shitloc);
@@ -54,48 +54,48 @@ onPlayerDisconnected() {
     thread call_event("player_disconnected", self.name);
 }
 
-onWeaponChange() {
-    for(;;) {
-        self waittill( "weapon_change", weapon );
-        thread call_event("weapon_change", self.name, weapon);
-    }
-}
-
-onPlayerSay() {
-    for(;;) {
-        level waittill( "say", message, player );
-        thread call_event("player_say", player.name, message);
-    }
-}
-
-onMenuResponse() {
-    for (;;) {
-        self waittill( "menuresponse", menu, response );
-        thread call_event("menu_response", self.name, menu, response);
-    }
-}
-
-onJoinedTeam() {
-    for(;;) {
-        self waittill( "joined_team" );
-        thread call_event("joined_team", self.name, self.pers["team"]);
-    }
-}
-
-
-onKillcam() {
-    for(;;) {
-        level waittill( "play_final_killcam" );
-        thread call_event("killcam_start");
-    }
-}
-
-onKillcamEnd() {
-    for(;;) {
-        level waittill( "final_killcam_done" );
-        thread call_event("killcam_end");
-    }
-}
+// onWeaponChange() {
+//     for(;;) {
+//         self waittill( "weapon_change", weapon );
+//         thread call_event("weapon_change", self.name, weapon);
+//     }
+// }
+//
+// onPlayerSay() {
+//     for(;;) {
+//         level waittill( "say", message, player );
+//         thread call_event("player_say", player.name, message);
+//     }
+// }
+//
+// onMenuResponse() {
+//     for (;;) {
+//         self waittill( "menuresponse", menu, response );
+//         thread call_event("menu_response", self.name, menu, response);
+//     }
+// }
+//
+// onJoinedTeam() {
+//     for(;;) {
+//         self waittill( "joined_team" );
+//         thread call_event("joined_team", self.name, self.pers["team"]);
+//     }
+// }
+//
+//
+// onKillcam() {
+//     for(;;) {
+//         level waittill( "play_final_killcam" );
+//         thread call_event("killcam_start");
+//     }
+// }
+//
+// onKillcamEnd() {
+//     for(;;) {
+//         level waittill( "final_killcam_done" );
+//         thread call_event("killcam_end");
+//     }
+// }
 
 call_event( event, arg1, arg2, arg3, arg4, arg5 ) {
     if (arg1 == undefined || arg1 == "" ) {

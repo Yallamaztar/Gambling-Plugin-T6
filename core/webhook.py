@@ -6,6 +6,7 @@ def current_timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 def send_webhook(data: dict[str, list]) -> None:
+    if not environ["DISCORD_WEBHOOK"]: return # Optional
     try: requests.post(environ["DISCORD_WEBHOOK"], json=data, timeout=5)
     except Exception: return
 
