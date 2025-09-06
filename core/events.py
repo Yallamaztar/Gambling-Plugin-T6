@@ -35,7 +35,7 @@ class EventManager:
             
             if player == self.bank.top_balances()[0]['name']:
                 self.commands.say(f"^5{attacker} ^7killed ^5MVP ^7{player}!")
-                kill += max(25_000, int(.000002 * self.bank.balance(player)
+                kill += max(25_000, int(.000002 * self.bank.balance(player)))
 
             self.bank.deposit(attacker, kill)
             self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")

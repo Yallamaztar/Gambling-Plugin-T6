@@ -13,7 +13,7 @@ class PayCommand:
             Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return
         
-        self._player   = Wrapper().player
+        self._player  = Wrapper().player
         self.commands = Wrapper().commands
         self.bank = BankManager()
 
@@ -52,7 +52,7 @@ class PayCommand:
             payment = parse_amount(amount)
             bal = self.bank.balance(player)
 
-            if payment <= 0
+            if payment <= 0:
                 self.commands.privatemessage(
                     player, f"^1cannot pay^7 non-positive amount: {amount}"
                 ); return

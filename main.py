@@ -68,5 +68,4 @@ class GamblingPlugin:
             time.sleep(.01)
 
 if __name__ == '__main__':
-    print(BankManager().top_balances()[0])
-    # GamblingPlugin()
+    GamblingPlugin()

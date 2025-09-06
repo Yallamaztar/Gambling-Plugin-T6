@@ -191,7 +191,7 @@ class ShopHelper:
 
     def loose_double_money(self) -> None:
         self.bank.deposit(self.player, -int(self.price * 2))
-        self.commands.privatemessage(self.player f"You just lost ^1${int(self.price * 2)}")
+        self.commands.privatemessage(self.player, f"You just lost ^1${int(self.price * 2)}")
 
 @rate_limit(seconds=5)
 def shop(player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
