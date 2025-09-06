@@ -29,7 +29,7 @@ class PayCommand:
             self.bank.deposit(target, payment)
 
             self.commands.privatemessage(player, f"you have paid ^5${parse_prefix_amount(payment)}^7 to {target} | Your new balance: ^5${self.bank.balance(player)}")
-            self.commands.privatemessage(target, f"{player} paid you ^^5${parse_prefix_amount(payment)}^7 | Your new balance: ^5${self.bank.balance(target)}")
+            self.commands.privatemessage(target, f"{player} paid you ^5${parse_prefix_amount(payment)}^7 | Your new balance: ^5${self.bank.balance(target)}")
         
         except ValueError:
             return self.commands.privatemessage(player, f"^1{amount}^7 is ^1not^7 a valid number")
@@ -52,7 +52,7 @@ class PayCommand:
             payment = parse_amount(amount)
             bal = self.bank.balance(player)
 
-            if payment <= 0:
+            if payment <= 0
                 self.commands.privatemessage(
                     player, f"^1cannot pay^7 non-positive amount: {amount}"
                 ); return

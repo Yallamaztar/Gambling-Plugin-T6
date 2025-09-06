@@ -4,6 +4,7 @@ from core.wrapper import Wrapper
 from core.commands import run_command_threaded, rate_limit
 
 from typing import Optional
+import random
 
 class ShopCommand:
     def __init__(self, player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:
@@ -13,7 +14,7 @@ class ShopCommand:
             return
         
         self.commands = Wrapper().commands
-        self.bank     = BankManager()
+        self.bank     = BankManager() 
         self.player   = player
         
         allowed_maps = [ 
@@ -41,8 +42,8 @@ class ShopCommand:
             2: "^7[2] ^5Gambler ^7Role     - $40q",
             3: "^7[3] ^5Map ^7Change       - $550q",
             4: "^7[4] ^5SeniorAdmin ^7Role - $150,000y",
-            # 5: "^7[5] ^5Random ^7Effect    - $50t",
-            5: "^7[5] ^5Kill ^7Player      - $10z"
+            5: "^7[5] ^5Random ^7Effect    - $50t",
+            6: "^7[6] ^5Kill ^7Player      - $10z"
         }
         
         self.commands.privatemessage(self.player, "^7-- ^5Brow^7nies ^5Shop ^7--")
@@ -54,11 +55,11 @@ class ShopCommand:
             price = 500_000_000_000_000
             balance = self.bank.balance(self.player)
 
-            if balance == 0:
+            if balance <= 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
             if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
             
             self.bank.deposit(self.player, -price)
             self.commands.fastrestart()
@@ -67,11 +68,11 @@ class ShopCommand:
             price = 40_000_000_000_000 # 40q
             balance = self.bank.balance(self.player)
             
-            if balance == 0:
+            if balance <= 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
             
             self.bank.deposit(self.player, -price)
 
@@ -86,11 +87,11 @@ class ShopCommand:
             price = 550_000_000_000_000_000 # 500q
             balance = self.bank.balance(self.player)
 
-            if balance == 0:
+            if balance <= 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
 
             self.bank.deposit(self.player, -price)
             self.commands.change_map(self.map) # type: ignore
@@ -99,11 +100,11 @@ class ShopCommand:
             price = 150_000_000_000_000_000_000_000_000_000 # 150,000y
             balance = self.bank.balance(self.player)
             
-            if balance == 0:
+            if balance <= 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
 
             if balance < price:
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
             
             self.bank.deposit(self.player, -price)
 
@@ -113,16 +114,40 @@ class ShopCommand:
 
             self.commands.setlevel(self.player, "administrator")
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2SeniorAdmin")
+        
+        elif item in [ "randomeffect", "random", "effect", "5" ]:
+            price = 50_000_000_000_000 # 50t
+            balance = self.bank.balance(player)
 
+            if balance <= 0:
+                self.commands.say(f"^7@{self.player} us ^1^Fgay n poor"); return
+
+            if balance < price:
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
+
+            self.bank.deposit(self.player, -price)
+            helper = ShopHelper(self.player, price)
+
+            effects = [
+                lambda: self.commands.takeweapons(self.player),
+                lambda: self.commands.kill(self.player),
+                lambda: self.commands.giveweapon(self.player, "ballist_mp+dualclip+is"),
+                lambda: self.commands.say(f"^7@{self.player} rolled a random effect and won nothing! Congratulations"),
+                lambda: helper.double_money(),
+                lambda: helper.loose_double_money()
+            ]
+
+            random.choice(effects)() 
+        
         # elif item in [ "administrator", "admin", "5" ]:
         #     price = 550_000_000_000_000_000_000_000_000 # 550,000o
         #     balance = self.bank.balance(self.player)
 
-        #     if balance == 0:
+        #     if balance <= 0:
         #         self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
         #     if balance < price: 
-        #         self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return
+        #         self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return
             
         #     self.bank.deposit(self.player, -price)
 
@@ -138,11 +163,11 @@ class ShopCommand:
             price = 10_000_000_000_000_000_000 # 10z
             balance = self.bank.balance(self.player)
 
-            if balance == 0:
+            if balance <= 0:
                 self.commands.say(f"^7@{self.player} is ^1^Fgay n poor"); return
             
             if balance < price: 
-                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1{price - balance}^7)"); return           
+                self.commands.privatemessage(self.player, f"You cant ^1afford ^7this (missing ^1${price - balance}^7)"); return           
 
             self.bank.deposit(self.player, -price)
             self.commands.kill(self.target)
@@ -151,6 +176,22 @@ class ShopCommand:
 
         else: 
             self.commands.privatemessage(self.player, "Invalid item selected"); return
+
+class ShopHelper:
+    def __init__(self, player: str, price: int):
+        self.bank     = BankManager()
+        self.commands = Wrapper().commands
+
+        self.player = player
+        self.price  = price
+        
+    def double_money(self) -> None:
+        self.bank.deposit(self.player, int(self.price * 2))
+        self.commands.privatemessage(self.player, f"You just won ^5${int(self.price * 2)}")
+
+    def loose_double_money(self) -> None:
+        self.bank.deposit(self.player, -int(self.price * 2))
+        self.commands.privatemessage(self.player f"You just lost ^1${int(self.price * 2)}")
 
 @rate_limit(seconds=5)
 def shop(player: str, item: Optional[str] = None, target: Optional[str] = None) -> None:

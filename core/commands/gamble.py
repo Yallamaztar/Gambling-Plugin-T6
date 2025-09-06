@@ -13,11 +13,10 @@ class GambleCommand:
     def __init__(self, player: str, amount: str) -> None:
         print(f"[GambleCommand] {player} ${amount}")
 
-        if not LinkManager().is_linked(player):
-            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
-            return
-        
         self.commands = Wrapper().commands
+        if not LinkManager().is_linked(player):
+            self.commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account"); return
+        
         self.bank     = BankManager()
         self.player   = player
         
@@ -30,8 +29,7 @@ class GambleCommand:
             self.commands.privatemessage(player, f"you {result} ^5${parse_prefix_amount(bet)}^7 | Your new balance: ^5${balance}")
             self.commands.say(f"^7{split_clan_tag(player)} {result} ^5${parse_prefix_amount(bet)}^7")
         
-        except ValueError:
-            self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
+        except ValueError: self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
 
     def validate(self, amount: str) -> Optional[int]:
         if amount.lower() == "all" or amount.lower() == "a":

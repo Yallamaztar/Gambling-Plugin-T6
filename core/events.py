@@ -29,21 +29,16 @@ class EventManager:
         
         @self.client.on("player_killed")
         def on_killed(player: str, attacker: str, reason: str, weapon: str, hit_loc: str) -> None:
-            if self.bank.balance(player) > 1_000_000_000:
-                kill = int(.000005 * self.bank.balance(player))
-            else:
-                kill = 10_000
+            if self.bank.balance(attacker) > 1_000_000_000: kill = int(.000005 * self.bank.balance(attacker))
+            elif player == attacker: kill = -50_000
+            else: kill = 10_000
+            
+            if player == self.bank.top_balances()[0]['name']:
+                self.commands.say(f"^5{attacker} ^7killed ^5MVP ^7{player}!")
+                kill += max(25_000, int(.000002 * self.bank.balance(player)
+
             self.bank.deposit(attacker, kill)
             self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")
-            
-            # if player == attacker: # suicide
-            #     suicide = int(0.02 * self.bank.balance(player))
-            #     self.bank.deposit(player, suicide)
-            #     self.commands.privatemessage(player, f"Suicide Bonus: ^5${suicide}")
-            # else:
-            #     kill = int(0.015 * self.bank.balance(player))
-            #     self.bank.deposit(attacker, kill)
-            #     self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")
 
         @self.client.on("player_death")
         def on_death(player: str) -> None:
