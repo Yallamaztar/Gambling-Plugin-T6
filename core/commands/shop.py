@@ -117,7 +117,7 @@ class ShopCommand:
         
         elif item in [ "randomeffect", "random", "effect", "5" ]:
             price = 50_000_000_000_000 # 50t
-            balance = self.bank.balance(player)
+            balance = self.bank.balance(self.player)
 
             if balance <= 0:
                 self.commands.say(f"^7@{self.player} us ^1^Fgay n poor"); return
