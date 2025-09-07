@@ -40,7 +40,7 @@ class ShopCommand:
         shop = {
             1: "^7[1] ^5Fast^7Restart Map  - $500t",
             2: "^7[2] ^5Gambler ^7Role     - $40q",
-            3: "^7[3] ^5Map ^7Change       - $550q",
+            3: "^7[3] ^5Map ^7Change       - $10q",
             4: "^7[4] ^5SeniorAdmin ^7Role - $150,000y",
             5: "^7[5] ^5Random ^7Effect    - $50t",
             6: "^7[6] ^5Kill ^7Player      - $10z"
@@ -84,7 +84,7 @@ class ShopCommand:
             self.commands.privatemessage(self.player, "You have been ^3promoted ^7to ^2Gambler")
         
         elif item in [ "mapchange", "map", "3" ]:
-            price = 550_000_000_000_000_000 # 500q
+            price = 10_000_000_000_000_000 # 10q
             balance = self.bank.balance(self.player)
 
             if balance <= 0:
