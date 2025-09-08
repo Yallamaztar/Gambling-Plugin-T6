@@ -21,23 +21,20 @@ async def update_presence() -> None:
     if len(players) == 0:
         await bot.change_presence(
             activity=Activity(
-                type=ActivityType.playing, 
-                name=f"Come Gamble In Brownies ;*"
+                type=ActivityType.playing, name=f"Come Gamble In Brownies ;*"
             )
         )
 
     elif len(players) == 1:
         await bot.change_presence(
             activity=Activity(
-                type=ActivityType.playing,
-                name=f"One Lonely Dedicated Gambler On"
+                type=ActivityType.playing, name=f"One Lonely Dedicated Gambler On"
                 )
             )
     else:
         await bot.change_presence(
             activity=Activity(
-                type=ActivityType.playing, 
-                name=f"Watching {len(player)} gamblers on Brownies <3"
+                type=ActivityType.playing, name=f"Watching {len(player)} gamblers on Brownies <3"
             )
         )
 

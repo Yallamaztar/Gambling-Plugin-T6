@@ -36,24 +36,28 @@ class TokenManager:
                 json.dump(tokens, f, indent=2)
 
     def add(self, player: str, token: str) -> None:
-        tokens = self.load()
-        tokens[player] = token
-        self.save(tokens)
+        with self.lock:
+            tokens = self.load()
+            tokens[player] = token
+            self.save(tokens)
 
     def delete(self, player: str) -> None:
-        tokens = self.load()
-        tokens.pop(player, None)
-        self.save(tokens)
+        with self.lock:
+            tokens = self.load()
+            tokens.pop(player, None)
+            self.save(tokens)
 
     def get_player_by_token(self, token: str) -> Optional[str]:
-        tokens = self.load()
-        for player, t in tokens.items():
-            if t == token:
-                return player
-        return
+        with self.lock:
+            tokens = self.load()
+            for player, t in tokens.items():
+                if t == token:
+                    return player
+            return
     
     def get_all(self) -> dict:
-        return self.load()
+        with self.lock:
+            return self.load()
 
     def __enter__(self) -> "TokenManager":
         self.lock.acquire()

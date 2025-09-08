@@ -34,10 +34,9 @@ class GamblingPlugin:
         print("[Gambling] Plugin running")
         self.run()
         
-    def is_valid_audit_log(self, audit_log: Dict[str, Any]) -> bool:
-        origin, data, log_time = audit_log['origin'], audit_log['data'], audit_log['time']
-        if (origin, data, log_time) in self.last_seen: return False
-        if origin == self.server.logged_in_as(): return False
+    def is_valid_audit_log(self, audit_log: Dict[str, str]) -> bool:
+        if (audit_log['origin'], audit_log['data'], audit_log['time']) in self.last_seen: return False
+        if audit_log['origin'] == self.server.logged_in_as(): return False
         return True
 
     def handle_command(self, origin: str, data: str) -> None:
@@ -62,7 +61,6 @@ class GamblingPlugin:
             audit_log = self.server.get_recent_audit_log()
             if audit_log is None: time.sleep(.01); continue
             if not self.is_valid_audit_log(audit_log): time.sleep(.01); continue
-            # if len(self.last_seen) > 50: self.last_seen.clear()
             
             self.last_seen.append((audit_log['origin'], audit_log['data'], audit_log['time']))
             self.executor.submit(self.handle_command, audit_log['origin'], audit_log['data']) # better: yes ig

@@ -36,27 +36,32 @@ class LinkManager:
                 json.dump(links, f, indent=2)
 
     def link_account(self, discord_id: int, player: str) -> None:
-        print(f"[LinkManager] {player} ({discord_id}) linked theyre account")
-        links = self.load()
-        links[str(discord_id)] = player
-        self.save(links)
+        with self.lock:
+            print(f"[LinkManager] {player} ({discord_id}) linked theyre account")
+            links = self.load()
+            links[str(discord_id)] = player
+            self.save(links)
 
     def unlink_account(self, discord_id: int) -> None:
-        print(f"[LinkManager] {self.get_player_by_discord(discord_id)} ({discord_id}) unlinked theyre account")
-        links = self.load()
-        links.pop(str(discord_id), None)
-        self.save(links)
+        with self.lock:
+            print(f"[LinkManager] {self.get_player_by_discord(discord_id)} ({discord_id}) unlinked theyre account")
+            links = self.load()
+            links.pop(str(discord_id), None)
+            self.save(links)
 
     def get_player_by_discord(self, discord_id: int) -> Optional[str]:
-        links = self.load()
-        return links.get(str(discord_id))
+        with self.lock:
+            links = self.load()
+            return links.get(str(discord_id))
 
     def is_linked(self, player: str) -> bool:
-        links = self.load()
-        return player in links.values()
+        with self.lock:
+            links = self.load()
+            return player in links.values()
 
     def get_all(self) -> dict:
-        return self.load()
+        with self.lock:
+            return self.load()
 
     def find_linked_by_partial_name(self, player: str) -> str: # type: ignore
         player = player.lower()

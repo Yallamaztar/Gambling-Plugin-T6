@@ -6,8 +6,10 @@ from typing import Optional
 
 class BalanceCommand:
     def __init__(self, player: str, target: Optional[str] = None) -> None:
+        self.wrapper = Wrapper()
+
         if not LinkManager().is_linked(player):
-            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+            self.wrapper.commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return
         
         self.player   = Wrapper().player

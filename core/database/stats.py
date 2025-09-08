@@ -36,9 +36,10 @@ class StatsManager:
                 json.dump(self.stats, f, indent=2)
 
     def ensure(self, player: str) -> None:
-        if player not in self.stats:
-            self.stats[player] = {"wins": 0, "losses": 0, "net": 0}
-            self.save()
+        with self.lock:
+            if player not in self.stats:
+                self.stats[player] = {"wins": 0, "losses": 0, "net": 0}
+                self.save()
             
     def win(self, player: str, amount: int) -> None:
         with self.lock:

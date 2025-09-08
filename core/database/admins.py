@@ -36,21 +36,23 @@ class AdminManager:
                 json.dump(admins, f, indent=2)
 
     def add(self, admins: Union[List[str], str]) -> None:
-        data = self.load()
+        with self.lock:
+            data = self.load()
 
-        if isinstance(admins, list): data.extend(admins)
-        elif isinstance(admins, str): data.append(admins)
-        else: return
+            if isinstance(admins, list): data.extend(admins)
+            else: data.append(admins)
 
-        self.save(list(dict.fromkeys(data)))
+            self.save(list(dict.fromkeys(data)))
 
     def delete(self, admin: str) -> None:
-        admins = self.load()
-        admins.remove(admin)
-        self.save(admins)
+        with self.lock:
+            admins = self.load()
+            admins.remove(admin)
+            self.save(admins)
 
     def get_all(self) -> List[str]:
-        return self.load()
+        with self.lock:
+            return self.load()
     
     def __enter__(self) -> "AdminManager":
         self.lock.acquire()

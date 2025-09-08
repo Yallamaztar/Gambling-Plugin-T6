@@ -36,21 +36,23 @@ class OwnerManager:
                 json.dump(owners, f, indent=2)
 
     def add(self, owners: Union[List[str], str]) -> None:
-        data = self.load()
+        with self.lock:
+            data = self.load()
 
-        if isinstance(owners, list): data.extend(owners)
-        elif isinstance(owners, str): data.append(owners)
-        else: return
+            if isinstance(owners, list): data.extend(owners)
+            else: data.append(owners)
 
-        self.save(list(dict.fromkeys(data)))
+            self.save(list(dict.fromkeys(data)))
 
     def delete(self, owner: str) -> None:
-        owners = self.load()
-        owners.remove(owner)
-        self.save(owners)
+        with self.lock:
+            owners = self.load()
+            owners.remove(owner)
+            self.save(owners)
 
     def get_all(self) -> List[str]:
-        return self.load()
+        with self.lock:
+            return self.load()
     
     def __enter__(self) -> "OwnerManager":
         self.lock.acquire()

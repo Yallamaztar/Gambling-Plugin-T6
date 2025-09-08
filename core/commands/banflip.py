@@ -10,14 +10,18 @@ import random
 
 class BanFlip:
     def __init__(self, player: str, amount: str, duration: str) -> None:
-        print(f"[BanFlip] {player} ${amount} {duration}")
-        if not LinkManager().is_linked(player):
-            Wrapper().commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
+        print(f"[BanFlip] {player} {amount} {duration}")
+        
+        self.wrapper  = Wrapper()
+        self.commands = self.wrapper.commands
+
+        if not self.links.is_linked(player):
+            self.commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return
         
-        self.commands = Wrapper().commands
-        self.bank = BankManager()
-
+        self.links = LinkManager()
+        self.bank  = BankManager()
+        
         try:
             bet = self.validate(player, amount)
             if bet == None or bet <= 0: return
@@ -39,8 +43,8 @@ class BanFlip:
             self.commands.privatemessage(player, f"{amount} ^1is not^7 a valid number")
     
     def validate(self, player: str, amount: str) -> Optional[int]:
-        if Wrapper().player.is_banned(
-            Wrapper().player.player_client_id_from_name(player)
+        if self.wrapper.player.is_banned(
+            self.wrapper.player.player_client_id_from_name(player)
         ):
             self.commands.privatemessage(player, "You cannot run this command"); return
 

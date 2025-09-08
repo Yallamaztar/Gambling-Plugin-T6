@@ -1,5 +1,3 @@
-from typing import List, Tuple, Optional, Callable
-
 from core.commands.owner import add_owner, remove_owner
 from core.commands.balance import balance
 from core.commands.gamble import gamble
@@ -14,6 +12,8 @@ from core.commands.shop import shop
 from core.commands.banflip import banflip
 from core.commands.link import link
 from core.commands.admin import add_admin, remove_admin
+
+from typing import List, Tuple, Optional, Callable
 
 class Register:
     def __init__(self, prefix: Optional[str] = "!") -> None:
