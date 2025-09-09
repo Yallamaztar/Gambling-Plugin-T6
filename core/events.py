@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from gsc_events import GSCClient
 from core.database.bank import BankManager
 from iw4m import IW4MWrapper
+import os
 
 class EventManager:
     def __init__(self, bank: BankManager, commands: IW4MWrapper.Commands) -> None:
@@ -56,3 +57,5 @@ class EventManager:
             else:
                 disconnect = 25000
             self.bank.deposit(player, -disconnect)
+
+        print("[EventManager] Registered all events")

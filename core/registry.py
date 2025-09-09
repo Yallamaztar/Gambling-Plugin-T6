@@ -10,7 +10,7 @@ from core.commands.usage import usage
 from core.commands.claim import hourly, daily, weekly, monthly
 from core.commands.shop import shop 
 from core.commands.banflip import banflip
-from core.commands.link import link
+from core.commands.link import link, is_linked
 from core.commands.admin import add_admin, remove_admin
 
 from typing import List, Tuple, Optional, Callable
@@ -44,11 +44,12 @@ class Register:
         self.register_command(f"{self.prefix}shop", alias=f"{self.prefix}shp", callback=shop)
 
         # Discord link
-        self.register_command(f"{self.prefix}link", alias=f"{self.prefix}lnk", callback=link)
+        self.register_command(f"{self.prefix}link",     alias=f"{self.prefix}lnk",   callback=link)
+        self.register_command(f"{self.prefix}islinked", alias=f"{self.prefix}islnk", callback=is_linked)
 
         # Admin commands
-        self.register_command(f"{self.prefix}give",        alias=f"{self.prefix}gi",  callback=admin_give)
-        self.register_command(f"{self.prefix}giveall",     alias=f"{self.prefix}ga",  callback=admin_give_all)
+        self.register_command(f"{self.prefix}admingive",    alias=f"{self.prefix}agi", callback=admin_give)
+        self.register_command(f"{self.prefix}admingiveall", alias=f"{self.prefix}aga", callback=admin_give_all)
 
         # Owner commands
         self.register_command(f"{self.prefix}give",        alias=f"{self.prefix}gi",  callback=give)
@@ -56,7 +57,7 @@ class Register:
         self.register_command(f"{self.prefix}take",        alias=f"{self.prefix}t",   callback=take)
         self.register_command(f"{self.prefix}takeall",     alias=f"{self.prefix}ta",  callback=take_all)
         self.register_command(f"{self.prefix}reset",       alias=f"{self.prefix}res", callback=reset)
-
+        
         self.register_command(f"{self.prefix}addadmin",    alias=f"{self.prefix}aa", callback=add_admin)
         self.register_command(f"{self.prefix}removeadmin", alias=f"{self.prefix}ra", callback=remove_admin)
         self.register_command(f"{self.prefix}addowner",    alias=f"{self.prefix}add", callback=add_owner)

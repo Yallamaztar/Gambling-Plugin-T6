@@ -34,7 +34,7 @@ async def update_presence() -> None:
     else:
         await bot.change_presence(
             activity=Activity(
-                type=ActivityType.playing, name=f"Watching {len(player)} gamblers on Brownies <3"
+                type=ActivityType.playing, name=f"Watching {len(players)} gamblers on Brownies <3"
             )
         )
 
