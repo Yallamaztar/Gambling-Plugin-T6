@@ -14,12 +14,12 @@ class BanFlip:
         
         self.wrapper  = Wrapper()
         self.commands = self.wrapper.commands
+        self.links    = LinkManager()
 
         if not self.links.is_linked(player):
             self.commands.privatemessage(player, "^1You must link your Discord account to use this command. Use ^3!link ^1to link your account.")
             return
         
-        self.links = LinkManager()
         self.bank  = BankManager()
         
         try:
