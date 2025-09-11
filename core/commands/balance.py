@@ -1,3 +1,4 @@
+from core.utils import parse_prefix_amount
 from core.wrapper import Wrapper
 from core.database.bank import BankManager
 from core.database.links import LinkManager
@@ -18,11 +19,11 @@ class BalanceCommand:
 
         if target == None:
             bal = self.bank.balance(player)
-            self.commands.privatemessage(player, f"your balance is ^1${bal}"); return
+            self.commands.privatemessage(player, f"your balance is (${parse_prefix_amount(bal)}) ^5${bal}"); return
         
         target = LinkManager().find_linked_by_partial_name(target) # type: ignore
         bal = self.bank.balance(target)
-        self.commands.privatemessage(player, f"{target}'s balance is ^1${bal}")
+        self.commands.privatemessage(player, f"{target}'s balance is (${parse_prefix_amount(bal)}) ^5${bal}")
 
 def balance(player: str, target: Optional[str] = None) -> None:
     run_command_threaded(BalanceCommand, player, target)

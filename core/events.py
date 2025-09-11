@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from gsc_events import GSCClient
 from core.database.bank import BankManager
+from core.utils import parse_amount
 from iw4m import IW4MWrapper
 import os
 
@@ -35,8 +36,8 @@ class EventManager:
             else: kill = 10_000
             
             if player == self.bank.top_balances()[0]['name']:
-                self.commands.say(f"^5{attacker} ^7killed ^5MVP ^7{player}!")
                 kill += max(25_000, int(.000002 * self.bank.balance(player)))
+                self.commands.say(f"^5{attacker} ^7killed ^5MVP ^7{player} and won ^5${parse_amount(kill)}!")
 
             self.bank.deposit(attacker, kill)
             self.commands.privatemessage(attacker, f"Kill Bonus: ^5${kill}")
