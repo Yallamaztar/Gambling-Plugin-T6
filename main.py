@@ -9,7 +9,6 @@ from core.wrapper import Wrapper
 from core.events import EventManager
 from core.database.bank import BankManager
 from core.bot import run_bot
-from core.api.manager import APIManager
 
 class GamblingPlugin:
     def __init__(self) -> None:
@@ -28,14 +27,6 @@ class GamblingPlugin:
 
         GamblingManager(bank, self.server, self.commands)
         EventManager(bank, self.commands)
-
-        # Start API server if enabled
-        if os.environ.get('API_ENABLED', 'false').lower() == 'true':
-            api_manager = APIManager(bank, self.server, self.commands)
-            api_host = os.environ.get('API_HOST', '0.0.0.0')
-            api_port = int(os.environ.get('API_PORT', '5000'))
-            api_debug = os.environ.get('API_DEBUG', 'false').lower() == 'true'
-            api_manager.start(api_host, api_port, api_debug)
 
         if os.environ.get('BOT_TOKEN'):
             self.executor.submit(run_bot)
